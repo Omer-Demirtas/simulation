@@ -1,12 +1,14 @@
+import { Button, Container, Stack } from "@mui/material";
 import React from "react";
+import HomeScreen from "./screens/Home";
 
 const App = () => 
 {
 
   return (
-    <div>
-      <h1>Hello World</h1>
-    </div>
+    <Container>
+      <HomeScreen />
+    </Container>
   );
 }
 
