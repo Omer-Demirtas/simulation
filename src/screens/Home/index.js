@@ -1,12 +1,14 @@
 import { Button, Card } from "@mui/material";
 import React, { useState } from "react";
 import DetailsTable from "../../components/details_table";
+import SimulationTable from "../../components/simulation_table";
 import ServiceSimulationDetails from "./components/service_simulation_details";
 
 const HomeScreen = () => 
 {
     const [state, setState] = useState({
         type: "",
+        rows: []
       });
     
     const handleTypeChange = (e) => setState({ ...state, type: e.target.value });
@@ -64,16 +66,49 @@ const HomeScreen = () =>
         return cumulativeDistribution[i].value;
     }
 
+    const getFromUniformDistribution = (a, b) => 
+    {
+        const rand = getRandomNumber();
+
+        return Math.floor((a + (b - a) * rand))
+    }
+
+    const getFromNormalDistribution = (s, m) => 
+    {
+        const rand = getRandomNumber();
+    }
+
     const generateTable = () => 
     {
         var customers = [];
+        
+        var events = {};
+
+        let time = 0;
 
         for (var i = 0; i < 10; i++)
         {
-            customers[i] = getFromCumulative();
+            const gas = getFromCumulative();
+            const serviceTime = getFromUniformDistribution(10, 20);
+            time+=gas;
+
+            customers[i] = 
+            {
+                time: time,
+                customer: (i+1),
+                gas: gas,
+                serviceTime: getFromUniformDistribution(10, 20)
+            };
+            
+            events[time] = 
+            {
+                customer: (i+1),
+                serviceTime: serviceTime,
+                finishTime: (i === 0) ? (time + serviceTime) : null
+            }
         }
 
-        console.log(customers);
+        setState({...state, rows: customers})
     }
     
     return (
@@ -83,12 +118,16 @@ const HomeScreen = () =>
             <DetailsTable />
 
             <Button
+                sx={{mt: 5}}
                 onClick={generateTable}
             >
                 Generate Table
             </Button>
 
-
+            
+            <SimulationTable 
+                rows={state.rows}
+            />
         </Card>
         </>
   );
