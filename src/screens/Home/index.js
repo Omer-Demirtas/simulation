@@ -82,8 +82,6 @@ const HomeScreen = () =>
     {
         var customers = [];
         
-        var events = {};
-
         let time = 0;
 
         for (var i = 0; i < 10; i++)
@@ -99,14 +97,99 @@ const HomeScreen = () =>
                 gas: gas,
                 serviceTime: getFromUniformDistribution(10, 20)
             };
-            
-            events[time] = 
-            {
-                customer: (i+1),
-                serviceTime: serviceTime,
-                finishTime: (i === 0) ? (time + serviceTime) : null
-            }
+
         }
+
+        var events = [];
+
+        var currentServiceFinishTime = 0;
+        var atService = null;
+        var waiting = "";
+
+        time = 0;
+        for (var j = 0; j < 10; j++)
+        {
+            const gas = getFromCumulative();
+            const serviceTime = getFromUniformDistribution(10, 20);
+
+            const event = {
+                now: time,
+                gas: gas,
+                serviceTime: serviceTime
+            };
+
+            // if the service is empty.
+            if(atService === null)
+            {
+                time+=gas;
+
+                atService = (j+1);
+                currentServiceFinishTime = (time + serviceTime);
+
+                event.time = time;
+                event.finishTime = currentServiceFinishTime;
+                event.user = (j+1);
+            }
+            // new user come but service not finish
+            else if(currentServiceFinishTime > (time + gas))
+            {
+                time+=gas;
+
+                event.time = time;
+                event.user = (j+1);
+
+                waiting+=`${j+1}, `;
+            }
+            // finish service before new user come
+            else if(currentServiceFinishTime < (time + gas))
+            {
+                const temp = waiting.split(', ');
+                waiting=temp.slice(1).join("");
+                
+                events.push(
+                    {
+                        time: currentServiceFinishTime,
+                        finishUser: atService
+                    }
+                );
+
+                atService = null;
+
+                time = time+gas;
+                event.time = time;
+                event.user = (j+1);
+            }
+            /*
+            // Service process finish, before new user coming
+            else if(currentServiceFinishTime < (time + gas))
+            {
+                events.push(
+                    {
+                        ...events[events.length - 1],
+                        user: null,
+                    }
+                );
+                atService = null;
+            }
+            // if service finish and new user come at the same time
+            else if(currentServiceFinishTime = (time + gas))
+            {
+                event.finishUser = atService;
+                atService = null;
+
+            }
+            else 
+            {
+                waiting+=`${j+1}, `;
+            }
+            */
+            
+            event.waiting = waiting;
+
+            events.push(event);
+        }
+
+        console.log(events);
 
         setState({...state, rows: customers})
     }
