@@ -4,6 +4,14 @@ import DetailsTable from "../../components/details_table";
 import SimulationTable from "../../components/simulation_table";
 import ServiceSimulationDetails from "./components/service_simulation_details";
 
+
+const TYPE_BY_DISTRUBTION = 
+{
+    0: {cumulative: ""},
+    1: {a: 0, b: 0},
+    2: {m: 0, s: 0}
+}
+
 const HomeScreen = () => 
 {
     const [state, setState] = useState({
@@ -11,6 +19,43 @@ const HomeScreen = () =>
         rows: []
       });
     
+    const [distributions, setDistributions] = useState(
+        [
+            {
+                id: '1',
+                title: 'Gelişler Arası Süre (GAS)',
+                distribution: 0,
+                values: TYPE_BY_DISTRUBTION[0],
+            },
+            {
+                id: '2',
+                title: 'Servis Süresi',
+                distribution: 1,
+                values: TYPE_BY_DISTRUBTION[1],
+            }
+        ]
+    );
+
+    const handleChangeDistruvtionsType = (e) => 
+    {
+        const id = `${e.target.name}`;
+        const newType = e.target.value;
+        
+
+        const newDsit = 
+        
+        setDistributions(
+            distributions.map(dist => 
+                (dist.id === id) ? 
+                {
+                    ...dist, 
+                    distribution: newType,
+                    values: TYPE_BY_DISTRUBTION[newType]
+                } : dist 
+            )
+        )
+    }
+
     const handleTypeChange = (e) => setState({ ...state, type: e.target.value });
  
     const renderDetailsPage = () => 
@@ -80,8 +125,9 @@ const HomeScreen = () =>
 
     const generateTable = () => 
     {
-        var customers = [];
-        
+        var users = [];
+        var events = [];
+
         let time = 0;
 
         for (var i = 0; i < 10; i++)
@@ -90,115 +136,143 @@ const HomeScreen = () =>
             const serviceTime = getFromUniformDistribution(10, 20);
             time+=gas;
 
-            customers[i] = 
+            users.push( 
             {
+                id: i,
                 time: time,
-                customer: (i+1),
-                gas: gas,
-                serviceTime: getFromUniformDistribution(10, 20)
-            };
-
-        }
-
-        var events = [];
-
-        var currentServiceFinishTime = 0;
-        var atService = null;
-        var waiting = "";
-
-        time = 0;
-        for (var j = 0; j < 10; j++)
-        {
-            const gas = getFromCumulative();
-            const serviceTime = getFromUniformDistribution(10, 20);
-
-            const event = {
-                now: time,
+                no: (i+1),
                 gas: gas,
                 serviceTime: serviceTime
-            };
+            });
+        }
 
-            // if the service is empty.
-            if(atService === null)
+        // constants 
+        time = 0;
+
+        var waitings = [];
+
+        users[0].finishTime = users[0].time + users[0].serviceTime;
+
+        var atService = users[0].no;
+        var serviceCompleteTime = users[0].finishTime;
+
+        events.push(
             {
-                time+=gas;
-
-                atService = (j+1);
-                currentServiceFinishTime = (time + serviceTime);
-
-                event.time = time;
-                event.finishTime = currentServiceFinishTime;
-                event.user = (j+1);
+                time: users[0].time,
+                user: atService,
+                finishTime: serviceCompleteTime
             }
-            // new user come but service not finish
-            else if(currentServiceFinishTime > (time + gas))
+        )
+        
+        users.slice(1).forEach(user => 
             {
-                time+=gas;
+                var event = {};
+                // user come before service finish
+                if(user.time < serviceCompleteTime)
+                {
+                    event = {
+                        ...event,
+                        user: user.no,
+                        time:   user.time,
+                    }
+                    waitings.push(user.no);
+                }
+                else if(user.time > serviceCompleteTime)
+                {
+                    const newServiceUser = waitings[0];
+                    waitings = waitings.slice(1);
 
-                event.time = time;
-                event.user = (j+1);
+                    events.push
+                    (
+                        {
+                            ...event,
+                            time: serviceCompleteTime,
+                            atService: newServiceUser,
+                            waitings: waitings.toString(),
+                            user: null
+                        }
+                    );
+                    
+                    atService = newServiceUser;
+                    serviceCompleteTime = serviceCompleteTime + users[(newServiceUser-1)].serviceTime
 
-                waiting+=`${j+1}, `;
-            }
-            // finish service before new user come
-            else if(currentServiceFinishTime < (time + gas))
-            {
-                const temp = waiting.split(', ');
-                waiting=temp.slice(1).join("");
+                    event = 
+                    {
+                        ...event,
+                        user: user.no,
+                        time: user.time,
+                    };
+                }
+                else if(user.time === serviceCompleteTime)
+                {
+                    const newServiceUser = waitings[0];
+                    waitings = waitings.slice(1);
+
+                    event = 
+                    {
+                        ...event,
+                        time: serviceCompleteTime,
+                        atService: newServiceUser,
+                        waitings: waitings.toString(),
+                        user: user.no                        
+                    };
+
+                    atService = newServiceUser;
+                    serviceCompleteTime = serviceCompleteTime + users[(newServiceUser-1)].serviceTime
+                }
                 
-                events.push(
+                events.push
+                (
                     {
-                        time: currentServiceFinishTime,
-                        finishUser: atService
+                        ...event, 
+                        atService,
+                        waitings: waitings.toString()
                     }
                 );
+            }    
+        );
 
-                atService = null;
+        if(waitings.length !== 0)
+        {
+            waitings.forEach(id => 
+                {
+                    var event = {};
+                
+                    const newServiceUser = waitings[0];
+                    waitings = waitings.slice(1);
 
-                time = time+gas;
-                event.time = time;
-                event.user = (j+1);
-            }
-            /*
-            // Service process finish, before new user coming
-            else if(currentServiceFinishTime < (time + gas))
-            {
-                events.push(
-                    {
-                        ...events[events.length - 1],
-                        user: null,
-                    }
-                );
-                atService = null;
-            }
-            // if service finish and new user come at the same time
-            else if(currentServiceFinishTime = (time + gas))
-            {
-                event.finishUser = atService;
-                atService = null;
+                    events.push
+                    (
+                        {
+                            ...event,
+                            time: serviceCompleteTime,
+                            atService: newServiceUser,
+                            waitings: waitings.toString(),
+                            user: null
+                        }
+                    );
 
-            }
-            else 
-            {
-                waiting+=`${j+1}, `;
-            }
-            */
-            
-            event.waiting = waiting;
-
-            events.push(event);
+                    atService = newServiceUser;
+                    serviceCompleteTime = serviceCompleteTime + users[(newServiceUser-1)].serviceTime
+                }      
+            )
         }
 
         console.log(events);
+        console.log(users);
 
-        setState({...state, rows: customers})
+
+        setState({...state, rows: events})
     }
     
     return (
         <>
         <Card sx={{ p: 3, mt: 5}} variant="outlined">
 
-            <DetailsTable />
+            <DetailsTable 
+                distributions={distributions}
+                handleChangeDistruvtionsType={handleChangeDistruvtionsType}
+            />
 
             <Button
                 sx={{mt: 5}}

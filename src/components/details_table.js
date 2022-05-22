@@ -17,34 +17,19 @@ import {
   MenuItem,
   Select,
   Stack,
-  TextField,
 } from "@mui/material";
 import DistrubitionForm from "./distribution_form";
 
-function createData(id, title, distribution, values, m, s) {
-  return {
-    id,
-    title,
-    distribution,
-    values,
-    m,
-    s,
-  };
-}
 
-const distributions = {
-  1: {
-    name: "Normal Dağılım",
-    variables: ["M", "S"],
-  },
-  2: {
-    name: "Düzgün Dağılım",
-    variables: ["a", "b"],
-  },
-};
+const distrubitionOptions = 
+[
+  "Kümülatif Dağılım",
+  "Düzgün Dağılım",
+  "Normal Dağılım"
+]
 
 function Row(props) {
-  const { row } = props;
+  const { dist, handleChangeDistruvtionsType } = props;
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -60,12 +45,12 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.title}
+          {dist.title}
         </TableCell>
-        <TableCell>{row.m}</TableCell>
-        <TableCell>{row.s}</TableCell>
-        <TableCell>{row.s}</TableCell>
-        <TableCell>{row.s}</TableCell>
+        <TableCell>{dist.values.m}</TableCell>
+        <TableCell>{dist.values.m}</TableCell>
+        <TableCell>{dist.values.s}</TableCell>
+        <TableCell>{dist.values.s}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -77,23 +62,23 @@ function Row(props) {
                   <Select
                     labelId="service-type-label"
                     id="service-type"
-                    value={row.distribution}
+                    value={dist.distribution}
+                    name={dist.id}
                     label="Servis Türü"
-                    //onChange={handleChange}
+                    onChange={handleChangeDistruvtionsType}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {Object.entries(distributions).map(([k, v]) => (
-                      <MenuItem key={k} value={k}>
-                        {v.name}
-                      </MenuItem>
-                    ))}
+                    {
+                      distrubitionOptions.map((k, i) => (
+                        <MenuItem key={k} value={i}>
+                          {k}
+                        </MenuItem>
+                      ))
+                    }
                   </Select>
                   <FormHelperText>Service Type</FormHelperText>
                 </FormControl>
                 <DistrubitionForm
-                  distribution={distributions[row.distribution]}
+                  distribution={dist}
                 />
               </Stack>
             </Box>
@@ -104,13 +89,9 @@ function Row(props) {
   );
 }
 
-const rows = [
-  createData(1, "Gelişler Arası Süre (GAS)", 1, [{ 1: 10, 2: 90 }], 0, 0),
-  createData(2, "Servis Süresi", 2, [{ 1: 10, 2: 90 }], 0, 0),
-  createData(3, "Yemek yeme süresi", 1, [{ 1: 10, 2: 90 }], 0, 0),
-];
 
-export default function DetailsTable() {
+export default function DetailsTable({distributions, handleChangeDistruvtionsType}) {
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
@@ -125,8 +106,8 @@ export default function DetailsTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <Row key={row.id} row={row} />
+          {distributions.map((dist) => (
+            <Row key={dist.id} dist={dist} handleChangeDistruvtionsType={handleChangeDistruvtionsType}/>
           ))}
         </TableBody>
       </Table>

@@ -2,9 +2,9 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
 
 const columns = [
     { id: 'time', label: 'Benzetim Süresi', minWidth: 170 },
-    { id: 'customer', label: 'Gelişler Arası Süre', minWidth: 170 },
-    { id: 'serviceTime', label: 'Service Time', minWidth: 100 },
-    { id: 'serviceTime', label: 'Service Time', minWidth: 100 },
+    { id: 'user', label: 'Gelen kullanıcı', minWidth: 170 },
+    { id: 'atService', label: 'Serviste olan', minWidth: 100 },
+    { id: 'waitings', label: 'Bekleyenler', minWidth: 100 },
   ];
 
 
@@ -33,7 +33,7 @@ const SimulationTable = ({rows}) =>
             {rows
               .map((row) => {
                 return (
-                  <TableRow key={row.time} hover role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableRow key={row.time} hover role="checkbox" tabIndex={-1}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
