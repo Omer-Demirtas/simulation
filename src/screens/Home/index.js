@@ -1,8 +1,9 @@
-import { Button, Card } from "@mui/material";
+import { Button, Card, Typography } from "@mui/material";
 import React, { useState } from "react";
 import DetailsTable from "../../components/details_table";
 import SimulationTable from "../../components/simulation_table";
 import ServiceSimulationDetails from "./components/service_simulation_details";
+import TempForm from "./components/temp_form";
 
 
 const TYPE_BY_DISTRUBTION = 
@@ -17,7 +18,7 @@ const HomeScreen = () =>
     const [state, setState] = useState({
         type: "",
         rows: []
-      });
+    });
     
     const [distributions, setDistributions] = useState(
         [
@@ -35,6 +36,8 @@ const HomeScreen = () =>
             }
         ]
     );
+
+    const [input, setInput] = useState({a: 5, b: 10});
 
     const handleChangeDistruvtionsType = (e) => 
     {
@@ -123,6 +126,11 @@ const HomeScreen = () =>
         const rand = getRandomNumber();
     }
 
+    const atServiceToString = (no, serviceFinishTime) => 
+    {
+        return `${no}[${serviceFinishTime}]`
+    }
+
     const generateTable = () => 
     {
         var users = [];
@@ -133,8 +141,9 @@ const HomeScreen = () =>
         for (var i = 0; i < 10; i++)
         {
             const gas = getFromCumulative();
-            const serviceTime = getFromUniformDistribution(10, 20);
+            const serviceTime = getFromUniformDistribution(input.a, input.b);
             time+=gas;
+        
 
             users.push( 
             {
@@ -149,6 +158,9 @@ const HomeScreen = () =>
         // constants 
         time = 0;
 
+        console.log(users);
+
+        var totalWaitins = [];
         var waitings = [];
 
         users[0].finishTime = users[0].time + users[0].serviceTime;
@@ -173,7 +185,7 @@ const HomeScreen = () =>
                     event = {
                         ...event,
                         user: user.no,
-                        time:   user.time,
+                        time: user.time,
                     }
                     waitings.push(user.no);
                 }
@@ -182,19 +194,22 @@ const HomeScreen = () =>
                     const newServiceUser = waitings[0];
                     waitings = waitings.slice(1);
 
+                    // To calculate standby time for user that is in service
+                    totalWaitins[(newServiceUser-1)] = serviceCompleteTime - users[(newServiceUser-1)].time
+
+                    atService = newServiceUser;
+                    serviceCompleteTime = serviceCompleteTime + users[(newServiceUser-1)].serviceTime      
+
                     events.push
                     (
                         {
                             ...event,
                             time: serviceCompleteTime,
-                            atService: newServiceUser,
+                            atService: atServiceToString(newServiceUser, serviceCompleteTime),
                             waitings: waitings.toString(),
                             user: null
                         }
                     );
-                    
-                    atService = newServiceUser;
-                    serviceCompleteTime = serviceCompleteTime + users[(newServiceUser-1)].serviceTime
 
                     event = 
                     {
@@ -207,6 +222,9 @@ const HomeScreen = () =>
                 {
                     const newServiceUser = waitings[0];
                     waitings = waitings.slice(1);
+
+                    // To calculate standby time for user that is in service
+                    totalWaitins[(newServiceUser-1)] = serviceCompleteTime - users[(newServiceUser-1)].time
 
                     event = 
                     {
@@ -225,7 +243,7 @@ const HomeScreen = () =>
                 (
                     {
                         ...event, 
-                        atService,
+                        atService: atServiceToString(atService, serviceCompleteTime),
                         waitings: waitings.toString()
                     }
                 );
@@ -241,12 +259,15 @@ const HomeScreen = () =>
                     const newServiceUser = waitings[0];
                     waitings = waitings.slice(1);
 
+                    // To calculate standby time for user that is in service
+                    totalWaitins[(newServiceUser-1)] = serviceCompleteTime - users[(newServiceUser-1)].time
+
                     events.push
                     (
                         {
                             ...event,
                             time: serviceCompleteTime,
-                            atService: newServiceUser,
+                            atService: atServiceToString(newServiceUser, serviceCompleteTime),
                             waitings: waitings.toString(),
                             user: null
                         }
@@ -257,23 +278,27 @@ const HomeScreen = () =>
                 }      
             )
         }
-
-        console.log(events);
-        console.log(users);
-
+        
+        console.log(totalWaitins);
 
         setState({...state, rows: events})
     }
     
+    const hanldeInput = (e) => setInput({...input, [e.target.name]: e.target.value})
+
     return (
         <>
         <Card sx={{ p: 3, mt: 5}} variant="outlined">
 
-            <DetailsTable 
-                distributions={distributions}
-                handleChangeDistruvtionsType={handleChangeDistruvtionsType}
-            />
-
+            {
+                /*
+                <DetailsTable 
+                    distributions={distributions}
+                    handleChangeDistruvtionsType={handleChangeDistruvtionsType}
+                />
+                */
+            }
+            
             <Button
                 sx={{mt: 5}}
                 onClick={generateTable}
@@ -281,6 +306,10 @@ const HomeScreen = () =>
                 Generate Table
             </Button>
 
+            <TempForm
+                input={input}
+                handleInput={hanldeInput}
+            />
             
             <SimulationTable 
                 rows={state.rows}
