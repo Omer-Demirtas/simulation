@@ -131,7 +131,39 @@ const HomeScreen = () =>
         return `${no}[${serviceFinishTime}]`
     }
 
-    const generateTable = () => 
+    const waitingsToString = (waitings) => waitings.map(w => w.no).toString(); 
+
+    const generateUsers = () => 
+    {
+        const users = [];
+        const events = {};
+        var time = 0;
+
+        for (var i = 0; i < 11; i++)
+        {
+            const gas = getFromCumulative();
+            const serviceTime = getFromUniformDistribution(input.a, input.b);
+            time+=gas;
+
+            users.push( 
+            {
+                id: i,
+                time: time,
+                no: (i+1),
+                gas: gas,
+                serviceTime: serviceTime
+            });
+
+            events[time] = 
+            {
+                user: i,
+            } 
+        }
+
+        return [users, events];
+    }
+
+    const generateTable1 = () => 
     {
         var users = [];
         var events = [];
@@ -156,9 +188,7 @@ const HomeScreen = () =>
         }
 
         // constants 
-        time = 0;
-
-        console.log(users);
+        time = users[0].time
 
         var totalWaitins = [];
         var waitings = [];
@@ -179,14 +209,17 @@ const HomeScreen = () =>
         users.slice(1).forEach(user => 
             {
                 var event = {};
+
                 // user come before service finish
                 if(user.time < serviceCompleteTime)
                 {
-                    event = {
+                    event =
+                    {
                         ...event,
                         user: user.no,
                         time: user.time,
                     }
+
                     waitings.push(user.no);
                 }
                 else if(user.time > serviceCompleteTime)
@@ -195,11 +228,12 @@ const HomeScreen = () =>
                     waitings = waitings.slice(1);
 
                     // To calculate standby time for user that is in service
-                    totalWaitins[(newServiceUser-1)] = serviceCompleteTime - users[(newServiceUser-1)].time
+                    totalWaitins[(atService-1)] = serviceCompleteTime - users[(atService-1)].time
 
                     atService = newServiceUser;
                     serviceCompleteTime = serviceCompleteTime + users[(newServiceUser-1)].serviceTime      
 
+                    // Service finish event pushed
                     events.push
                     (
                         {
@@ -224,19 +258,19 @@ const HomeScreen = () =>
                     waitings = waitings.slice(1);
 
                     // To calculate standby time for user that is in service
-                    totalWaitins[(newServiceUser-1)] = serviceCompleteTime - users[(newServiceUser-1)].time
+                    totalWaitins[(atService-1)] = serviceCompleteTime - users[(atService-1)].time
+
+                    atService = newServiceUser;
+                    serviceCompleteTime = serviceCompleteTime + users[(newServiceUser-1)].serviceTime
 
                     event = 
                     {
                         ...event,
                         time: serviceCompleteTime,
-                        atService: newServiceUser,
+                        atService: atServiceToString(newServiceUser, serviceCompleteTime),
                         waitings: waitings.toString(),
                         user: user.no                        
                     };
-
-                    atService = newServiceUser;
-                    serviceCompleteTime = serviceCompleteTime + users[(newServiceUser-1)].serviceTime
                 }
                 
                 events.push
@@ -279,9 +313,111 @@ const HomeScreen = () =>
             )
         }
         
-        console.log(totalWaitins);
+        console.log({totalWaitins, users});
 
         setState({...state, rows: events})
+    }
+
+    const newUserService = (time, user, finishTime) => 
+    {
+        return (
+            {
+                time,
+                user: user,
+                atService: atServiceToString(user, finishTime)
+            }
+        )
+    }
+
+    const serviceFinish = (oldUser, time, user, finishTime, waitings) => 
+    ({
+        finishedUser: oldUser,
+        time,
+        atService: atServiceToString(user, finishTime),
+        waitings: waitingsToString(waitings)
+    })
+
+    const generateTable = () => 
+    {
+        const [users, _] = generateUsers();
+        const events = [];
+
+        var waitings = [];
+
+        var atService = users[0].no;
+        var serviceCompleteTime = (users[0].time + users[0].serviceTime);
+
+        events.push(newUserService(users[0].time, users[0].no, (users[0].time + users[0].serviceTime)))
+
+        users.slice(1).forEach(user => 
+            {
+                const event = {time: user.time, user: user.no};
+
+                // Service henüz bitmediyse
+                if(user.time <  serviceCompleteTime)
+                {
+                    waitings.push({id: user.id, no: user.no});
+                }
+                else if(user.time === serviceCompleteTime)
+                {
+                    const oldFinishTime = serviceCompleteTime;
+                    const oldServiceUser = atService;
+
+                    event['finishedUser'] = oldServiceUser;
+
+                    // Bekleyen Müşteri var ise
+                    if(waitings.length !== 0)
+                    {   
+                        atService = waitings[0].no;
+                        serviceCompleteTime+= users[waitings[0].id].serviceTime;
+                        waitings = waitings.slice(1);
+
+                        waitings.push({id: user.id, no: user.no});
+                    }
+                    // Hali hazırda bekleyen kullanıcı yok ise
+                    else 
+                    {
+                        atService = user.no;
+                        serviceCompleteTime+=user.serviceTie;
+                    }
+                }
+                // Yeni user geldiğinde service bitmiş.
+                else if(user.time > serviceCompleteTime)
+                {
+                    // Bekleyen Müşteri var ise
+                    if(waitings.length !== 0)
+                    {   
+                        const oldFinishTime = serviceCompleteTime;
+                        const oldServiceUser = atService;
+
+                        atService = waitings[0].no;
+                        serviceCompleteTime+= users[waitings[0].id].serviceTime;
+                        waitings = waitings.slice(1);
+
+                        waitings.push({id: user.id, no: user.no});
+
+                        events.push(serviceFinish(oldServiceUser, oldFinishTime, atService, serviceCompleteTime, waitings));
+                    }
+                    // Hali hazırda bekleyen kullanıcı yok ise
+                    // Servis yeni kullanıcı gelne kadar boşta kaldı ise
+                    else 
+                    {
+                    }
+                }
+                
+                events.push(
+                    {
+                        ...event,
+                        atService: atServiceToString(atService, serviceCompleteTime),
+                        waitings: waitingsToString(waitings)
+                    }
+                );
+            }
+        );
+
+        //const rows = Object.entries(events).map(event => ({time: event[0], ...event[1]}));
+        setState({...state, rows: events});
+        console.log({users, events})
     }
     
     const hanldeInput = (e) => setInput({...input, [e.target.name]: e.target.value})

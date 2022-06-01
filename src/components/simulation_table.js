@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
 const columns = [
     { id: 'time', label: 'Benzetim Süresi', minWidth: 170 },
     { id: 'user', label: 'Gelen kullanıcı', minWidth: 170 },
+    { id: 'finishedUser', label: 'Servisi Biten', minWidth: 100 },
     { id: 'atService', label: 'Serviste olan', minWidth: 100 },
     { id: 'waitings', label: 'Bekleyenler', minWidth: 100 },
   ];
