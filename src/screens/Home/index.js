@@ -344,7 +344,7 @@ const HomeScreen = () =>
 
         var waitings = [];
 
-        var atService = users[0].no;
+        var atService = {no: users[0].no, id:  users[0].id};
         var serviceCompleteTime = (users[0].time + users[0].serviceTime);
 
         events.push(newUserService(users[0].time, users[0].no, (users[0].time + users[0].serviceTime)))
@@ -363,12 +363,12 @@ const HomeScreen = () =>
                     const oldFinishTime = serviceCompleteTime;
                     const oldServiceUser = atService;
 
-                    event['finishedUser'] = oldServiceUser;
+                    event['finishedUser'] = oldServiceUser.no;
 
                     // Bekleyen Müşteri var ise
                     if(waitings.length !== 0)
                     {   
-                        atService = waitings[0].no;
+                        atService = waitings[0];
                         serviceCompleteTime+= users[waitings[0].id].serviceTime;
                         waitings = waitings.slice(1);
 
@@ -377,7 +377,7 @@ const HomeScreen = () =>
                     // Hali hazırda bekleyen kullanıcı yok ise
                     else 
                     {
-                        atService = user.no;
+                        atService = {no: user.no, id: user.id};
                         serviceCompleteTime+=user.serviceTie;
                     }
                 }
@@ -390,13 +390,13 @@ const HomeScreen = () =>
                         const oldFinishTime = serviceCompleteTime;
                         const oldServiceUser = atService;
 
-                        atService = waitings[0].no;
+                        atService = waitings[0];
                         serviceCompleteTime+= users[waitings[0].id].serviceTime;
                         waitings = waitings.slice(1);
 
                         waitings.push({id: user.id, no: user.no});
 
-                        events.push(serviceFinish(oldServiceUser, oldFinishTime, atService, serviceCompleteTime, waitings));
+                        events.push(serviceFinish(oldServiceUser.no, oldFinishTime, atService.no, serviceCompleteTime, waitings));
                     }
                     // Hali hazırda bekleyen kullanıcı yok ise
                     // Servis yeni kullanıcı gelne kadar boşta kaldı ise
@@ -408,16 +408,60 @@ const HomeScreen = () =>
                 events.push(
                     {
                         ...event,
-                        atService: atServiceToString(atService, serviceCompleteTime),
+                        atService: atServiceToString(atService.no, serviceCompleteTime),
                         waitings: waitingsToString(waitings)
                     }
                 );
             }
         );
 
+        //events.push(serviceFinish(atService, serviceCompleteTime, null, null))
+
+
+        //waitings.unshift(atService)
+
+        console.log({waitings});
+
+        waitings.forEach(id => 
+            {
+                const oldServiceUser = atService;
+                const oldServiceTime = serviceCompleteTime;
+
+                atService = waitings[0];
+                serviceCompleteTime = serviceCompleteTime + users[atService.id].serviceTime
+
+                waitings = waitings.slice(1);
+
+                events.push
+                (
+                    {
+                        time: oldServiceTime,
+                        finishedUser: oldServiceUser.no,
+                        atService: atServiceToString(atService.no, serviceCompleteTime),
+                        waitings: waitingsToString(waitings),
+                        user: null
+                    }
+                );
+            }      
+        )
+
+        if(serviceCompleteTime !== events[events.length - 1].time)
+        {
+            events.push
+                (
+                    {
+                        time: serviceCompleteTime,
+                        finishedUser: atService.no,
+                        atService: null,
+                        waitings: null,
+                        user: null
+                    }
+                );
+        }
+
         //const rows = Object.entries(events).map(event => ({time: event[0], ...event[1]}));
         setState({...state, rows: events});
-        console.log({users, events})
+        console.log({users, events, atService, serviceCompleteTime})
     }
     
     const hanldeInput = (e) => setInput({...input, [e.target.name]: e.target.value})
