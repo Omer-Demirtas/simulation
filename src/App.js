@@ -1,13 +1,15 @@
+import { Typography } from "@mui/material";
 import React from "react";
 
 import { Routes, Route, Navigate, Link } from 'react-router-dom';
+import Header from "./components/common/header";
 import HomePage from "./pages/home";
 import ServiceSystemPage from "./pages/serviceSystems";
 //import { useSelector, useDispatch } from 'react-redux'
 //import { decrement, increment } from './feature/counter/counter'
 
 
-const Header = () =>
+const asd = () =>
 {
   return (
     <ul>
@@ -31,6 +33,8 @@ const App = () =>
       <Route element={<ServiceSystemPage />} path='/service'></Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
+
+      
     </Routes>
     </>
   );
