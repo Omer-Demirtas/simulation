@@ -1,8 +1,31 @@
-import { Button, Card, Grid, Stack } from "@mui/material";
-import { Box } from "@mui/system";
+import React from 'react';
+import { Button, Card, Grid, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { useState } from "react";
+import ServiceSimulationUI from './components/serviceUI'
 
-
+const pages = [
+    {
+      label: 'tab 1',
+      isVisible: () => true,
+      Content: () =>(
+        <ServiceSimulationUI />
+      )
+    },
+    {
+        label: 'tab 2',
+        isVisible: () => true,
+        Content: () =>(
+          <h1>Tab 2</h1>
+        )
+    },
+    {
+        label: 'tab 3',
+        isVisible: () => true,
+        Content: () =>(
+          <h1>Tab 3</h1>
+        )
+    },
+]
 
 
 const ServiceSystemPage = () =>
@@ -18,56 +41,24 @@ const ServiceSystemPage = () =>
         }
     );
 
-    const addNewService = () => {};
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (_, newValue) => {
+      setValue(newValue);
+    };
+
+    const selectedTab = pages[value];
 
     return(
        <Stack direction="column">
-            <Grid 
-                sx={{paddingTop: '2rem'}}
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                container
-            >
-            <Grid sx={{height: '700px'}} item xs={9}>
-                <Card elevation={12} sx={{height: '100%'}}>
 
-                    <Stack 
-                        alignItems="flex-start"
-                        justifyContent="flex-end"
-                        sx={{height: '33.33%'}} 
-                        direction="row" 
-                    >
-                        <Box sx={{bgcolor: 'green', width: 100, height: '50%'}}>
-                            ASD
-                        </Box>
-                        <Box sx={{bgcolor: 'green', width: 100, height: '50%'}}>
-                            ASD
-                        </Box>
-                    </Stack>
-                    <Stack sx={{height: '33.33%'}} direction="row" >
-                    </Stack>
-                    <Stack sx={{height: '33.33%'}} direction="row" >
-                    </Stack>
-                </Card>
-            </Grid>
-            </Grid>
-
-            <Grid
-                sx={{paddingTop: '2rem'}}
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                container
-            >
-                <Grid item xs={9}>
-                    <Button 
-                        onClick={addNewService}
-                        variant="contained" color="success">
-                        Add New Service
-                    </Button>
-                </Grid>
-            </Grid>
+            <Tabs value={value} onChange={handleChange} centered>
+                <Tab label="System" />
+                <Tab label="Result" />
+            </Tabs>
+            
+            <selectedTab.Content
+            />
        </Stack>
     );
 }
