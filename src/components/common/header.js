@@ -6,7 +6,8 @@ import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Slide from '@mui/material/Slide';
-import {Link} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 function HideOnScroll(props) {
   const { children, window } = props;
@@ -31,7 +32,12 @@ HideOnScroll.propTypes = {
 };
 
 
-export default function Header(props) {
+export default function Header(props) 
+{
+  const navigate = useNavigate();
+
+  const navigateToHome = () => navigate('/');
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -39,9 +45,13 @@ export default function Header(props) {
         <AppBar>
           <Toolbar>
             <Typography variant="h6" component="div">
-              Simulation
+                Simulation
             </Typography>
-            <Link   to="/">Home</Link>
+
+            <Button sx={{color: 'white', marginLeft: '10px'}} onClick={navigateToHome}  variant="text">
+              Home
+            </Button>
+
           </Toolbar>
         </AppBar>
       </HideOnScroll>
