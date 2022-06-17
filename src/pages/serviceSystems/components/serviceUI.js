@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Card, Grid, Stack, Tab, Tabs, Typography } from "@mui/material";
-import { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { addService } from '../../../features/service/serviceSlice';
+import ServiceDialog from './serviceDialog';
 
 
 const Service = ({serviceNo}) => 
@@ -37,10 +39,24 @@ const EntranceDoor = ({ text }) =>
 
 const ServiceSimulationUI = () => 
 {
-    const addNewService = () => {};
+    const addNewService = () => handleClickOpen();
+    //dispatch(addService());
+
+    const [open, setOpen] = useState(false);
+
+    const serviceSimulation = useSelector((state) => state.service);
+    const dispatch = useDispatch();
+
+    const handleClose = () => setOpen(false);
+    const handleClickOpen = () => setOpen(true);
 
     return (
         <React.Fragment>
+            <ServiceDialog 
+                handleClose={handleClose}
+                handleClickOpen={handleClickOpen}
+                open={open}
+            />
             <Grid 
                 sx={{paddingTop: '2rem'}}
                 direction="row"
@@ -49,17 +65,16 @@ const ServiceSimulationUI = () =>
                 container
             >
             <Grid sx={{height: '700px'}} item xs={9}>
-                <Card elevation={12} sx={{height: '100%', paddingLeft: '0.5rem', paddingTop: '0.5rem'}}>
-
+                <Card elevation={12} sx={{height: '100%', paddingLeft: '0.5rem', paddingTop: '0.5rem', paddingRight: '0.5rem'}}>
                     <Stack 
                         alignItems="flex-start"
                         justifyContent="flex-start"
                         sx={{height: '33.33%'}} 
                         direction="row" 
                     >
-                        <Service serviceNo={1} />
-                        <Service serviceNo={2} />
-                        <Service serviceNo={3} />
+                        {
+                            serviceSimulation.services.map(s => <Service key={s.title} serviceNo={s.title} /> )
+                        }
                     </Stack>
                     <Stack sx={{height: '33.33%'}} direction="row" >
                     </Stack>
@@ -85,7 +100,8 @@ const ServiceSimulationUI = () =>
                 <Grid item xs={9}>
                     <Button 
                         onClick={addNewService}
-                        variant="contained" color="success">
+                        variant="contained" color="success"
+                    >
                         Add New Service
                     </Button>
                 </Grid>
