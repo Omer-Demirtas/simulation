@@ -39,7 +39,6 @@ const EntranceDoor = ({ text }) =>
 
 const ServiceSimulationUI = () => 
 {
-    const addNewService = () => handleClickOpen();
     //dispatch(addService());
 
     const [open, setOpen] = useState(false);
@@ -50,12 +49,15 @@ const ServiceSimulationUI = () =>
     const handleClose = () => setOpen(false);
     const handleClickOpen = () => setOpen(true);
 
+    const handleNewService = (service) => dispatch(addService(service));
+
     return (
         <React.Fragment>
             <ServiceDialog 
-                handleClose={handleClose}
-                handleClickOpen={handleClickOpen}
                 open={open}
+                handleClose={handleClose}
+                handleNewService={handleNewService}
+                serviceTypes={serviceSimulation.serviceTypes}
             />
             <Grid 
                 sx={{paddingTop: '2rem'}}
@@ -99,7 +101,7 @@ const ServiceSimulationUI = () =>
             >
                 <Grid item xs={9}>
                     <Button 
-                        onClick={addNewService}
+                        onClick={handleClickOpen}
                         variant="contained" color="success"
                     >
                         Add New Service

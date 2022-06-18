@@ -11,7 +11,12 @@ const initialState =
       title: 2,
     }
   ],
-
+  serviceTypes: 
+  [
+    {
+      title: 'Default Service'
+    }
+  ]
 };
 
 export const counterSlice = createSlice({
