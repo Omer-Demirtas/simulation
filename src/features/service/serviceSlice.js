@@ -1,24 +1,53 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export const counterSlice = createSlice({
-  name: 'counter',
-  initialState: {
-    value: 0,
-  },
+
+const initialState = 
+{
+  services: [
+    {
+      title: 1,
+    },
+    {
+      title: 2,
+    }
+  ],
+  serviceTypes: 
+  [
+    {
+      title: 'Default Service'
+    }
+  ]
+};
+
+export const serviceSlice = createSlice({
+  name: 'service',
+  initialState,
   reducers: {
     createTable: (state, action) => 
     {
       state.value++;
+    },
+    addService: (state, action) => 
+    {
+      state.services.push(
+        {
+          title: state.services[state.services.length - 1].title+1
+        }
+      );
+    },
+    addServiceType: (state, action) => 
+    {
+      state.serviceTypes.push(action.payload)
     }
   },
 })
 
 
-export const { createTable } = counterSlice.actions
+export const { createTable, addService, addServiceType } = serviceSlice.actions
 
-export const selectCount = (state) => state.counter.value
+//export const selectCount = (state) => state.counter.value
 
-export default counterSlice.reducer
+export default serviceSlice.reducer
 
 /*
 export const incrementAsync = (amount) => (dispatch) => {

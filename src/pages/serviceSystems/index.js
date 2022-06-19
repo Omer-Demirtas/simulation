@@ -27,6 +27,12 @@ const pages = [
     },
 ]
 
+/*
+    Service Tyopes: service-1, service-2
+
+    user can prefer: service-1 with %10 rate and service-2 %20 rate
+*/
+
 
 const ServiceSystemPage = () =>
 {
@@ -57,8 +63,7 @@ const ServiceSystemPage = () =>
                 <Tab label="Result" />
             </Tabs>
             
-            <selectedTab.Content
-            />
+            <selectedTab.Content />
        </Stack>
     );
 }
