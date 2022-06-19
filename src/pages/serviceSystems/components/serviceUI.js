@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Card, Grid, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { useDispatch, useSelector } from 'react-redux';
-import { addService } from '../../../features/service/serviceSlice';
 import ServiceDialog from './serviceDialog';
+import ServiceButtonGroup from './serviceButtonGroup';
 
 
 const Service = ({serviceNo}) => 
@@ -41,24 +41,13 @@ const ServiceSimulationUI = () =>
 {
     //dispatch(addService());
 
-    const [open, setOpen] = useState(false);
 
     const serviceSimulation = useSelector((state) => state.service);
-    const dispatch = useDispatch();
-
-    const handleClose = () => setOpen(false);
-    const handleClickOpen = () => setOpen(true);
-
-    const handleNewService = (service) => dispatch(addService(service));
+    
+    console.log('BAse UI');
 
     return (
         <React.Fragment>
-            <ServiceDialog 
-                open={open}
-                handleClose={handleClose}
-                handleNewService={handleNewService}
-                serviceTypes={serviceSimulation.serviceTypes}
-            />
             <Grid 
                 sx={{paddingTop: '2rem'}}
                 direction="row"
@@ -91,23 +80,8 @@ const ServiceSimulationUI = () =>
                 </Card>
             </Grid>
             </Grid>
-
-            <Grid
-                sx={{paddingTop: '2rem'}}
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                container
-            >
-                <Grid item xs={9}>
-                    <Button 
-                        onClick={handleClickOpen}
-                        variant="contained" color="success"
-                    >
-                        Add New Service
-                    </Button>
-                </Grid>
-            </Grid>
+            
+            <ServiceButtonGroup />
         </React.Fragment>
     );
 }

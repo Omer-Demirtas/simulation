@@ -1,13 +1,11 @@
-import { FormControl, FormHelperText, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Button, Fab, FormControl, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 
-const ServiceForm = ({ serviceTypes, isSaved, handleAddNewService }) => 
+const ServiceForm = ({ serviceTypes, isSaved, servicesLength, handleAddNewService }) => 
 {
-    console.log('serviceForm component');
-
     const [input, setInput] = useState(
         {
-            title: `${serviceTypes.length + 1}`,
+            title: `${servicesLength + 1}`,
             serviceType: 0
         }
     );    
@@ -32,9 +30,11 @@ const ServiceForm = ({ serviceTypes, isSaved, handleAddNewService }) =>
                 onChange={handleChangeInput}
             />
 
+
+            <Stack direction="row">
             <FormControl 
                 fullWidth={true}
-                sx={{ m: 1, minWidth: 120 }}
+                sx={{mr: 1, minWidth: 120 }}
             >
                 <InputLabel id="demo-simple-select-helper-label">Service Type</InputLabel>
                 <Select
@@ -56,6 +56,22 @@ const ServiceForm = ({ serviceTypes, isSaved, handleAddNewService }) =>
                     // <FormHelperText>With label + helper text</FormHelperText>
                 }
             </FormControl>
+            <Button>
+                +
+            </Button>
+            {
+                /*
+                <Fab variant="extended">
+                    <Icon sx={{ mr: 1 }} />
+                    Extended
+                </Fab>
+                */
+            }
+            </Stack>
+
+
+
+            
         </Stack>
     );
 }  

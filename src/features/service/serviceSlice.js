@@ -19,8 +19,8 @@ const initialState =
   ]
 };
 
-export const counterSlice = createSlice({
-  name: 'counter',
+export const serviceSlice = createSlice({
+  name: 'service',
   initialState,
   reducers: {
     createTable: (state, action) => 
@@ -39,11 +39,11 @@ export const counterSlice = createSlice({
 })
 
 
-export const { createTable, addService } = counterSlice.actions
+export const { createTable, addService } = serviceSlice.actions
 
-export const selectCount = (state) => state.counter.value
+//export const selectCount = (state) => state.counter.value
 
-export default counterSlice.reducer
+export default serviceSlice.reducer
 
 /*
 export const incrementAsync = (amount) => (dispatch) => {
