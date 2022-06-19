@@ -41,10 +41,7 @@ const ServiceSimulationUI = () =>
 {
     //dispatch(addService());
 
-
-    const serviceSimulation = useSelector((state) => state.service);
-    
-    console.log('BAse UI');
+    const services = useSelector((state) => state.service.services);
 
     return (
         <React.Fragment>
@@ -64,11 +61,10 @@ const ServiceSimulationUI = () =>
                         direction="row" 
                     >
                         {
-                            serviceSimulation.services.map(s => <Service key={s.title} serviceNo={s.title} /> )
+                            services.map(s => <Service key={s.title} serviceNo={s.title} /> )
                         }
                     </Stack>
-                    <Stack sx={{height: '33.33%'}} direction="row" >
-                    </Stack>
+                    <Stack sx={{height: '33.33%'}} direction="row" ></Stack>
                     <Stack
                         direction="row"
                         justifyContent="flex-start"

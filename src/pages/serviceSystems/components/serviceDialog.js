@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import ServiceForm from './serviceForm';
 
-const ServiceDialog = ({ open, handleClose, serviceTypes, servicesLength, handleNewService }) => 
+const ServiceDialog = ({ open, handleClose, handleNewService }) => 
 {
   const [state, setState] = React.useState({isSaved: false});
 
@@ -35,9 +35,7 @@ const ServiceDialog = ({ open, handleClose, serviceTypes, servicesLength, handle
     <DialogContent>
       <ServiceForm
         isSaved={state.isSaved} 
-        serviceTypes={serviceTypes}
         handleAddNewService={handleAddNewService}
-        servicesLength={servicesLength}
       />
         <DialogContentText id="alert-dialog-description">
         </DialogContentText>

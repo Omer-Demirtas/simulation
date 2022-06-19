@@ -7,10 +7,9 @@ import ServiceDialog from "./serviceDialog";
 
 const ServiceButtonGroup = () =>
 {
-    const [open, setOpen] = useState(false);
-
-    const [serviceTypes, servicesLength] = useSelector(state => [state.service.serviceTypes, state.service.services.length]);
     const dispatch = useDispatch();
+
+    const [open, setOpen] = useState(false);
 
     const handleClose = () => setOpen(false);
     const handleClickOpen = () => setOpen(true);
@@ -21,9 +20,7 @@ const ServiceButtonGroup = () =>
         <React.Fragment>
             <ServiceDialog
                 open={open}
-                serviceTypes={serviceTypes}
                 handleClose={handleClose}
-                servicesLength={servicesLength}
                 handleNewService={handleNewService}
             />  
             <Grid

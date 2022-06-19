@@ -34,12 +34,16 @@ export const serviceSlice = createSlice({
           title: state.services[state.services.length - 1].title+1
         }
       );
+    },
+    addServiceType: (state, action) => 
+    {
+      state.serviceTypes.push(action.payload)
     }
   },
 })
 
 
-export const { createTable, addService } = serviceSlice.actions
+export const { createTable, addService, addServiceType } = serviceSlice.actions
 
 //export const selectCount = (state) => state.counter.value
 

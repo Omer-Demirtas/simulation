@@ -1,8 +1,14 @@
 import { Button, Fab, FormControl, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import ServiceTypeDialog from "./serviceTypeForm/serviceTypeDialog";
 
-const ServiceForm = ({ serviceTypes, isSaved, servicesLength, handleAddNewService }) => 
+const ServiceForm = ({ isSaved, handleAddNewService }) => 
 {
+    const [serviceTypes, servicesLength] = useSelector(state => [state.service.serviceTypes, state.service.services.length]);
+
+    const [open, setOpen] = useState(false);
+ 
     const [input, setInput] = useState(
         {
             title: `${servicesLength + 1}`,
@@ -12,67 +18,74 @@ const ServiceForm = ({ serviceTypes, isSaved, servicesLength, handleAddNewServic
 
     const handleChangeInput = (e) => setInput({...input, [e.target.name]: e.target.value})
 
+    const handleClose  = () => setOpen(false);
+    const handleOpen  = () => setOpen(true);
+
     useEffect(() => {
         if(isSaved) handleAddNewService(input)
     }, [isSaved]);
 
     return (
-        <Stack
-            spacing={3}
-            direction="column"
-        >
-            <TextField
-                name="title"
-                label="Title" 
-                variant="outlined"
-                sx={{marginTop: '1rem'}}
-                value={input.title}
-                onChange={handleChangeInput}
+        <React.Fragment>
+            <ServiceTypeDialog 
+                open={open}
+                handleClose={handleClose}
             />
-
-
-            <Stack direction="row">
-            <FormControl 
-                fullWidth={true}
-                sx={{mr: 1, minWidth: 120 }}
+            <Stack
+                spacing={3}
+                direction="column"
             >
-                <InputLabel id="demo-simple-select-helper-label">Service Type</InputLabel>
-                <Select
-                    labelId="demo-simple-select-helper-label"
-                    id="demo-simple-select-helper"
-                    value={input.serviceType}
-                    name="serviceType"
-                    label="Service Type"
+                <TextField
+                    name="title"
+                    label="Title" 
+                    variant="outlined"
+                    sx={{marginTop: '1rem'}}
+                    value={input.title}
                     onChange={handleChangeInput}
+                />
+
+
+                <Stack direction="row">
+                <FormControl 
+                    fullWidth={true}
+                    sx={{mr: 1, minWidth: 120 }}
                 >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
+                    <InputLabel id="demo-simple-select-helper-label">Service Type</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-helper-label"
+                        id="demo-simple-select-helper"
+                        value={input.serviceType}
+                        name="serviceType"
+                        label="Service Type"
+                        onChange={handleChangeInput}
+                    >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        {
+                            serviceTypes.map((s, i) => <MenuItem key={s.title} value={i}>{s.title}</MenuItem>)
+                        }
+                    </Select>
                     {
-                        serviceTypes.map((s, i) => <MenuItem key={s.title} value={i}>{s.title}</MenuItem>)
+                        // <FormHelperText>With label + helper text</FormHelperText>
                     }
-                </Select>
+                </FormControl>
+                <Button
+                    onClick={handleOpen}
+                >
+                    +
+                </Button>
                 {
-                    // <FormHelperText>With label + helper text</FormHelperText>
+                    /*
+                    <Fab variant="extended">
+                        <Icon sx={{ mr: 1 }} />
+                        Extended
+                    </Fab>
+                    */
                 }
-            </FormControl>
-            <Button>
-                +
-            </Button>
-            {
-                /*
-                <Fab variant="extended">
-                    <Icon sx={{ mr: 1 }} />
-                    Extended
-                </Fab>
-                */
-            }
+                </Stack>
             </Stack>
-
-
-
-            
-        </Stack>
+        </React.Fragment>
     );
 }  
 
