@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, Card, Grid, Stack, Tab, Tabs, Typography } from "@mui/material";
-import { useState } from "react";
+import { Grid, Stack, Tab, Tabs } from "@mui/material";
 import ServiceSimulationUI from './components/serviceUI'
 
 const pages = [
@@ -33,20 +32,8 @@ const pages = [
     user can prefer: service-1 with %10 rate and service-2 %20 rate
 */
 
-
 const ServiceSystemPage = () =>
 {
-    const [pageState, setPageState] = useState(
-        {
-            services: [
-                {
-                    id: 1,
-                    name: 'Kasa-1',
-                }
-            ]
-        }
-    );
-
     const [value, setValue] = React.useState(0);
 
     const handleChange = (_, newValue) => {
@@ -57,7 +44,6 @@ const ServiceSystemPage = () =>
 
     return(
        <Stack direction="column">
-
             <Tabs value={value} onChange={handleChange} centered>
                 <Tab label="System" />
                 <Tab label="Result" />
