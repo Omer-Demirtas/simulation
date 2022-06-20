@@ -25,13 +25,13 @@ export const serviceSlice = createSlice({
   reducers: {
     createTable: (state, action) => 
     {
-      state.value++;
+      console.log({ action, state });
     },
     addService: (state, action) => 
     {
       state.services.push(
         {
-          title: state.services[state.services.length - 1].title+1
+          ...action.payload
         }
       );
     },
