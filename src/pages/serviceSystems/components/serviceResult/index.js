@@ -7,7 +7,7 @@ const columns = [
     { id: 'commingUser', label: 'Gelen kullanıcı', minWidth: 170 },
     { id: 'userInService', label: 'Service Giren', minWidth: 100 },
     { id: 'finishedUser', label: 'Servisi Biten', minWidth: 100 },
-    { id: 'waitings', label: 'Bekleyenler', minWidth: 100 },
+    { id: 'que', label: 'Bekleyenler', minWidth: 100 },
 ];
 
 

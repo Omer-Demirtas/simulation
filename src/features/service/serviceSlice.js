@@ -102,6 +102,8 @@ const createSystemUsers = (n) =>
 
 const finishServiceObject = (userId, service, time) => ({serviceFinihed: true, serviceFinishedUser: userId, service, time});
 
+const queToString = (que) => que.map(q => q.id).join(',');
+
 /*
   Genarate Table Method
   * event based approach
@@ -127,9 +129,6 @@ const generateTable = (services) =>
         const event = Object.values(events)[0];
         
         delete events[Object.keys(events)[0]];
-
-        console.log('----------');
-        console.log(time, event);
 
         // if new user come to the systems
         if(event.newUser)
@@ -174,6 +173,7 @@ const generateTable = (services) =>
           console.log({user});
         }
 
+        newEvent.que = queToString(que);
         resultEvents[time] = newEvent;
     }
 
