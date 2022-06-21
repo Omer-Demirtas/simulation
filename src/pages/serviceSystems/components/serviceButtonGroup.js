@@ -1,7 +1,7 @@
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Stack } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addService } from '../../../features/service/serviceSlice';
+import { addService, createTable } from '../../../features/service/serviceSlice';
 import ServiceDialog from "./serviceDialog";
 
 
@@ -15,6 +15,7 @@ const ServiceButtonGroup = () =>
     const handleClickOpen = () => setOpen(true);
 
     const handleNewService = (service) => dispatch(addService(service));
+    const generateTable = () => dispatch(createTable());
 
     return (
         <React.Fragment>
@@ -31,12 +32,20 @@ const ServiceButtonGroup = () =>
                 container
             >
                 <Grid item xs={9}>
-                    <Button
-                        onClick={handleClickOpen}
-                        variant="contained" color="success"
-                    >
-                        Add New Service
-                    </Button>
+                    <Stack spacing={2} direction="row">
+                        <Button
+                            onClick={handleClickOpen}
+                            variant="contained" color="success"
+                        >
+                            Add New Service
+                        </Button>
+                        <Button
+                            onClick={generateTable}
+                            variant="contained" color="success"
+                        >
+                            Create Table
+                        </Button>
+                    </Stack>
                 </Grid>
             </Grid>
         </React.Fragment>

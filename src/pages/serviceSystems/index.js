@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, Stack, Tab, Tabs } from "@mui/material";
 import ServiceSimulationUI from './components/serviceUI'
+import ServiceResultPage from './components/serviceResult';
 
 const pages = [
     {
@@ -14,7 +15,7 @@ const pages = [
         label: 'tab 2',
         isVisible: () => true,
         Content: () =>(
-          <h1>Tab 2</h1>
+          <ServiceResultPage />
         )
     },
     {
