@@ -1,4 +1,3 @@
-import { areArraysEqual } from '@mui/base';
 import { createSlice } from '@reduxjs/toolkit'
 
 
@@ -19,7 +18,8 @@ const initialState =
     {
       title: 'Default Service'
     }
-  ]
+  ],
+  resultEvents: []
 };
 
 const getRandomNumber = () => Math.random().toFixed(2);
@@ -99,34 +99,8 @@ const createSystemUsers = (n) =>
 }
 
 /* Helper methods for simulation logic */
-const insert = (arr, index, newItem) => [...arr.slice(0, index),newItem,...arr.slice(index)];
-
-const getEmptyService = (services) => services.find((s) => s.userInServicce === null)?.id || false;
 
 const finishServiceObject = (userId, service, time) => ({serviceFinihed: true, serviceFinishedUser: userId, service, time});
-const commingNewUser = () => ({})
-
-const pushAfterTime = (arr, obj) => 
-{
-  for (var i = 0; i < arr.length; i++)
-  {
-    const e = arr[i];
-
-    if(e.time < obj.time)
-    {
-      insert(arr, i, obj);
-      console.log({arr1: arr, obj});
-      break;
-    }
-    else if(e.time === obj.time)
-    {
-      arr[i] = {...arr[i], ...obj}
-      console.log({arr2: arr});
-      break;
-    }
-    console.log(i);
-  }
-} 
 
 /*
   Genarate Table Method
@@ -143,9 +117,6 @@ const generateTable = (services) =>
   const users = createSystemUsers(20);
   const events = {}
   users.forEach(user => events[user.time] = {newUser: true, newUserId: user.id, serviceTime: user.serviceTime});
-
-  console.log({ users, events , services, que, resultEvents});
-  console.log("*******************")
 
   try
   {
@@ -204,29 +175,6 @@ const generateTable = (services) =>
         }
 
         resultEvents[time] = newEvent;
-        /*
-        
-
-        // Aynı anda birden fazla user sisteme girer ise?
-        // veya aynı anda birden fazla user beklerken sistemlerde birden fazlası boş ise
-        const emptyServiceId = getEmptyService(services);
-        
-        //Is there a empty service 
-        if(emptyServiceId  && que.length !== 0)
-        {
-          const user = que.shift();
-          
-          const newServiceFinishTime = (event.time + user.serviceTime);
-
-          console.log({newServiceFinishTime, que});
-          // fill the service with first element in que
-          const index = services.findIndex(s => s.id === emptyServiceId);
-          services[index] = {...services[index], userInServicce: user.id, serviceFinishTime: newServiceFinishTime}
-          
-          events[newServiceFinishTime] = {...events[newServiceFinishTime], ...finishServiceObject(user.id)} 
-        }
-
-        */
     }
 
   } catch(e) 
@@ -234,7 +182,9 @@ const generateTable = (services) =>
     console.error(e)
   }
   
-      console.log({ users, events , services, que, resultEvents});
+  console.log({ users, events , services, que, resultEvents});
+
+  return resultEvents;
 } 
 
 /*
@@ -251,7 +201,15 @@ export const serviceSlice = createSlice({
     {
       const services = state.services.map(s => ({...s, userInServicce: null, serviceFinishTime: null}));
 
-      const result = generateTable(services);
+      const resultObj = generateTable(services);
+
+      const resultEvents = [];
+
+      Object.entries(resultObj).map(item => {
+        resultEvents.push({time: item[0],...item[1]})
+      })
+
+      state.resultEvents = resultEvents;
     },
     addService: (state, action) => 
     {
