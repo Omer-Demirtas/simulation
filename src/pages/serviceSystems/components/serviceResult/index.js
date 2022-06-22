@@ -5,8 +5,8 @@ import SimulationTable from "../../../../components/common/simulationTable";
 const columns = [
     { id: 'time', label: 'Benzetim Süresi', minWidth: 170 },
     { id: 'commingUser', label: 'Gelen kullanıcı', minWidth: 170 },
-    { id: 'userInService', label: 'Service Giren', minWidth: 100 },
-    { id: 'finishedUser', label: 'Servisi Biten', minWidth: 100 },
+    { id: 'services', label: 'Service Giren', minWidth: 100 },
+    { id: 'finishedServices', label: 'Servisi Biten', minWidth: 100 },
     { id: 'que', label: 'Bekleyenler', minWidth: 100 },
 ];
 

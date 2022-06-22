@@ -101,9 +101,18 @@ const createSystemUsers = (n) =>
 /* Helper methods for simulation logic */
 
 //const finishServiceObject = (userId, service, time) => ({serviceFinihed: true, serviceFinishedUser: userId, service, time});
-const finishServiceObject = (userId, time) => ({serviceFinihed: true, serviceFinishedUser: userId});
 
 const queToString = (que) => que.map(q => q.id).join(',');
+const servicesToString = (services) => 
+{
+  if(!services) return '';
+
+  var result = [];
+  for (const [key, value] of Object.entries(services)) {
+    result.push(`${key}: ${value}`);
+  }
+  return result.join(", ");
+}
 
 /*
   Genarate Table Method
@@ -165,7 +174,6 @@ const generateTable = (services) =>
           {
             const i = Number(key);
 
-            console.log(`${key} - ${value}`);
             emptyServices[i] = true;
             services[i].userInServicce = null;
             services[i].serviceFinishTime = null;
@@ -179,7 +187,6 @@ const generateTable = (services) =>
         // Servis Müsait ve kuyrukta bir kullanıcı var
         if(emptyServices.find(s => s) && que.length !== 0)
         {
-          console.log('service');
           for (var i = 0; i < services.length; i++)
           {
             if(que.length === 0) break;
@@ -224,6 +231,11 @@ const generateTable = (services) =>
         }
 
         newEvent.que = queToString(que);
+        console.log('service' , {...newEvent.services});
+        console.log('finishedService', {...newEvent.finishedServices});
+
+        newEvent.services = servicesToString(newEvent.services);
+        newEvent.finishedServices = servicesToString(newEvent.finishedServices);
         resultEvents[time] = newEvent;
     }
 
