@@ -3,15 +3,15 @@ import { useSelector } from "react-redux";
 import SimulationTable from "../../../../components/common/simulationTable";
 
 const columns = [
-    { id: 'time', label: 'Benzetim Süresi', minWidth: 170 },
-    { id: 'commingUser', label: 'Gelen kullanıcı', minWidth: 170 },
+    { id: 'time', align: "center", label: 'Benzetim Süresi', minWidth: 170 },
+    { id: 'commingUser', align: "center", label: 'Gelen kullanıcı', minWidth: 170 },
     { id: 'service-1', label: '1', minWidth: 100 },
     { id: 'service-2', label: '2', minWidth: 100 },
     { id: 'service-3', label: '3', minWidth: 100 },
     { id: 'finish-1', label: '1', minWidth: 100 },
     { id: 'finish-2', label: '2', minWidth: 100 },
     { id: 'finish-3', label: '3', minWidth: 100 },
-    { id: 'que', label: 'Bekleyenler', minWidth: 100 },
+    { id: 'que', align: "center", label: 'Bekleyenler', minWidth: 100 },
 ];
 
 

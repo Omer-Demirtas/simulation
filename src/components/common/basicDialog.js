@@ -13,6 +13,8 @@ const BasicDialog = ({open, handleClose, children}) =>
             PaperProps={{
                 sx: {
                   width: "50%",
+                  maxHeight: '60%',
+                  minHeight: '60%',
                   p:1
                 }
             }}
