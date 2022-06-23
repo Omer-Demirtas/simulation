@@ -7,17 +7,19 @@ const SimulationTable = ({ rows, columns }) =>
         <TableContainer sx={{ height: '100%' }}>
             <Table stickyHeader aria-label="sticky table">
             <TableHead>
-                <TableRow>
-                {columns.map((column) => (
-                    <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                    >
-                    {column.label}
-                    </TableCell>
-                ))}
-                </TableRow>
+                {
+                    columns.map(col => (
+                        <TableCell
+                            key={col.id}
+                            align={col.align}
+                            style={{ minWidth: col.minWidth }}
+                        >
+                            {
+                                col.label
+                            }
+                        </TableCell>
+                    ))
+                }
             </TableHead>
             <TableBody>
                 {rows
