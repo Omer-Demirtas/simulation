@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,7 +9,6 @@ import {
   Legend
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { Chip, Stack } from "@mui/material";
 
 ChartJS.register(
     CategoryScale,
@@ -18,7 +17,7 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend
-  );
+);
   
 export const options = {
     responsive: true,
@@ -33,27 +32,26 @@ export const options = {
     }
 };
   
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
-  
-export const data = {
-    labels,
-    datasets: [
-      {
-        label: "Dataset 1",
-        data: labels.map((l, i) => (i * 100)),
-        backgroundColor: "rgba(255, 99, 132, 0.5)"
-      }
-    ]
-};
-  
-
 const CumulativeChart = ({cumulative}) => 
 {
-
-    console.log({cumulative});
-
+  const data = useMemo(() => {
+    const labels = Object.keys(cumulative);
     return (
-    <Bar options={options} data={data} onClick={(e) => console.log({ e })} />
+      {
+        labels,
+        datasets: [
+        {
+          label: "data",
+          data: Object.values(cumulative),
+          backgroundColor: "rgba(255, 99, 132, 0.5)"
+        }
+        ]
+      }
+    );
+  }, [cumulative]);
+
+  return (
+      <Bar options={options} data={data} onClick={(e) => console.log({ e })} />
     );
 }
 

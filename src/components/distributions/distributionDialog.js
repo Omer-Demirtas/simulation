@@ -1,7 +1,7 @@
-import { Stack, Tabs, Tab, Button, Chip } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { Stack, Tabs, Tab, Button, Chip, Card } from "@mui/material";
+import { useEffect, useState } from "react";
 import BasicDialog from "../common/basicDialog";
-import CumulativeChart from "./cumulative/cumulativeChart";
+import CumulativeTab from "./cumulative/cumulativeTab";
 
 const createTabs = (cumulative) => 
 {
@@ -10,7 +10,7 @@ const createTabs = (cumulative) =>
             {
                 label: '1',
                 isVisible: () => true,
-                Content: () =>(<CumulativeChart cumulative={cumulative} />)
+                Content: () =>(<h1>ASD</h1>)
               },
               {
                   label: '2',
@@ -26,7 +26,7 @@ const tabs =
     {
         label: '1',
         isVisible: () => true,
-        Content: (cumulative) =>(<CumulativeChart cumulative={cumulative} />)
+        Content: ({cumulative}) =>(<CumulativeTab cumulative={cumulative} />)
       },
       {
           label: '2',
@@ -50,7 +50,6 @@ const DistributionDialog = ({ open, handleClose, cumulative, uniform}) =>
     useEffect(() => {
         if(uniform) setTabIndex(1);
         //else if(uniform) setTabIndex(1);
-
         console.log('Distribution Dialog');
     },[]);
 
@@ -59,7 +58,7 @@ const DistributionDialog = ({ open, handleClose, cumulative, uniform}) =>
             open={open}
             handleClose={handleClose}
         >
-            <Stack direction="column" justifyContent="flex-end" sx={{ p: 1}}>
+            <Stack direction="column" justifyContent="flex-end">
                 <Stack direction="row">
                     <Tabs value={tabIndex} onChange={handleChangeTabIndex} centered>
                         <Tab label="Cumulative" />
@@ -73,27 +72,8 @@ const DistributionDialog = ({ open, handleClose, cumulative, uniform}) =>
                 >
                     <selectedTab.Content 
                         cumulative={cumulative}
+                        uniform={uniform}
                     />
-                </Stack>
-                <Stack sx={{mt: 1}} direction="row">
-                    {
-                        Object.keys(cumulative).map(k => (
-                            <Chip
-                                label={`${k} : ${cumulative[k]}`}
-                                variant="outlined"
-                                onClick={() => {}}
-                                onDelete={() => {}}
-                            />
-                        ))
-                    }
-                </Stack>
-                <Stack 
-                    sx={{height: '100%'}}
-                    alignItems="flex-end" 
-                    justifyContent="flex-end" 
-                    direction="row"
-                >
-                    <Button>ASD</Button>
                 </Stack>
             </Stack>
         </BasicDialog>

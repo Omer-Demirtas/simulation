@@ -1,4 +1,4 @@
-import { Button, Card, Dialog, DialogActions, DialogContent } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, Stack } from "@mui/material";
 
 
 const BasicDialog = ({open, handleClose, children}) =>
@@ -13,12 +13,20 @@ const BasicDialog = ({open, handleClose, children}) =>
             PaperProps={{
                 sx: {
                   width: "50%",
-                  minHeight: '70%',
-                  maxHeight: '70%',
+                  p:1
                 }
-              }}
+            }}
         >
-            {children}
+            <DialogContent
+                sx={{ m:0, p: 0 }}
+            >
+                {children}
+            </DialogContent>
+            <DialogActions
+                sx={{ m:0, p: 0 }}
+            >
+                <Button>asd</Button>
+            </DialogActions>
         </Dialog>
     );
 }
