@@ -1,5 +1,7 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 
+const maxWidth = 12
+
 const SimulationTable = ({ rows, columns }) => 
 {
 
@@ -7,7 +9,52 @@ const SimulationTable = ({ rows, columns }) =>
         <TableContainer sx={{ height: '100%' }}>
             <Table stickyHeader aria-label="sticky table">
             <TableHead>
+                <TableRow>
+                    <TableCell
+                        rowSpan={2}
+                        style={{ minWidth: `${maxWidth}%`}}
+                    >
+                        Benzetim Süresi
+                    </TableCell>
+                    <TableCell
+                        rowSpan={2}
+                        style={{ minWidth: `${maxWidth}%`}}
+                    >
+                        Gelen Kullanıcı
+                    </TableCell>
+
+                    <TableCell 
+                        align="center"
+                        colSpan={3}
+                    >
+                        Sirvistekiler
+                    </TableCell>
+
+                    <TableCell 
+                        align="center"
+                        colSpan={3}
+                    >
+                        Biten Servisler
+                    </TableCell>
+
+                    <TableCell
+                        style={{ minWidth: `${maxWidth}%`}}
+                        rowSpan={2}
+                    >
+                       Sırada Bekleyenler
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell>1</TableCell>
+                    <TableCell>2</TableCell>
+                    <TableCell>3</TableCell>
+                    <TableCell>1</TableCell>
+                    <TableCell>2</TableCell>
+                    <TableCell>3</TableCell>
+
+                </TableRow>
                 {
+                    /*
                     columns.map(col => (
                         <TableCell
                             key={col.id}
@@ -19,6 +66,7 @@ const SimulationTable = ({ rows, columns }) =>
                             }
                         </TableCell>
                     ))
+                    */
                 }
             </TableHead>
             <TableBody>
