@@ -100,13 +100,39 @@ const createSystemUsers = (n) =>
 
 /* Helper methods for simulation logic */
 
-const finishServiceObject = (userId, service, time) => ({serviceFinihed: true, serviceFinishedUser: userId, service, time});
+//const finishServiceObject = (userId, service, time) => ({serviceFinihed: true, serviceFinishedUser: userId, service, time});
 
 const queToString = (que) => que.map(q => q.id).join(',');
+const servicesToString = (services) => 
+{
+  if(!services) return '';
+
+  var result = [];
+  for (const [key, value] of Object.entries(services)) {
+    result.push(`${key}: ${value}`);
+  }
+  return result.join(", ");
+}
 
 /*
   Genarate Table Method
   * event based approach
+
+  Expected structure for Event
+  time: 
+  {
+    time: ,
+    commingUser: ,
+    services: {
+
+    },
+    finishedService: {
+      0: 1,
+      1: 2,
+    },
+    que: [],  
+  }
+
 */
 const generateTable = (services) =>
 {
@@ -118,7 +144,7 @@ const generateTable = (services) =>
 
   const users = createSystemUsers(20);
   const events = {}
-  users.forEach(user => events[user.time] = {newUser: true, newUserId: user.id, serviceTime: user.serviceTime});
+  users.forEach(user => events[user.time] = {newUser: true, newUserId: user.id, serviceTime: user.serviceTime, finishedServices: {}, services: {}});
 
   try
   {
@@ -138,25 +164,55 @@ const generateTable = (services) =>
         }
 
         // if a service finish
-        if(event.serviceFinihed)
+        if(event.serviceFinished)
         {
-          console.log('service finish');
-          newEvent.finishedUser = event.serviceFinishedUser;
+          //newEvent.finishedUser = event.serviceFinishedUser;
           
-          event.service.forEach(i => 
-            {
-              emptyServices[i] = true;
-              services[i].userInServicce = null;
-              services[i].serviceFinishTime = null;
-            }
-          );
+          const finishedServices = {};
 
+          for (const [key, value] of Object.entries(event.finishedServices)) 
+          {
+            const i = Number(key);
+
+            emptyServices[i] = true;
+            services[i].userInServicce = null;
+            services[i].serviceFinishTime = null;
+
+            finishedServices[i] = value;
+          }
+          
+          newEvent.finishedServices = finishedServices; 
         }
 
         // Servis Müsait ve kuyrukta bir kullanıcı var
-        if(emptyServices[0] && que.length !== 0)
+        if(emptyServices.find(s => s) && que.length !== 0)
         {
-          console.log('service');
+          for (var i = 0; i < services.length; i++)
+          {
+            if(que.length === 0) break;
+            if(!emptyServices[i]) continue;
+
+            const user = que.shift();
+
+            emptyServices[i] = false;
+
+            const newServiceFinishTime = (time + user.serviceTime);
+
+            // Fill service
+            services[i].userInServicce = user.id ;
+            services[i].serviceFinishTime = newServiceFinishTime;
+
+            //TODO Change for multiple service
+            newEvent.services = {...newEvent.services, [`${i}`]: user.id};
+
+            events[newServiceFinishTime] = {
+              ...events[newServiceFinishTime], 
+              serviceFinished: true,
+              finishedServices: {...events[newServiceFinishTime]?.finishedServices, [`${i}`]: user.id}
+            } 
+          }
+
+          /*
           emptyServices[0] = false;
           const user = que.shift();
           
@@ -171,9 +227,15 @@ const generateTable = (services) =>
 
           console.log({newServiceFinishTime});
           console.log({user});
+          */
         }
 
         newEvent.que = queToString(que);
+        console.log('service' , {...newEvent.services});
+        console.log('finishedService', {...newEvent.finishedServices});
+
+        newEvent.services = servicesToString(newEvent.services);
+        newEvent.finishedServices = servicesToString(newEvent.finishedServices);
         resultEvents[time] = newEvent;
     }
 
