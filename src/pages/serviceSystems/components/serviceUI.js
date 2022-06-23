@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Card, Fab, Grid, Stack, Tab, Tabs, Typography } from "@mui/material";
-import { useDispatch, useSelector } from 'react-redux';
+import { Card, Fab, Grid, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { useSelector } from 'react-redux';
 import ServiceDialog from './serviceDialog';
 import ServiceButtonGroup from './serviceButtonGroup';
 import UserDialog from './userDialog/userDialog';
-import BasicDialog from '../../../components/common/basicDialog';
 
 const ServiceSimulationUI = () => 
 {
@@ -14,7 +13,7 @@ const ServiceSimulationUI = () =>
     const services = useSelector((state) => state.service.services);
 
     const handleClose = () => setOpen(0);
-    const handleOpenUserDialog = () => setOpen(2);
+    const handleOpenUserDialog = () => setOpen(1);
 
     return (
         <React.Fragment>
@@ -22,12 +21,6 @@ const ServiceSimulationUI = () =>
                 open={open === 1}
                 handleClose={handleClose}
             />
-            <BasicDialog 
-                open={open == 2}
-                handleClose={handleClose}
-            >
-                ASD
-            </BasicDialog>
             <Grid 
                 sx={{paddingTop: '2rem'}}
                 direction="row"

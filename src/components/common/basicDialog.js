@@ -1,4 +1,4 @@
-import { Card, Dialog } from "@mui/material";
+import { Button, Card, Dialog, DialogActions, DialogContent } from "@mui/material";
 
 
 const BasicDialog = ({open, handleClose, children}) =>
@@ -10,11 +10,15 @@ const BasicDialog = ({open, handleClose, children}) =>
             maxWidth="md"
             fullWidth={true}
             onClose={handleClose}
-            sx={{height: '400px'}}
+            PaperProps={{
+                sx: {
+                  width: "50%",
+                  minHeight: '70%',
+                  maxHeight: '70%',
+                }
+              }}
         >
-            <Card sx={{width: '100%', height: '100%', bgcolor: 'red'}}>
-             {children}
-            </Card>
+            {children}
         </Dialog>
     );
 }
