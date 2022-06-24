@@ -1,6 +1,6 @@
 import { Button, Chip, Stack } from '@mui/material';
 import CumulativeChart from '../cumulative/cumulativeChart';
-import React, { useState } from 'react'
+import React from 'react'
 import CumulativeBar from './cumulativeBar';
 
 const CumulativeTab = ({ cumulative, setDistribution }) =>

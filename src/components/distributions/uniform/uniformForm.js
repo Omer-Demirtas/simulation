@@ -1,8 +1,8 @@
-import { Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
 
 
 
-const UniformForm = ({ value, handleChange }) =>
+const UniformForm = ({ value, handleChange, handleSave }) =>
 {
 
     return (
@@ -14,14 +14,24 @@ const UniformForm = ({ value, handleChange }) =>
         >
             <TextField 
                 name="a"
+                type="number"
                 value={value.a}
                 onChange={handleChange}
+                InputLabelProps={{shrink: true,}}
             />
             <TextField 
                 name="b"
+                type="number"
                 value={value.b}
                 onChange={handleChange}
+                InputLabelProps={{shrink: true,}}
+
             />
+            <Button
+                onClick={handleSave}
+            >
+                Submit
+            </Button>
         </Stack>
     );
 }

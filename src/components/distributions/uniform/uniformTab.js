@@ -9,7 +9,7 @@ const UnifromTab = ({ uniform, setDistribution }) =>
 
     const handleInput = (e) => 
     {
-        setInput({...input, [e.target.name]: e.target.value});
+        setInput({...input, [e.target.name]: Number(e.target.value)});
     }
 
     const handleSave = () =>
@@ -27,9 +27,12 @@ const UnifromTab = ({ uniform, setDistribution }) =>
             direction="column"
             spacing={3}
         >
-            <UniformChart />
+            <UniformChart 
+                input={input}
+            />
             <UniformForm 
                 value={input}
+                handleSave={handleSave}
                 handleChange={handleInput}
             />
 
