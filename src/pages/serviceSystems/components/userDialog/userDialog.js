@@ -33,7 +33,7 @@ const UserDialog = ({ handleClose, open}) =>
         >
             <DistributionDialog
                 open={dialogOpen}
-                cumulative={user.gas.value}
+                distribution={user.gas.value}
                 handleClose={handleDialogClose}
                 saveDistribution={handleSaveDistribution}
             />
