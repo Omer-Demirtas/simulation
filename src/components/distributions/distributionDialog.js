@@ -2,6 +2,7 @@ import { Stack, Tabs, Tab, Button, Chip, Card } from "@mui/material";
 import { useEffect, useState } from "react";
 import BasicDialog from "../common/basicDialog";
 import CumulativeTab from "./cumulative/cumulativeTab";
+import UnifromTab from "./uniform/uniformTab";
 
 const tabs = 
 [
@@ -13,7 +14,7 @@ const tabs =
       {
           label: '2',
           isVisible: () => true,
-          Content: () =>(<h1>2</h1>)
+          Content: ({distribution, setDistribution}) =>(<UnifromTab uniform={distribution} setDistribution={setDistribution} />)
       },
 ]
 
@@ -23,13 +24,15 @@ const DistributionDialog = ({ open, handleClose, distribution, distributionType,
 
     const [tabIndex, setTabIndex] = useState(0);
 
-    const handleChangeTabIndex = (_, newValue) => {
-      setTabIndex(newValue);
+    const handleChangeTabIndex = (_, newValue) => 
+    {
+        setTabIndex(newValue);
+        setDist(newValue === distributionType ? distribution : {});    
     };
 
     const handleSave = () => 
     {
-        saveDistribution(dist);
+        saveDistribution({distribution: dist, distributionType: tabIndex});
         handleClose();
     }
 

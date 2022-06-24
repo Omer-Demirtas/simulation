@@ -36,6 +36,7 @@ const UserDialog = ({ handleClose, open}) =>
                 distribution={user.gas.value}
                 handleClose={handleDialogClose}
                 saveDistribution={handleSaveDistribution}
+                distributionType={user.gas.distributionType}
             />
             <DialogTitle id="alert-dialog-title">
                 {"User"}

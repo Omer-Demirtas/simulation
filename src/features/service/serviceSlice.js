@@ -1,12 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-
-const initialState = 
-{
-  user: {
-    gas: {
-      distributionType: 0,
-      value: 
+/*
+value: 
       {
         1: 10,
         2: 20,
@@ -14,6 +9,17 @@ const initialState =
         4: 30,
         5: 15,
         6: 15
+      }
+*/
+
+const initialState = 
+{
+  user: {
+    gas: {
+      distributionType: 1,
+      value: {
+        a: 10,
+        b: 15
       }
     },
   },
@@ -275,8 +281,11 @@ export const serviceSlice = createSlice({
     },
     updateUserDistribution: (state, action) => 
     {
-      console.log({action})
-      state.user.gas.value=action.payload;
+      const {distribution, distributionType} = action.payload;
+
+      console.log({distribution, distributionType})
+
+      state.user.gas = { distributionType, value: distribution };
     }
   },
 })
