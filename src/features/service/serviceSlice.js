@@ -61,23 +61,37 @@ const getFromCumulative = (cumulative) =>
     }
 
 
-const getFromUniformDistribution = (a, b) => 
-    {
-        const rand = getRandomNumber();
+const getFromUniformDistribution = ({a, b}) => 
+{
+  const rand = getRandomNumber();
 
-        return Math.floor((a + (b - a) * rand))
+  return Math.floor((a + (b - a) * rand))
 }
 
-const createSystemUsers = (n, c) =>
+const generateDistributionOption = (distribution) =>
 {
-  const cumulative = getFromCumulative(c);
+  console.log({distribution})
+  if(distribution.distributionType === 0)
+  {
+    return [getFromCumulative(distribution.value), getCumulativeValue];
+  }
+  else if(distribution.distributionType === 1)
+  {
+    return [distribution.value, getFromUniformDistribution]
+  }
+}
+
+const createSystemUsers = (n, distribution) =>
+{
+  const [options, generator] = generateDistributionOption(distribution);
+
   const users = [];
   var time = 0;
 
   for (var i = 0; i < n; i++)
   {
-      const gas = getCumulativeValue(cumulative);
-      const serviceTime = getFromUniformDistribution(10, 20);
+      const gas = generator(options);
+      const serviceTime = getFromUniformDistribution({a: 10, b: 20});
       time+=gas;
 
       users.push( 
@@ -131,15 +145,15 @@ const servicesToList = (services) =>
   }
 
 */
-const generateTable = (services, c) =>
+const generateTable = (services, user) =>
 {
-  // Definitios 
+  // Definitios
   const que = [];
   const resultEvents = {};
   const emptyServices = new Array(services.length);
   emptyServices.fill(true);  
 
-  const users = createSystemUsers(20, c);
+  const users = createSystemUsers(20, user.gas);
   const events = {}
   users.forEach(user => events[user.time] = {newUser: true, newUserId: user.id, serviceTime: user.serviceTime, finishedServices: {}, services: {}});
 
@@ -257,7 +271,9 @@ export const serviceSlice = createSlice({
     {
       const services = state.services.map(s => ({...s, userInServicce: null, serviceFinishTime: null}));
 
-      const resultObj = generateTable(services, state.user.gas.value);
+      const user = JSON.parse(JSON.stringify(state.user));
+
+      const resultObj = generateTable(services, user);
 
       const resultEvents = [];
 
