@@ -1,13 +1,26 @@
 import { Button, Chip, Stack } from '@mui/material';
 import CumulativeChart from '../cumulative/cumulativeChart';
-import React from 'react'
+import React, { useState } from 'react'
+import CumulativeBar from './cumulativeBar';
 
-const CumulativeTab = ({ cumulative }) =>
+const CumulativeTab = ({ cumulative, setDistribution }) =>
 {
+    const handleUpdate = () =>
+    {
+        setDistribution(
+            {
+                1: 50,
+                2: 30,
+                3: 20
+            }
+        )
+    }
+
     return (
         <Stack 
             sx={{width: '100%'}}
             direction="column"
+            spacing={3}
         >
             <Stack
                 justifyContent="center"
@@ -16,25 +29,17 @@ const CumulativeTab = ({ cumulative }) =>
             >
                 <CumulativeChart cumulative={cumulative} />
             </Stack>
+            <CumulativeBar
+                cumulative={cumulative}
+            />
             <Stack
-                sx={{my: 1}} 
                 direction="row"
                 justifyContent="center"
             >
-                {
-                    Object.keys(cumulative).map(k => (
-                        <Chip
-                            key={k}
-                            sx={{ mr: 1 }}
-                            label={`${k} : ${cumulative[k]}`}
-                            variant="outlined"
-                            onClick={() => {}}
-                            onDelete={() => {}}
-                        />
-                    ))
-                }
-                <Button>
-                    +
+                <Button
+                    onClick={handleUpdate}
+                >
+                    update
                 </Button>
             </Stack>
         </Stack>

@@ -2,7 +2,21 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from
 
 const maxWidth = 12
 
-const SimulationTable = ({ rows, columns }) => 
+const ServiceCell = (services) => 
+{
+    return (
+        services.map(service => (
+            <TableCell
+                key={service.id}
+                align="center"
+            >
+                {service.title}
+            </TableCell>
+        ))
+    );
+}
+
+const SimulationTable = ({ rows, columns, services }) => 
 {
 
     return (
@@ -26,14 +40,14 @@ const SimulationTable = ({ rows, columns }) =>
 
                     <TableCell 
                         align="center"
-                        colSpan={3}
+                        colSpan={services.length}
                     >
                         Sirvistekiler
                     </TableCell>
 
                     <TableCell 
                         align="center"
-                        colSpan={3}
+                        colSpan={services.length}
                     >
                         Biten Servisler
                     </TableCell>
@@ -46,13 +60,8 @@ const SimulationTable = ({ rows, columns }) =>
                     </TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell>1</TableCell>
-                    <TableCell>2</TableCell>
-                    <TableCell>3</TableCell>
-                    <TableCell>1</TableCell>
-                    <TableCell>2</TableCell>
-                    <TableCell>3</TableCell>
-
+                    {ServiceCell(services)}
+                    {ServiceCell(services)}
                 </TableRow>
                 {
                     /*
@@ -76,15 +85,13 @@ const SimulationTable = ({ rows, columns }) =>
                     return (
                     <TableRow key={row.time} hover role="checkbox" tabIndex={-1}>
                         {columns.map((column) => {
-                        const value = row[column.id];
+                        const value = column.render ? column.render(row) : row[column.id];
                         return (
                             <TableCell 
                                 key={column.id} 
-                                align={column.align}
+                                align="center"
                             >
-                            {column.format && typeof value === 'number'
-                                ? column.format(value)
-                                : value}
+                                {value}
                             </TableCell>
                         );
                         })}

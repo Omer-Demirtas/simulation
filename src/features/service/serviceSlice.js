@@ -1,8 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+/*
+value: 
+      {
+        1: 10,
+        2: 20,
+        3: 10,
+        4: 30,
+        5: 15,
+        6: 15
+      }
+*/
 
 const initialState = 
 {
+  user: {
+    gas: {
+      distributionType: 1,
+      value: {
+        a: 10,
+        b: 15
+      }
+    },
+  },
   services: [
     {
       id: 1,
@@ -20,68 +40,58 @@ const initialState =
     }
   ],
   resultEvents: []
-};
+}
 
 const getRandomNumber = () => Math.random().toFixed(2);
 
-const cumulativeDistribution = 
-[
-    {
-        value: 2,
-        percent: 20
-    },
-    {
-        value: 3,
-        percent: 30
-    },
-    {
-        value: 4,
-        percent: 25
-    },
-    {
-        value: 5,
-        percent: 15
-    },
-    {
-        value: 6,
-        percent: 10
-    },
-]
-
-const getFromCumulative = () => 
-    {
-        const values = cumulativeDistribution.map(c => c.percent);
-        let cumulative = [];  
-        values.reduce( (prev, curr,i) =>  cumulative[i] = prev + curr , 0 )
-        
-        const rand = getRandomNumber();
-        
-        var i = 0
-        for(var c of cumulative)
-        {
-            if(c >= (rand * 100)) break;
-            i++;
-        }
-
-        return cumulativeDistribution[i].value;
-}
-
-const getFromUniformDistribution = (a, b) => 
-    {
-        const rand = getRandomNumber();
-
-        return Math.floor((a + (b - a) * rand))
-}
-
-const createSystemUsers = (n) =>
+const getCumulativeValue = (cu) =>
 {
+    const rand = getRandomNumber() * 100;
+
+    return cu.findIndex(c => rand < c);
+}
+
+const getFromCumulative = (cumulative) => 
+    {
+        const values = Object.values(cumulative);
+
+        const c = values.map((sum => value => sum += value)(0))
+
+        return c;
+    }
+
+
+const getFromUniformDistribution = ({a, b}) => 
+{
+  const rand = getRandomNumber();
+
+  return Math.floor((a + (b - a) * rand))
+}
+
+const generateDistributionOption = (distribution) =>
+{
+  console.log({distribution})
+  if(distribution.distributionType === 0)
+  {
+    return [getFromCumulative(distribution.value), getCumulativeValue];
+  }
+  else if(distribution.distributionType === 1)
+  {
+    return [distribution.value, getFromUniformDistribution]
+  }
+}
+
+const createSystemUsers = (n, distribution) =>
+{
+  const [options, generator] = generateDistributionOption(distribution);
+
   const users = [];
   var time = 0;
 
   for (var i = 0; i < n; i++)
   {
-      const gas = getFromCumulative();
-      const serviceTime = getFromUniformDistribution(10, 20);
+      const gas = generator(options);
+      const serviceTime = getFromUniformDistribution({a: 10, b: 20});
       time+=gas;
 
       users.push( 
@@ -103,15 +113,16 @@ const createSystemUsers = (n) =>
 //const finishServiceObject = (userId, service, time) => ({serviceFinihed: true, serviceFinishedUser: userId, service, time});
 
 const queToString = (que) => que.map(q => q.id).join(',');
-const servicesToString = (services) => 
+
+const servicesToList = (services) => 
 {
-  if(!services) return '';
+  if(!services) return null;
 
   var result = [];
   for (const [key, value] of Object.entries(services)) {
-    result.push(`${key}: ${value}`);
+    result[Number(key)] = value;
   }
-  return result.join(", ");
+  return result;
 }
 
 /*
@@ -134,15 +145,15 @@ const servicesToString = (services) =>
   }
 
 */
-const generateTable = (services) =>
+const generateTable = (services, user) =>
 {
-  // Definitios 
+  // Definitios
   const que = [];
   const resultEvents = {};
   const emptyServices = new Array(services.length);
   emptyServices.fill(true);  
 
-  const users = createSystemUsers(20);
+  const users = createSystemUsers(20, user.gas);
   const events = {}
   users.forEach(user => events[user.time] = {newUser: true, newUserId: user.id, serviceTime: user.serviceTime, finishedServices: {}, services: {}});
 
@@ -231,11 +242,8 @@ const generateTable = (services) =>
         }
 
         newEvent.que = queToString(que);
-        console.log('service' , {...newEvent.services});
-        console.log('finishedService', {...newEvent.finishedServices});
-
-        newEvent.services = servicesToString(newEvent.services);
-        newEvent.finishedServices = servicesToString(newEvent.finishedServices);
+        newEvent.services = servicesToList(newEvent.services);
+        newEvent.finishedServices = servicesToList(newEvent.finishedServices);
         resultEvents[time] = newEvent;
     }
 
@@ -263,7 +271,9 @@ export const serviceSlice = createSlice({
     {
       const services = state.services.map(s => ({...s, userInServicce: null, serviceFinishTime: null}));
 
-      const resultObj = generateTable(services);
+      const user = JSON.parse(JSON.stringify(state.user));
+
+      const resultObj = generateTable(services, user);
 
       const resultEvents = [];
 
@@ -284,14 +294,23 @@ export const serviceSlice = createSlice({
     addServiceType: (state, action) => 
     {
       state.serviceTypes.push(action.payload)
+    },
+    updateUserDistribution: (state, action) => 
+    {
+      const {distribution, distributionType} = action.payload;
+
+      console.log({distribution, distributionType})
+
+      state.user.gas = { distributionType, value: distribution };
     }
   },
 })
 
 
-export const { createTable, addService, addServiceType } = serviceSlice.actions
+export const { createTable, addService, addServiceType, updateUserDistribution } = serviceSlice.actions
 
-//export const selectCount = (state) => state.counter.value
+export const selectEventsAndServices = (state) => [ state.service.resultEvents, state.service.services]
+export const selectUser = (state) => state.service.user;
 
 export default serviceSlice.reducer
 

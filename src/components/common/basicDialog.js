@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, Stack } from "@mui/material";
 
 
-const BasicDialog = ({open, handleClose, children}) =>
+const BasicDialog = ({open, handleClose, children, handleSave}) =>
 {
 
     return (
@@ -26,8 +26,10 @@ const BasicDialog = ({open, handleClose, children}) =>
             </DialogContent>
             <DialogActions
                 sx={{ m:0, p: 0 }}
+
             >
-                <Button>asd</Button>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={handleSave}>Save</Button>
             </DialogActions>
         </Dialog>
     );
