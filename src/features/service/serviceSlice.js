@@ -3,6 +3,20 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = 
 {
+  user: {
+    gas: {
+      distributionType: 0,
+      value: 
+      {
+        1: 10,
+        2: 20,
+        3: 10,
+        4: 30,
+        5: 15,
+        6: 15
+      }
+    },
+  },
   services: [
     {
       id: 1,
@@ -20,51 +34,26 @@ const initialState =
     }
   ],
   resultEvents: []
-};
+}
 
 const getRandomNumber = () => Math.random().toFixed(2);
 
-const cumulativeDistribution = 
-[
-    {
-        value: 2,
-        percent: 20
-    },
-    {
-        value: 3,
-        percent: 30
-    },
-    {
-        value: 4,
-        percent: 25
-    },
-    {
-        value: 5,
-        percent: 15
-    },
-    {
-        value: 6,
-        percent: 10
-    },
-]
+const getCumulativeValue = (cu) =>
+{
+    const rand = getRandomNumber() * 100;
 
-const getFromCumulative = () => 
-    {
-        const values = cumulativeDistribution.map(c => c.percent);
-        let cumulative = [];  
-        values.reduce( (prev, curr,i) =>  cumulative[i] = prev + curr , 0 )
-        
-        const rand = getRandomNumber();
-        
-        var i = 0
-        for(var c of cumulative)
-        {
-            if(c >= (rand * 100)) break;
-            i++;
-        }
-
-        return cumulativeDistribution[i].value;
+    return cu.findIndex(c => rand < c);
 }
+
+const getFromCumulative = (cumulative) => 
+    {
+        const values = Object.values(cumulative);
+
+        const c = values.map((sum => value => sum += value)(0))
+
+        return c;
+    }
+
 
 const getFromUniformDistribution = (a, b) => 
     {
@@ -73,14 +62,15 @@ const getFromUniformDistribution = (a, b) =>
         return Math.floor((a + (b - a) * rand))
 }
 
-const createSystemUsers = (n) =>
+const createSystemUsers = (n, c) =>
 {
+  const cumulative = getFromCumulative(c);
   const users = [];
   var time = 0;
 
   for (var i = 0; i < n; i++)
   {
-      const gas = getFromCumulative();
+      const gas = getCumulativeValue(cumulative);
       const serviceTime = getFromUniformDistribution(10, 20);
       time+=gas;
 
@@ -103,16 +93,6 @@ const createSystemUsers = (n) =>
 //const finishServiceObject = (userId, service, time) => ({serviceFinihed: true, serviceFinishedUser: userId, service, time});
 
 const queToString = (que) => que.map(q => q.id).join(',');
-const servicesToString = (services) => 
-{
-  if(!services) return '';
-
-  var result = [];
-  for (const [key, value] of Object.entries(services)) {
-    result.push(`${key}: ${value}`);
-  }
-  return result.join(", ");
-}
 
 const servicesToList = (services) => 
 {
@@ -145,7 +125,7 @@ const servicesToList = (services) =>
   }
 
 */
-const generateTable = (services) =>
+const generateTable = (services, c) =>
 {
   // Definitios 
   const que = [];
@@ -153,7 +133,7 @@ const generateTable = (services) =>
   const emptyServices = new Array(services.length);
   emptyServices.fill(true);  
 
-  const users = createSystemUsers(20);
+  const users = createSystemUsers(20, c);
   const events = {}
   users.forEach(user => events[user.time] = {newUser: true, newUserId: user.id, serviceTime: user.serviceTime, finishedServices: {}, services: {}});
 
@@ -271,7 +251,7 @@ export const serviceSlice = createSlice({
     {
       const services = state.services.map(s => ({...s, userInServicce: null, serviceFinishTime: null}));
 
-      const resultObj = generateTable(services);
+      const resultObj = generateTable(services, state.user.gas.value);
 
       const resultEvents = [];
 
@@ -292,14 +272,20 @@ export const serviceSlice = createSlice({
     addServiceType: (state, action) => 
     {
       state.serviceTypes.push(action.payload)
+    },
+    updateUserDistribution: (state, action) => 
+    {
+      console.log({action})
+      state.user.gas.value=action.payload;
     }
   },
 })
 
 
-export const { createTable, addService, addServiceType } = serviceSlice.actions
+export const { createTable, addService, addServiceType, updateUserDistribution } = serviceSlice.actions
 
 export const selectEventsAndServices = (state) => [ state.service.resultEvents, state.service.services]
+export const selectUser = (state) => state.service.user;
 
 export default serviceSlice.reducer
 

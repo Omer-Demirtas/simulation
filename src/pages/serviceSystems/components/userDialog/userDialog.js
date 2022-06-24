@@ -1,25 +1,26 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import DistributionDialog from "../../../../components/distributions/distributionDialog";
+import { selectUser, updateUserDistribution } from "../../../../features/service/serviceSlice";
 
 const UserDialog = ({ handleClose, open}) => 
 {
-
     const handleAddNewType = () => 
     {
         handleClose();
     }
-
-    const [state, setState] = useState({
-        1: 10,
-        2: 20,
-        3: 10,
-        4: 30,
-        5: 15,
-        6: 15
-    });
     
-    const [distribution, setDistribution] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
+ 
+    const user = useSelector(statea => selectUser(statea))
+
+    const dispatch = useDispatch();
+
+    const handleDialogClose = () => setDialogOpen(false);
+    const handleOpenDialog = () => setDialogOpen(true);
+
+    const handleSaveDistribution = (distribution) => dispatch(updateUserDistribution(distribution))
 
     return (
         <Dialog
@@ -31,9 +32,10 @@ const UserDialog = ({ handleClose, open}) =>
             aria-describedby="alert-dialog-description"
         >
             <DistributionDialog
-                cumulative={state}
-                open={distribution}
-                handleClose={() => setDistribution(false)}
+                open={dialogOpen}
+                cumulative={user.gas.value}
+                handleClose={handleDialogClose}
+                saveDistribution={handleSaveDistribution}
             />
             <DialogTitle id="alert-dialog-title">
                 {"User"}
@@ -49,7 +51,7 @@ const UserDialog = ({ handleClose, open}) =>
                         Set GAS Distributon :
                     </Typography> 
                     <Button
-                        onClick={() => setDistribution(true )}
+                        onClick={handleOpenDialog}
                     >
                         set distribution
                     </Button>

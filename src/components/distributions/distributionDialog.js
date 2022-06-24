@@ -3,30 +3,12 @@ import { useEffect, useState } from "react";
 import BasicDialog from "../common/basicDialog";
 import CumulativeTab from "./cumulative/cumulativeTab";
 
-const createTabs = (cumulative) => 
-{
-    return (
-        [
-            {
-                label: '1',
-                isVisible: () => true,
-                Content: () =>(<h1>ASD</h1>)
-              },
-              {
-                  label: '2',
-                  isVisible: () => true,
-                  Content: () =>(<h1>2</h1>)
-              },
-        ]
-    )
-}
-
 const tabs = 
 [
     {
         label: '1',
         isVisible: () => true,
-        Content: ({cumulative}) =>(<CumulativeTab cumulative={cumulative} />)
+        Content: ({cumulative, setDistribution}) =>(<CumulativeTab cumulative={cumulative} setDistribution={setDistribution} />)
       },
       {
           label: '2',
@@ -35,15 +17,23 @@ const tabs =
       },
 ]
 
-const DistributionDialog = ({ open, handleClose, cumulative, uniform}) => 
+const DistributionDialog = ({ open, handleClose, cumulative, uniform, saveDistribution}) => 
 {
-    const [tabIndex, setTabIndex] = useState(0);
+    const [distribution, setDistribution] = useState({});
 
-    //const tabs = useMemo(() => createTabs(cumulative), []);
+    const [tabIndex, setTabIndex] = useState(0);
 
     const handleChangeTabIndex = (_, newValue) => {
       setTabIndex(newValue);
     };
+
+    const handleSave = () => 
+    {
+        console.log('save');
+
+        saveDistribution(distribution);
+        handleClose();
+    }
 
     const selectedTab = tabs[tabIndex];
 
@@ -56,6 +46,7 @@ const DistributionDialog = ({ open, handleClose, cumulative, uniform}) =>
     return (
         <BasicDialog
             open={open}
+            handleSave={handleSave}
             handleClose={handleClose}
         >
             <Stack direction="column" justifyContent="flex-end">
@@ -71,8 +62,9 @@ const DistributionDialog = ({ open, handleClose, cumulative, uniform}) =>
                     direction="row"
                 >
                     <selectedTab.Content 
-                        cumulative={cumulative}
                         uniform={uniform}
+                        cumulative={cumulative}
+                        setDistribution={setDistribution}
                     />
                 </Stack>
             </Stack>
