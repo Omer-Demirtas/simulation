@@ -18,6 +18,7 @@ const UserDialog = ({ handleClose, open}) =>
         5: 15,
         6: 15
     });
+    
     const [distribution, setDistribution] = useState(false);
 
     return (

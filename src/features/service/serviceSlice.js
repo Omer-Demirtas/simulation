@@ -114,6 +114,17 @@ const servicesToString = (services) =>
   return result.join(", ");
 }
 
+const servicesToList = (services) => 
+{
+  if(!services) return null;
+
+  var result = [];
+  for (const [key, value] of Object.entries(services)) {
+    result[Number(key)] = value;
+  }
+  return result;
+}
+
 /*
   Genarate Table Method
   * event based approach
@@ -231,11 +242,8 @@ const generateTable = (services) =>
         }
 
         newEvent.que = queToString(que);
-        console.log('service' , {...newEvent.services});
-        console.log('finishedService', {...newEvent.finishedServices});
-
-        newEvent.services = servicesToString(newEvent.services);
-        newEvent.finishedServices = servicesToString(newEvent.finishedServices);
+        newEvent.services = servicesToList(newEvent.services);
+        newEvent.finishedServices = servicesToList(newEvent.finishedServices);
         resultEvents[time] = newEvent;
     }
 
@@ -291,7 +299,7 @@ export const serviceSlice = createSlice({
 
 export const { createTable, addService, addServiceType } = serviceSlice.actions
 
-//export const selectCount = (state) => state.counter.value
+export const selectEventsAndServices = (state) => [ state.service.resultEvents, state.service.services]
 
 export default serviceSlice.reducer
 

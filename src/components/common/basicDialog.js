@@ -26,8 +26,10 @@ const BasicDialog = ({open, handleClose, children}) =>
             </DialogContent>
             <DialogActions
                 sx={{ m:0, p: 0 }}
-            >
-                <Button>asd</Button>
+
+            >te
+                <Button>Cancel</Button>
+                <Button>Save</Button>
             </DialogActions>
         </Dialog>
     );
