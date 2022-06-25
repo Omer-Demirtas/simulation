@@ -53,7 +53,7 @@ const DistributionDialog = ({ open, handleClose, distribution, distributionType,
         >
             <Stack direction="column" justifyContent="flex-end">
                 <Stack direction="row">
-                    <Tabs value={tabIndex} onChange={handleChangeTabIndex} centered>
+                    <Tabs sx={{mb: 2}} value={tabIndex} onChange={handleChangeTabIndex} centered>
                         <Tab label="Cumulative" />
                         <Tab label="Uniform" />
                     </Tabs>

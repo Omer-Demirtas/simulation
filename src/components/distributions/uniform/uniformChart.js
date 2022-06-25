@@ -25,6 +25,11 @@ const UniformChart = ({ input }) =>
       {
         options: 
         {
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
           tooltips: 
           {
             mode: 'index',

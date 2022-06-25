@@ -1,8 +1,27 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Stack, TableBody, TableCell, TableRow, TextField, Typography, Zoom } from "@mui/material";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DistributionDialog from "../../../../components/distributions/distributionDialog";
 import { selectUser, updateUserDistribution } from "../../../../features/service/serviceSlice";
+
+const Row = ({children}) =>
+{
+
+    return (
+        <React.Fragment>
+
+            <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                sx={{my: 1}}
+            >
+                {children}
+            </Stack>
+            <Divider />
+        </React.Fragment>
+    );
+}
 
 const UserDialog = ({ handleClose, open}) => 
 {
@@ -28,8 +47,12 @@ const UserDialog = ({ handleClose, open}) =>
             fullWidth={true}
             open={open}
             onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
+            PaperProps={{
+                sx: {
+                  maxHeight: '40%',
+                  minHeight: '40%',
+                }
+            }}
         >
             <DistributionDialog
                 open={dialogOpen}
@@ -39,24 +62,21 @@ const UserDialog = ({ handleClose, open}) =>
                 distributionType={user.gas.distributionType}
             />
             <DialogTitle id="alert-dialog-title">
-                {"User"}
+                {"Customer Settings"}
             </DialogTitle>
             <DialogContent>
-                <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    spacing={2}
-                >
-                    <Typography variant="body1">
-                        Set GAS Distributon :
-                    </Typography> 
+                <Row>
                     <Button
                         onClick={handleOpenDialog}
                     >
-                        set distribution
+                        Set GAS Distributon
                     </Button>
-                </Stack>    
+                </Row>
+                <Row>
+                    <Button>
+                        Servis Selection statistics
+                    </Button>
+                </Row>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>CANCEL</Button>

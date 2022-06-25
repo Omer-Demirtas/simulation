@@ -35,16 +35,6 @@ const UnifromTab = ({ uniform, setDistribution }) =>
                 handleSave={handleSave}
                 handleChange={handleInput}
             />
-
-            <Stack
-                direction="row"
-            >
-                <Button
-                    onClick={handleSave}
-                >
-                    Save
-                </Button>
-            </Stack>
         </Stack>
     );
 }
