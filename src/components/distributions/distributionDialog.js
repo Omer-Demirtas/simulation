@@ -1,5 +1,7 @@
 import { Stack, Tabs, Tab, Button, Chip, Card } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { selectAllDistribution } from "../../features/distribution/distributionSlice";
 import BasicDialog from "../common/basicDialog";
 import CumulativeTab from "./cumulative/cumulativeTab";
 import UnifromTab from "./uniform/uniformTab";
@@ -27,7 +29,7 @@ const DistributionDialog = ({ open, handleClose, distribution, distributionType,
     const handleChangeTabIndex = (_, newValue) => 
     {
         setTabIndex(newValue);
-        setDist(newValue === distributionType ? distribution : {});    
+        setDist(newValue === distributionType ? distribution : null);    
     };
 
     const handleSave = () => 
