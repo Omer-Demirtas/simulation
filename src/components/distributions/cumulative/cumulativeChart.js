@@ -23,14 +23,14 @@ export const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: "top"
-      },
-      title: {
-        display: false,
-        text: "Chart.js Bar Chart"
+        display: false
       }
+    },
+    title: {
+      display: false,
+      text: "Chart.js Bar Chart"
     }
-};
+  }
   
 const CumulativeChart = ({cumulative}) => 
 {

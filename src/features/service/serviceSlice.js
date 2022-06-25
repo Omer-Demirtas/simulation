@@ -70,7 +70,6 @@ const getFromUniformDistribution = ({a, b}) =>
 
 const generateDistributionOption = (distribution) =>
 {
-  console.log({distribution})
   if(distribution.distributionType === 0)
   {
     return [getFromCumulative(distribution.value), getCumulativeValue];
@@ -84,7 +83,6 @@ const generateDistributionOption = (distribution) =>
 const createSystemUsers = (n, distribution) =>
 {
   const [options, generator] = generateDistributionOption(distribution);
-
   const users = [];
   var time = 0;
 
@@ -313,20 +311,3 @@ export const selectEventsAndServices = (state) => [ state.service.resultEvents, 
 export const selectUser = (state) => state.service.user;
 
 export default serviceSlice.reducer
-
-/*
-export const incrementAsync = (amount) => (dispatch) => {
-  setTimeout(() => {
-    dispatch(incrementByAmount(amount))
-  }, 1000)
-}
-
-export const selectAllUsers = (state) => state.users;
-
-export const selectUserById = (state, userId) =>
-    state.users.find(user => user.id === userId)
-*/
-
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state) => state.counter.value)`
