@@ -9,17 +9,17 @@ import {
 } from 'chart.js';
 import { Scatter } from 'react-chartjs-2';
 
-
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 const UniformChart = ({ input }) =>
 {
 
-  const data = useMemo(() => {
+  const data = useMemo(() => 
+  {
     if(!input) return null;
+  
     const {a, b} = input;
     const diff = b - a; 
-
 
     return (
       {
@@ -56,7 +56,7 @@ const UniformChart = ({ input }) =>
             {
               label: 'Chart 2',
               data: [{x: (a-(diff/5)), y: 20}, {x: (b+(diff/5)), y: 20}],
-              showLine: true,
+              showLine: false,
               fill: false,
               borderColor: 'rgba(0, 0, 0, 0)'
             }
