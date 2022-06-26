@@ -48,11 +48,13 @@ const initialState =
   serviceTypes: 
   [
     {
+      id: 0,
       title: 'Default Service',
       value: {a: 10, b: 15},
       distributionType: 1
     },
     {
+      id: 1,
       title: 'Özel Gişe İşlemleri',
       value: {a: 5, b: 8},
       distributionType: 1
@@ -359,6 +361,7 @@ export const serviceSlice = createSlice({
 
 export const { createTable, addService, addServiceType, updateUserDistribution } = serviceSlice.actions
 
+export const selectServiceTypes = (state) => state.service.serviceTypes;
 export const selectEventsAndServices = (state) => [ state.service.resultEvents, state.service.services]
 export const selectUser = (state) => state.service.user;
 
