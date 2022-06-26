@@ -1,11 +1,11 @@
 import { Button, Chip, Stack } from '@mui/material';
 import CumulativeChart from '../cumulative/cumulativeChart';
-import React, { useMemo } from 'react'
+import React, { forwardRef, useImperativeHandle, useMemo } from 'react'
 import CumulativeBar from './cumulativeBar';
 import { useSelector } from 'react-redux';
 import { selectCumulative } from '../../../features/distribution/distributionSlice';
 
-const CumulativeTab = ({ cumulative, setDistribution }) =>
+const CumulativeTab = forwardRef(({ cumulative, setDistribution }, ref) =>
 {
     const defaultCumulative = useSelector(selectCumulative);
 
@@ -19,6 +19,8 @@ const CumulativeTab = ({ cumulative, setDistribution }) =>
             }
         )
     }
+
+    useImperativeHandle(ref, () => ({}));
 
     const distribution = useMemo(() => (cumulative || defaultCumulative), [cumulative] );
 
@@ -51,5 +53,6 @@ const CumulativeTab = ({ cumulative, setDistribution }) =>
         </Stack>
     );
 }
+)
 
 export default CumulativeTab;

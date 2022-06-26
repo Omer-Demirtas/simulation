@@ -87,6 +87,7 @@ const Service = ({serviceNo, event}) =>
             sx={{bgcolor: 'red', color: 'white', width: 100, height: '50%', border: '1px solid black'}}
         >
             <ButtonBase
+                sx={{width: '100%', height: '100%'}}
                 onClick={handleClick}
             >
                 <CardContent>

@@ -1,5 +1,5 @@
 import { Stack, Tabs, Tab, Button, Chip, Card } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectAllDistribution } from "../../features/distribution/distributionSlice";
 import BasicDialog from "../common/basicDialog";
@@ -11,19 +11,21 @@ const tabs =
     {
         label: '1',
         isVisible: () => true,
-        Content: ({distribution, setDistribution}) =>(<CumulativeTab cumulative={distribution} setDistribution={setDistribution} />)
+        Content: ({distribution, setDistribution, cumulativeRef}) =>(<CumulativeTab ref={cumulativeRef} cumulative={distribution} setDistribution={setDistribution} />)
       },
       {
           label: '2',
           isVisible: () => true,
-          Content: ({distribution, setDistribution}) =>(<UnifromTab uniform={distribution} setDistribution={setDistribution} />)
+          Content: ({distribution, setDistribution, uniformRef}) =>(<UnifromTab ref={uniformRef} uniform={distribution} setDistribution={setDistribution} />)
       },
-]
+];
 
 const DistributionDialog = ({ open, handleClose, distribution, distributionType, saveDistribution}) => 
 {
-    const [dist, setDist] = useState({});
+    const uniformRef = useRef();
+    const cumulativeRef = useRef();
 
+    const [dist, setDist] = useState({});
     const [tabIndex, setTabIndex] = useState(0);
 
     const handleChangeTabIndex = (_, newValue) => 
@@ -34,7 +36,12 @@ const DistributionDialog = ({ open, handleClose, distribution, distributionType,
 
     const handleSave = () => 
     {
-        saveDistribution({distribution: dist, distributionType: tabIndex});
+        var data = {}
+
+        if(distributionType == 1) data = {distribution: uniformRef.current.input, distributionType: 1}
+
+        saveDistribution(data);
+        
         handleClose();
     }
 
@@ -65,9 +72,11 @@ const DistributionDialog = ({ open, handleClose, distribution, distributionType,
                     alignItems="flex-end" 
                     direction="row"
                 >
-                    <selectedTab.Content 
+                    <selectedTab.Content
                         distribution={dist}
                         setDistribution={setDist}
+                        uniformRef={uniformRef}
+                        cumulativeRef={cumulativeRef}
                     />
                 </Stack>
             </Stack>

@@ -1,9 +1,9 @@
-import { Button, Stack } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Stack } from "@mui/material";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import UniformChart from "./uniformChart";
 import UniformForm from "./uniformForm";
 
-const UnifromTab = ({ uniform, setDistribution }) => 
+const UnifromTab = forwardRef(({ uniform, setDistribution }, ref) => 
 {
     const [input, setInput] = useState({a: 10, b: 20});
 
@@ -11,11 +11,10 @@ const UnifromTab = ({ uniform, setDistribution }) =>
     {
         setInput({...input, [e.target.name]: Number(e.target.value)});
     }
-
-    const handleSave = () =>
-    {
-        setDistribution(input);
-    }
+    
+    useImperativeHandle(ref, () => ({
+        input
+    }));
 
     useEffect(() => {
         setInput(uniform)
@@ -32,11 +31,10 @@ const UnifromTab = ({ uniform, setDistribution }) =>
             />
             <UniformForm 
                 value={input}
-                handleSave={handleSave}
                 handleChange={handleInput}
             />
         </Stack>
     );
-}
+});
 
 export default UnifromTab;
