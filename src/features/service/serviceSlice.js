@@ -1,3 +1,4 @@
+import { unstable_composeClasses } from '@mui/material';
 import { createSlice } from '@reduxjs/toolkit'
 
 /*
@@ -22,21 +23,41 @@ const initialState =
         b: 15
       }
     },
+    service: 
+    {
+      value: 
+      {
+        0: 20,
+        1: 80,
+      },
+      distributionType: 0
+    }
   },
   services: [
     {
       id: 1,
       title: 1,
+      serviceType: 0
     },
     {
       id: 2,
       title: 2,
+      serviceType: 1
     }
   ],
   serviceTypes: 
   [
     {
-      title: 'Default Service'
+      id: 0,
+      title: 'Default Service',
+      value: {a: 10, b: 15},
+      distributionType: 1
+    },
+    {
+      id: 1,
+      title: 'Özel Gişe İşlemleri',
+      value: {a: 5, b: 8},
+      distributionType: 1
     }
   ],
   resultEvents: []
@@ -60,7 +81,6 @@ const getFromCumulative = (cumulative) =>
         return c;
     }
 
-
 const getFromUniformDistribution = ({a, b}) => 
 {
   const rand = getRandomNumber();
@@ -72,24 +92,32 @@ const generateDistributionOption = (distribution) =>
 {
   if(distribution.distributionType === 0)
   {
-    return [getFromCumulative(distribution.value), getCumulativeValue];
+    return () => getCumulativeValue(getFromCumulative(distribution.value));
   }
   else if(distribution.distributionType === 1)
   {
-    return [distribution.value, getFromUniformDistribution]
+    return () => getFromUniformDistribution(distribution.value);
   }
 }
 
-const createSystemUsers = (n, distribution) =>
+const createSystemUsers = (n, user, serviceTypes) =>
 {
-  const [options, generator] = generateDistributionOption(distribution);
+  const generator = 
+  {
+    gas: generateDistributionOption(user.gas),
+    service: serviceTypes.map(s => generateDistributionOption(s)),
+    serviceType: generateDistributionOption(user.service)
+  };
+
   const users = [];
   var time = 0;
 
   for (var i = 0; i < n; i++)
   {
-      const gas = generator(options);
-      const serviceTime = getFromUniformDistribution({a: 10, b: 20});
+      const gas = generator.gas();
+      const serviceType = generator.serviceType();
+      const serviceTime = generator.service[serviceType]();
+      
       time+=gas;
 
       users.push( 
@@ -98,7 +126,8 @@ const createSystemUsers = (n, distribution) =>
           gas: gas,
           no: (i+1),
           time: time,
-          serviceTime: serviceTime
+          serviceTime: serviceTime,
+          serviceType: serviceType
         }
       );
   }
@@ -107,8 +136,6 @@ const createSystemUsers = (n, distribution) =>
 }
 
 /* Helper methods for simulation logic */
-
-//const finishServiceObject = (userId, service, time) => ({serviceFinihed: true, serviceFinishedUser: userId, service, time});
 
 const queToString = (que) => que.map(q => q.id).join(',');
 
@@ -120,6 +147,40 @@ const servicesToList = (services) =>
   for (const [key, value] of Object.entries(services)) {
     result[Number(key)] = value;
   }
+  return result;
+}
+
+const checkForAvaliableServiceForType = (services, que) =>
+{
+  if(que.length === 0) return false;
+  for (const service of services)
+  {
+    if(service.isEmpty) return true;
+  }
+
+  return false;
+}
+
+const getFirstUserByServiceType = (que, serviceType) =>
+{
+  console.log('getFirstUserByServiceType');
+
+  var result = null;
+
+  var index = 0;
+  for (const u of que)
+  {
+    console.log({u});
+
+    if(u.serviceType === serviceType) 
+    {
+      result = que[index];
+      que.splice(index, 1); // 2nd parameter means remove one item only
+    }
+    index++;
+  }
+
+  console.log({result, que, serviceType})
   return result;
 }
 
@@ -143,17 +204,26 @@ const servicesToList = (services) =>
   }
 
 */
-const generateTable = (services, user) =>
+const generateTable = (services, user, serviceTypes) =>
 {
   // Definitios
   const que = [];
-  const resultEvents = {};
-  const emptyServices = new Array(services.length);
-  emptyServices.fill(true);  
-
-  const users = createSystemUsers(20, user.gas);
   const events = {}
-  users.forEach(user => events[user.time] = {newUser: true, newUserId: user.id, serviceTime: user.serviceTime, finishedServices: {}, services: {}});
+  const resultEvents = {};
+
+  const users = createSystemUsers(20, user, serviceTypes);
+
+  users.forEach(user => 
+    events[user.time] = 
+    {
+      newUser: true, 
+      newUserId: user.id, 
+      serviceTime: user.serviceTime, 
+      serviceType: user.serviceType,
+      finishedServices: {},
+      services: {}
+    }
+  );
 
   try
   {
@@ -169,7 +239,7 @@ const generateTable = (services, user) =>
         if(event.newUser)
         {
           newEvent.commingUser = event.newUserId;
-          que.push({id: event.newUserId, serviceTime: event.serviceTime});
+          que.push({id: event.newUserId, serviceTime: event.serviceTime, serviceType: event.serviceType});
         }
 
         // if a service finish
@@ -183,7 +253,7 @@ const generateTable = (services, user) =>
           {
             const i = Number(key);
 
-            emptyServices[i] = true;
+            services[i].isEmpty = true;
             services[i].userInServicce = null;
             services[i].serviceFinishTime = null;
 
@@ -194,49 +264,36 @@ const generateTable = (services, user) =>
         }
 
         // Servis Müsait ve kuyrukta bir kullanıcı var
-        if(emptyServices.find(s => s) && que.length !== 0)
+        if(checkForAvaliableServiceForType(services, que))
         {
           for (var i = 0; i < services.length; i++)
           {
             if(que.length === 0) break;
-            if(!emptyServices[i]) continue;
+            if(!services[i].isEmpty) continue;
+            
+            const service = services[i];
 
-            const user = que.shift();
+            const user = getFirstUserByServiceType(que, service.serviceType);
 
-            emptyServices[i] = false;
+            if(user)
+            {
+              service.isEmpty = false;
 
-            const newServiceFinishTime = (time + user.serviceTime);
+              const newServiceFinishTime = (time + user.serviceTime);
 
-            // Fill service
-            services[i].userInServicce = user.id ;
-            services[i].serviceFinishTime = newServiceFinishTime;
+              // Fill service
+              service.userInServicce = user.id ;
+              service.serviceFinishTime = newServiceFinishTime;
 
-            //TODO Change for multiple service
-            newEvent.services = {...newEvent.services, [`${i}`]: user.id};
+              newEvent.services = {...newEvent.services, [`${i}`]: user.id};
 
-            events[newServiceFinishTime] = {
-              ...events[newServiceFinishTime], 
-              serviceFinished: true,
-              finishedServices: {...events[newServiceFinishTime]?.finishedServices, [`${i}`]: user.id}
-            } 
+              events[newServiceFinishTime] = {
+                ...events[newServiceFinishTime], 
+                serviceFinished: true,
+                finishedServices: {...events[newServiceFinishTime]?.finishedServices, [`${i}`]: user.id}
+              } 
+            }
           }
-
-          /*
-          emptyServices[0] = false;
-          const user = que.shift();
-          
-          const newServiceFinishTime = (time + user.serviceTime);
-
-          services[0].userInServicce = user.id ;
-          services[0].serviceFinishTime = newServiceFinishTime;
-
-          newEvent.userInService = user.id;
-
-          events[newServiceFinishTime] = {...events[newServiceFinishTime], ...finishServiceObject(user.id, [0], time)} 
-
-          console.log({newServiceFinishTime});
-          console.log({user});
-          */
         }
 
         newEvent.que = queToString(que);
@@ -255,11 +312,6 @@ const generateTable = (services, user) =>
   return resultEvents;
 } 
 
-/*
-  Event types 
-  0 -> new user come to system.
-
-*/
 
 export const serviceSlice = createSlice({
   name: 'service',
@@ -267,11 +319,13 @@ export const serviceSlice = createSlice({
   reducers: {
     createTable: (state, action) => 
     {
-      const services = state.services.map(s => ({...s, userInServicce: null, serviceFinishTime: null}));
+      const services = state.services.map(s => ({...s, userInServicce: null, serviceFinishTime: null, isEmpty: true}));
 
       const user = JSON.parse(JSON.stringify(state.user));
 
-      const resultObj = generateTable(services, user);
+      const serviceTypes = JSON.parse(JSON.stringify(state.serviceTypes));
+
+      const resultObj = generateTable(services, user, serviceTypes);
 
       const resultEvents = [];
 
@@ -307,6 +361,7 @@ export const serviceSlice = createSlice({
 
 export const { createTable, addService, addServiceType, updateUserDistribution } = serviceSlice.actions
 
+export const selectServiceTypes = (state) => state.service.serviceTypes;
 export const selectEventsAndServices = (state) => [ state.service.resultEvents, state.service.services]
 export const selectUser = (state) => state.service.user;
 

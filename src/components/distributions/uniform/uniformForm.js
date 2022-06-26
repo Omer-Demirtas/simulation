@@ -2,7 +2,7 @@ import { Button, Stack, TextField } from "@mui/material";
 
 
 
-const UniformForm = ({ value, handleChange, handleSave }) =>
+const UniformForm = ({ value, handleChange }) =>
 {
 
     return (
@@ -27,11 +27,6 @@ const UniformForm = ({ value, handleChange, handleSave }) =>
                 InputLabelProps={{shrink: true,}}
 
             />
-            <Button
-                onClick={handleSave}
-            >
-                Submit
-            </Button>
         </Stack>
     );
 }

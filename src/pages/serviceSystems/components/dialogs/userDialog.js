@@ -1,27 +1,10 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Stack, TableBody, TableCell, TableRow, TextField, Typography, Zoom } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import SettingsRow from "../../../../components/common/settings/settingsRow";
 import DistributionDialog from "../../../../components/distributions/distributionDialog";
 import { selectUser, updateUserDistribution } from "../../../../features/service/serviceSlice";
 
-const Row = ({children}) =>
-{
-
-    return (
-        <React.Fragment>
-
-            <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-                sx={{my: 1}}
-            >
-                {children}
-            </Stack>
-            <Divider />
-        </React.Fragment>
-    );
-}
 
 const UserDialog = ({ handleClose, open}) => 
 {
@@ -65,18 +48,18 @@ const UserDialog = ({ handleClose, open}) =>
                 {"Customer Settings"}
             </DialogTitle>
             <DialogContent>
-                <Row>
+                <SettingsRow>
                     <Button
                         onClick={handleOpenDialog}
                     >
                         Set GAS Distributon
                     </Button>
-                </Row>
-                <Row>
+                </SettingsRow>
+                <SettingsRow>
                     <Button>
                         Servis Selection statistics
                     </Button>
-                </Row>
+                </SettingsRow>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>CANCEL</Button>
