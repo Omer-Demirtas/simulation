@@ -1,19 +1,34 @@
 import { FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import BasicDialog from "../../../../components/common/basicDialog";
 import SettingsRow from "../../../../components/common/settings/settingsRow";
-import { selectServiceTypes } from "../../../../features/service/serviceSlice";
-
-
+import { selectServiceTypes, updateServiceType } from "../../../../features/service/serviceSlice";
+import useFormFields from "../../../../utils/hooks/useFormFields";
 
 const ServiceDetailDialog = ({open, handleClose, params}) =>
 {
+    const [input, handleChange, handleReload] = useFormFields({serviceNo: "", serviceType: ""});
+
+    const dispatch = useDispatch();
+
+    const handleSave = () => 
+    {
+        dispatch(updateServiceType({serviceNo: input.serviceNo, serviceType: input.serviceType}))
+        handleClose();
+    }
+
     const serviceTypes = useSelector(selectServiceTypes) 
+
+    useEffect(() => {
+        if(Object.values(params).length !== 0) handleReload(params)
+    }, [params]);
 
     return (
         <BasicDialog
             open={open}
             height="50%"
+            handleSave={handleSave}
             handleClose={handleClose}
         >
             <h1>Service Details</h1>
@@ -24,6 +39,7 @@ const ServiceDetailDialog = ({open, handleClose, params}) =>
                 <SettingsRow noDivider={true} >
                     <TextField
                         fullWidth
+                        disabled
                         id="serviceName" 
                         value={params.serviceNo}
                         onClick={() => {}}
@@ -37,9 +53,10 @@ const ServiceDetailDialog = ({open, handleClose, params}) =>
                         <Select
                             labelId="serviceType"
                             id="serviceType"
-                            value={0}
+                            name="serviceType"
+                            value={input.serviceType}
                             label="serviceType"
-                            onChange={() => {}}
+                            onChange={handleChange}
                         >
                             {
                                 serviceTypes.map(s => (

@@ -354,12 +354,20 @@ export const serviceSlice = createSlice({
       console.log({distribution, distributionType})
 
       state.user.gas = { distributionType, value: distribution };
+    },
+    updateServiceType: (state, action) => 
+    {
+      const {serviceNo, serviceType} = action.payload;
+
+      const index = state.services.findIndex(s => s.id === serviceNo);
+
+      state.services[index].serviceType = serviceType;
     }
   },
 })
 
 
-export const { createTable, addService, addServiceType, updateUserDistribution } = serviceSlice.actions
+export const { createTable, addService, addServiceType, updateUserDistribution, updateServiceType } = serviceSlice.actions
 
 export const selectServiceTypes = (state) => state.service.serviceTypes;
 export const selectEventsAndServices = (state) => [ state.service.resultEvents, state.service.services]
