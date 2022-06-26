@@ -1,20 +1,19 @@
 import { Button, Dialog, DialogActions, DialogContent, Stack } from "@mui/material";
 
 
-const BasicDialog = ({open, handleClose, children, handleSave}) =>
+const BasicDialog = ({open, handleClose, children, handleSave,widthCode, height}) =>
 {
 
     return (
         <Dialog
             open={open}
-            maxWidth="md"
+            maxWidth={widthCode}
             fullWidth={true}
             onClose={handleClose}
             PaperProps={{
                 sx: {
-                  width: "50%",
-                  maxHeight: '60%',
-                  minHeight: '60%',
+                  maxHeight: height,
+                  minHeight: height,
                   p:1
                 }
             }}
@@ -33,6 +32,10 @@ const BasicDialog = ({open, handleClose, children, handleSave}) =>
             </DialogActions>
         </Dialog>
     );
+}
+
+BasicDialog.defaultProps = {
+    widthCode: "xs",
 }
 
 export default BasicDialog;

@@ -1,25 +1,31 @@
 import React, { useState } from 'react';
-import { Card, Fab, Grid, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { ButtonBase, Card, CardContent, Fab, Grid, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { useSelector } from 'react-redux';
-import ServiceDialog from './serviceDialog';
 import ServiceButtonGroup from './serviceButtonGroup';
-import UserDialog from './userDialog/userDialog';
+import UserDialog from './dialogs/userDialog';
+import ServiceDetailDialog from './dialogs/serviceDetailDialog';
 
 const ServiceSimulationUI = () => 
 {
     //dispatch(addService());
-    const [open, setOpen] = useState(0);
+    const [open, setOpen] = useState({dialog: 0, params: {}});
 
     const services = useSelector((state) => state.service.services);
 
-    const handleClose = () => setOpen(0);
-    const handleOpenUserDialog = () => setOpen(1);
+    const handleClose = () => setOpen({dialog: 0, params: {serviceNo: ""}});
+    const handleOpenUserDialog = () => setOpen({dialog: 1, params: {}});
+    const handleOpenServiceDialog = (service) => setOpen({dialog: 2, params: {serviceNo: service}});
 
     return (
         <React.Fragment>
             <UserDialog 
-                open={open === 1}
+                open={open.dialog === 1}
                 handleClose={handleClose}
+            />
+            <ServiceDetailDialog
+                params={open.params}
+                open={open.dialog === 2}
+                handleClose={handleClose} 
             />
             <Grid 
                 sx={{paddingTop: '2rem'}}
@@ -37,7 +43,7 @@ const ServiceSimulationUI = () =>
                             direction="row" 
                         >
                             {
-                                services.map(s => <Service key={s.title} serviceNo={s.title} /> )
+                                services.map(s => <Service event={handleOpenServiceDialog} key={s.title} serviceNo={s.title} /> )
                             }
                         </Stack>
                         <Stack sx={{height: '33.33%'}} direction="row" ></Stack>
@@ -72,11 +78,31 @@ const ServiceSimulationUI = () =>
 }
 
 
-const Service = ({serviceNo}) => 
+const Service = ({serviceNo, event}) => 
 {
+    const handleClick = () => event(serviceNo);
 
     return (
-        <Stack 
+        <Card
+            sx={{bgcolor: 'red', color: 'white', width: 100, height: '50%', border: '1px solid black'}}
+        >
+            <ButtonBase
+                onClick={handleClick}
+            >
+                <CardContent>
+                    <Typography variant="h4">
+                        {serviceNo}
+                    </Typography>
+                </CardContent>
+            </ButtonBase>
+        </Card>
+        
+    );
+}
+
+/*
+<Stack 
+            
             justifyContent="center"
             alignItems="center"
             sx={{bgcolor: 'red', color: 'white', width: 100, height: '50%', border: '1px solid black'}}
@@ -85,8 +111,8 @@ const Service = ({serviceNo}) =>
                 {serviceNo}
             </Typography>
         </Stack>
-    );
-}
+*/
+
 
 const EntranceDoor = ({ text }) => 
 {
