@@ -378,12 +378,20 @@ export const serviceSlice = createSlice({
       const index = state.services.findIndex(s => s.id === serviceNo);
 
       state.services[index].serviceType = serviceType;
-    }
+    },
+    updateServiceTypeDetails: (state, action) => 
+    {
+      const {id, distribution} = action.payload;
+
+      state.serviceTypes[id].distributionType = distribution.distributionType;
+      state.serviceTypes[id].value = distribution.value;
+
+    },
   },
 })
 
 
-export const { createTable, addService, addServiceType, updateUserDistribution, updateServiceType } = serviceSlice.actions
+export const { createTable, addService, addServiceType, updateUserDistribution, updateServiceType, updateServiceTypeDetails} = serviceSlice.actions
 
 export const selectServiceTypes = (state) => state.service.serviceTypes;
 export const selectEventsAndServices = (state) => [ state.service.resultEvents, state.service.services]

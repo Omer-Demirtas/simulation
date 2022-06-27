@@ -36,6 +36,7 @@ const BasicDialog = ({open, handleClose, children, handleSave,widthCode, height}
 
 BasicDialog.defaultProps = {
     widthCode: "xs",
+    height: '50%'
 }
 
 export default BasicDialog;
