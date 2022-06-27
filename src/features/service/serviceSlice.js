@@ -184,6 +184,20 @@ const getFirstUserByServiceType = (que, serviceType) =>
   return result;
 }
 
+const fillServicesStatus = (services) => 
+{
+  var status = {};
+
+  var i = 0;
+  for (const service of services)
+  {
+    status[`${i}`] = service.userInServicce
+    i++;
+  }
+  
+  return status;
+}
+
 /*
   Genarate Table Method
   * event based approach
@@ -229,7 +243,7 @@ const generateTable = (services, user, serviceTypes) =>
   {
   while(Object.keys(events).length !== 0)
       {
-        const newEvent = {};
+        const newEvent = {services: fillServicesStatus(services)};
         const time = Number(Object.keys(events)[0]);
         const event = Object.values(events)[0];
         
@@ -256,6 +270,8 @@ const generateTable = (services, user, serviceTypes) =>
             services[i].isEmpty = true;
             services[i].userInServicce = null;
             services[i].serviceFinishTime = null;
+
+            newEvent.services[i] = "";
 
             finishedServices[i] = value;
           }
@@ -354,12 +370,28 @@ export const serviceSlice = createSlice({
       console.log({distribution, distributionType})
 
       state.user.gas = { distributionType, value: distribution };
-    }
+    },
+    updateServiceType: (state, action) => 
+    {
+      const {serviceNo, serviceType} = action.payload;
+
+      const index = state.services.findIndex(s => s.id === serviceNo);
+
+      state.services[index].serviceType = serviceType;
+    },
+    updateServiceTypeDetails: (state, action) => 
+    {
+      const {id, distribution} = action.payload;
+
+      state.serviceTypes[id].distributionType = distribution.distributionType;
+      state.serviceTypes[id].value = distribution.value;
+
+    },
   },
 })
 
 
-export const { createTable, addService, addServiceType, updateUserDistribution } = serviceSlice.actions
+export const { createTable, addService, addServiceType, updateUserDistribution, updateServiceType, updateServiceTypeDetails} = serviceSlice.actions
 
 export const selectServiceTypes = (state) => state.service.serviceTypes;
 export const selectEventsAndServices = (state) => [ state.service.resultEvents, state.service.services]

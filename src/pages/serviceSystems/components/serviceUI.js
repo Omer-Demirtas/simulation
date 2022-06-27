@@ -12,9 +12,9 @@ const ServiceSimulationUI = () =>
 
     const services = useSelector((state) => state.service.services);
 
-    const handleClose = () => setOpen({dialog: 0, params: {serviceNo: ""}});
+    const handleClose = () => setOpen({dialog: 0, params: {serviceNo: "", serviceType: ""}});
     const handleOpenUserDialog = () => setOpen({dialog: 1, params: {}});
-    const handleOpenServiceDialog = (service) => setOpen({dialog: 2, params: {serviceNo: service}});
+    const handleOpenServiceDialog = (service) => setOpen({dialog: 2, params: {serviceNo: service, serviceType: (services.find(s => s.id === service)?.serviceType)}});
 
     return (
         <React.Fragment>

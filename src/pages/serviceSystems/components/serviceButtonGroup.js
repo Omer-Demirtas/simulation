@@ -40,6 +40,12 @@ const ServiceButtonGroup = () =>
                             Add New Service
                         </Button>
                         <Button
+                            onClick={handleClickOpen}
+                            variant="contained" color="success"
+                        >
+                            Service Type
+                        </Button>
+                        <Button
                             onClick={generateTable}
                             variant="contained" color="success"
                         >
