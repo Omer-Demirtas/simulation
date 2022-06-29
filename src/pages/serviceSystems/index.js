@@ -2,13 +2,14 @@ import React from 'react';
 import { Grid, Stack, Tab, Tabs } from "@mui/material";
 import ServiceSimulationUI from './components/serviceUI'
 import ServiceResultPage from './components/serviceResult';
+import ServiceTab from './tabs/serviceTab';
 
 const pages = [
     {
       label: 'tab 1',
       isVisible: () => true,
       Content: () =>(
-        <ServiceSimulationUI />
+        <ServiceTab />
       )
     },
     {

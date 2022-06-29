@@ -9,6 +9,34 @@ import Slide from '@mui/material/Slide';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 
+
+const Header = () =>
+{
+  const navigate = useNavigate();
+
+  const navigateToHome = () => navigate('/');
+
+  return (
+    <React.Fragment>
+        <AppBar>
+          <Toolbar>
+            <Typography variant="h6" component="div">
+                Simulation
+            </Typography>
+
+            <Button sx={{color: 'white', marginLeft: '10px'}} onClick={navigateToHome}  variant="text">
+              Home
+            </Button>
+
+          </Toolbar>
+        </AppBar>
+      <Toolbar />
+    </React.Fragment>
+  );
+}
+
+export default Header;
+/*
 function HideOnScroll(props) {
   const { children, window } = props;
   const trigger = useScrollTrigger({
@@ -24,10 +52,6 @@ function HideOnScroll(props) {
 
 HideOnScroll.propTypes = {
   children: PropTypes.element.isRequired,
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
   window: PropTypes.func,
 };
 
@@ -60,3 +84,4 @@ export default function Header(props)
   );
 }
 
+*/
