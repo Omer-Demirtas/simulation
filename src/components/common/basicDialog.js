@@ -3,7 +3,6 @@ import { Button, Dialog, DialogActions, DialogContent, Stack } from "@mui/materi
 
 const BasicDialog = ({open, handleClose, children, handleSave,widthCode, height}) =>
 {
-
     return (
         <Dialog
             open={open}

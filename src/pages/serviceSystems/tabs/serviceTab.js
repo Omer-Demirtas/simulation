@@ -1,5 +1,7 @@
 import { Box, Button, Card, Divider, Stack, Typography } from '@mui/material';
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { openDialog } from '../../../features/dialog/dialogSlice';
 
 const services = [
     {
@@ -20,8 +22,17 @@ const services = [
     }
 ]
 
+
 const ServiceTab = () =>
 {
+
+    const dispatch = useDispatch();
+
+    console.log('service Tab')
+    const handleOpen = () => {
+        console.log('method ')
+        dispatch(openDialog());
+    }
 
     return (
         <Stack
@@ -35,7 +46,7 @@ const ServiceTab = () =>
                 sx={{height: '90%', width: '100%', borderRadius: 5}}
             >
                 <Stack
-                    spacing={3}
+                    spacing={4}
                     direction="row"
                     alignItems="center"
                     justifyContent="center"
@@ -44,6 +55,7 @@ const ServiceTab = () =>
                     {
                         services.map(s => (
                             <Stack
+                                key={s.id}
                                 spacing={2}
                                 direction="column"
                                 alignItems="center"
@@ -78,7 +90,9 @@ const ServiceTab = () =>
                             justifyContent="center"
                         >
                             <Typography>Customer</Typography>
-                            <Button>
+                            <Button
+                                onClick={handleOpen}
+                            >
                                 <img
                                     width="96"
                                     height="96"

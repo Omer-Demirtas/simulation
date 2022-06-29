@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import { store } from './app/store'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import GlobalDialog from './components/common/globalDialog';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -17,6 +18,7 @@ root.render(
           <Route path="/*" element={<App />} />
         </Routes>
       </Router>
+      <GlobalDialog />
     </Provider>
   </React.StrictMode>,
 );

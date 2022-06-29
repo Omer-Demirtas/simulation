@@ -9,20 +9,17 @@ import ServiceSystemPage from "./pages/serviceSystems";
 
 const App = () => 
 {
-  //const count = useSelector((state) => state.counter.value);
-  //const dispatch = useDispatch();
-
   return (
     <div style={{height: '100vh', width: '100%', position: 'relative'}}>
     <Header />
     <Routes>
+      
       <Route element={<HomePage />} path={'/'}></Route>
       
       <Route element={<ServiceSystemPage />} path='/service'></Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
 
-      
     </Routes>
     </div>
   );
