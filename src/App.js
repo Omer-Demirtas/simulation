@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import React from "react";
 
 import { Routes, Route, Navigate, Link } from 'react-router-dom';
@@ -8,24 +7,13 @@ import ServiceSystemPage from "./pages/serviceSystems";
 //import { useSelector, useDispatch } from 'react-redux'
 //import { decrement, increment } from './feature/counter/counter'
 
-
-const asd = () =>
-{
-  return (
-    <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="service">Post</Link></li>
-    </ul>
-  )
-}
-
 const App = () => 
 {
   //const count = useSelector((state) => state.counter.value);
   //const dispatch = useDispatch();
 
   return (
-    <>
+    <div style={{height: '100vh', width: '100%', position: 'relative'}}>
     <Header />
     <Routes>
       <Route element={<HomePage />} path={'/'}></Route>
@@ -36,7 +24,7 @@ const App = () =>
 
       
     </Routes>
-    </>
+    </div>
   );
 }
 
