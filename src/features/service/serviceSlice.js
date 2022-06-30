@@ -37,24 +37,24 @@ const initialState =
     {
       id: 1,
       title: 1,
-      serviceType: 1
+      serviceType: 0
     },
     {
       id: 2,
       title: 2,
-      serviceType: 2
+      serviceType: 1
     }
   ],
   serviceTypes: 
   [
     {
-      id: 1,
+      id: 0,
       title: 'Default Service',
       value: {a: 10, b: 15},
       distributionType: 1
     },
     {
-      id: 2,
+      id: 1,
       title: 'Özel Gişe İşlemleri',
       value: {a: 5, b: 8},
       distributionType: 1
@@ -353,6 +353,7 @@ export const serviceSlice = createSlice({
     },
     addService: (state, action) => 
     {
+      console.log({action})
       state.services.push(
         {
           ...action.payload

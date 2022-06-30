@@ -1,10 +1,12 @@
-import { Button, Card, Divider, Fab, Stack, Typography } from '@mui/material';
+import { Button, Card, Divider, Fab, Stack, Typography, Zoom } from '@mui/material';
 import { type } from '@testing-library/user-event/dist/type';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createTable } from '../../../features/service/serviceSlice';
+import { addService, createTable } from '../../../features/service/serviceSlice';
+import ServiceActionsDialog from '../components/dialogs/serviceActionsDialog';
 import ServiceDetailDialog from '../components/dialogs/serviceDetailDialog';
 import UserDialog from '../components/dialogs/userDialog';
+import ServiceDialog from '../components/serviceDialog';
 
 const ServiceTab = () =>
 {
@@ -18,9 +20,12 @@ const ServiceTab = () =>
     const handleOpenService = (id, serviceType) => setOpen({open: 2, params: {serviceNo: id, serviceType}});
     const handleCloseDialog = () => setOpen({open: 0});
     const handleOpenUserDialog = () => setOpen({open: 1});
+    const handleOpenServiceActions = () => setOpen({open: 3});
+    const handleOpenNewService = () => setOpen({open: 4});
 
     const handleGenerateTable = () => dispatch(createTable());
 
+    const handleAddNewService = (service) => dispatch(addService(service))
     return (
         <React.Fragment>
             <UserDialog 
@@ -32,6 +37,15 @@ const ServiceTab = () =>
                 open={open.open === 2}
                 serviceTypes={serviceTypes}
                 handleClose={handleCloseDialog}
+            />
+            <ServiceActionsDialog 
+                open={open.open === 3}
+                handleClose={handleCloseDialog}
+            />
+            <ServiceDialog 
+                open={open.open === 4}
+                handleClose={handleCloseDialog}
+                handleNewService={handleAddNewService}
             />
             <Stack
                 sx={{p: 3, height: '100%'}}
@@ -55,11 +69,18 @@ const ServiceTab = () =>
                                 <Service
                                     key={service.id}
                                     service={service}
-                                    onClick={handleOpenService} 
+                                    onClick={handleOpenService}
                                     serviceType={serviceTypes.find(t => t.id === service.serviceType).title}
                                 />
                             ))
                         }
+                        <Fab
+                            sx={{ml: 1}}
+                            color="primary"
+                            onClick={handleOpenNewService}
+                        >
+                            +
+                        </Fab>
                     </Stack>
                     <Stack
                         direction="column"
@@ -84,9 +105,9 @@ const ServiceTab = () =>
                             sx={{m: 2, width: '100%'}}
                         >
                             <Button
-                                color="error"
+                                color="primary"
                                 variant="contained"
-                                onClick={handleGenerateTable}
+                                onClick={(handleGenerateTable)}
                                 sx={{textTransform: 'none', fontSize: 36}}
                             >
                                 SIMULATE
@@ -94,6 +115,17 @@ const ServiceTab = () =>
 
                         </Stack>
                     </Stack>
+                    <Fab
+                        onClick={handleOpenServiceActions}
+                        sx={{
+                            position: "fixed",
+                            bottom: (theme) => theme.spacing(2),
+                            right: (theme) => theme.spacing(2)
+                        }}
+                        color="primary"
+                    >
+                        Actions
+                </Fab>
                 </Card>
             </Stack>
         </React.Fragment>
