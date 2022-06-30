@@ -3,6 +3,7 @@ import { Grid, Stack, Tab, Tabs } from "@mui/material";
 import ServiceSimulationUI from './components/serviceUI'
 import ServiceResultPage from './components/serviceResult';
 import ServiceTab from './tabs/serviceTab';
+import TableTab from './tabs/tableTab';
 
 const pages = [
     {
@@ -16,7 +17,7 @@ const pages = [
         label: 'tab 2',
         isVisible: () => true,
         Content: () =>(
-          <ServiceResultPage />
+          <TableTab />
         )
     },
     {
@@ -51,7 +52,8 @@ const ServiceSystemPage = () =>
             
             <Tabs value={value} onChange={handleChange} centered>
                 <Tab label="System" />
-                <Tab label="Result" />
+                <Tab label="Table" />
+                <Tab label="Statistics" />
             </Tabs>
             
             <selectedTab.Content />

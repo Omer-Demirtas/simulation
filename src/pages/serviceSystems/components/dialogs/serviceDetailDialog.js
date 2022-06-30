@@ -31,8 +31,10 @@ const ServiceDetailDialog = ({open, handleClose, params}) =>
     }
 
     useEffect(() => {
-        if(Object.values(params).length !== 0) handleReload(params)
+        if(params && Object.values(params).length !== 0) handleReload(params)
     }, [params]);
+
+    if(!params) return (<></>);
 
     return (
         <React.Fragment>
@@ -86,15 +88,6 @@ const ServiceDetailDialog = ({open, handleClose, params}) =>
                                 }
                             </Select>
                         </FormControl>
-                        <FormControl>
-                        <Button
-                            onClick={handleOpenDialog}
-                            sx={{ml: 1}}
-                        >
-                            Edit
-                        </Button>
-                        </FormControl>
-
                     </SettingsRow>
                 </Stack>
             </BasicDialog>
