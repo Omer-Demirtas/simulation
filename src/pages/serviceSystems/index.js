@@ -4,6 +4,7 @@ import ServiceSimulationUI from './components/serviceUI'
 import ServiceResultPage from './components/serviceResult';
 import ServiceTab from './tabs/serviceTab';
 import TableTab from './tabs/tableTab';
+import StatisticsTab from './tabs/statisticsTab';
 
 const pages = [
     {
@@ -24,7 +25,7 @@ const pages = [
         label: 'tab 3',
         isVisible: () => true,
         Content: () =>(
-          <h1>Tab 3</h1>
+          <StatisticsTab />
         )
     },
 ]
