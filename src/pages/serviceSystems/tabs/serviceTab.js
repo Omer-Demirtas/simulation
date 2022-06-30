@@ -1,7 +1,8 @@
 import { Button, Card, Divider, Fab, Stack, Typography } from '@mui/material';
 import { type } from '@testing-library/user-event/dist/type';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createTable } from '../../../features/service/serviceSlice';
 import ServiceDetailDialog from '../components/dialogs/serviceDetailDialog';
 import UserDialog from '../components/dialogs/userDialog';
 
@@ -9,12 +10,16 @@ const ServiceTab = () =>
 {
     const [open, setOpen] = useState({open: 0});
 
+    const dispatch = useDispatch();
+
     const services = useSelector((state) => state.service.services);
     const serviceTypes = useSelector((state) => state.service.serviceTypes);
 
     const handleOpenService = (id, serviceType) => setOpen({open: 2, params: {serviceNo: id, serviceType}});
     const handleCloseDialog = () => setOpen({open: 0});
     const handleOpenUserDialog = () => setOpen({open: 1});
+
+    const handleGenerateTable = () => dispatch(createTable());
 
     return (
         <React.Fragment>
@@ -81,6 +86,7 @@ const ServiceTab = () =>
                             <Button
                                 color="error"
                                 variant="contained"
+                                onClick={handleGenerateTable}
                                 sx={{textTransform: 'none', fontSize: 36}}
                             >
                                 SIMULATE

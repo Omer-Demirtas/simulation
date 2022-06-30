@@ -1,4 +1,7 @@
 import { Card, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import { selectEventsAndServices } from "../../../features/service/serviceSlice";
 
 const row = 
 [
@@ -8,6 +11,20 @@ const row =
 
 const TableTab = () =>
 {
+    const [events, services] = useSelector(selectEventsAndServices);
+    //const [columns, setColumns] = useState([]);
+
+    const columns = useMemo(() => (
+        [
+            { id: 'time', align: "center", label: 'Benzetim Süresi', minWidth: 170 },
+            { id: 'commingUser', align: "center", label: 'Gelen kullanıcı', minWidth: 170 },
+            ...services.map((s, i) => ({ id: `s-${s.id}`, label: `${s.title}`, minWidth: 100, render: (row) => row.services && row.services[i]})),
+            ...services.map((s, i) => ({ id: `f-${s.id}`, label: `${s.title}`, minWidth: 100, render: (row) => row.finishedServices && row.finishedServices[i]})),
+            { id: 'que', align: "center", label: 'Bekleyenler', minWidth: 100 },
+        ]
+    ), [services]);
+
+    console.log({events, columns})
 
     return (
         <Stack
@@ -25,32 +42,39 @@ const TableTab = () =>
                         <TableRow>
                             <TableCell align="center" rowSpan={2}>Simulation Time</TableCell>
                             <TableCell align="center" rowSpan={2}>Comming Customer</TableCell>
-                            <TableCell align="center" sx={{border:'none'}} colSpan={2}>In Service</TableCell>
-                            <TableCell align="center" sx={{border:'none'}} colSpan={2}>Service Fnisih</TableCell>
+                            <TableCell align="center" sx={{border:'none'}} colSpan={services.length}>In Service</TableCell>
+                            <TableCell align="center" sx={{border:'none'}} colSpan={services.length}>Service Fnisih</TableCell>
                             <TableCell align="center" rowSpan={2}>Que</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell align="center">1</TableCell>
-                            <TableCell align="center">2</TableCell>
-                            <TableCell align="center">1</TableCell>
-                            <TableCell align="center">2</TableCell>
+                            {
+                                services.map(s => (
+                                    <TableCell key={s.id} align="center">{s.id}</TableCell>
+                                ))
+                            }
+                            {
+                                services.map(s => (
+                                    <TableCell key={s.id} align="center">{s.id}</TableCell>
+                                ))
+                            }
                         </TableRow>
                         </TableHead>
                         <TableBody> 
                             {
-                                row.map( a => 
-                                    <TableRow>
-                                    <TableCell align="center">1</TableCell>
-                                    <TableCell align="center">1</TableCell>
-    
-                                        <TableCell align="center">1</TableCell>
-                                        <TableCell align="center">2</TableCell>
-                                        <TableCell align="center">1</TableCell>
-                                        <TableCell align="center">1</TableCell>
-    
-                                        <TableCell align="center">2</TableCell>
+                                events.map((row) => (
+                                    <TableRow key={row.time}>
+                                        {
+                                            columns.map(c => (
+                                                <TableCell 
+                                                    key={c.id} 
+                                                    align="center"
+                                                >
+                                                    {c.render ? c.render(row) : row[c.id]}
+                                                </TableCell>
+                                            ))
+                                        }
                                     </TableRow>
-                                )
+                                ))
                             }
                         </TableBody>
                     </Table>

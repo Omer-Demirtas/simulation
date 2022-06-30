@@ -28,9 +28,6 @@ const DistributionDialog = ({ open, handleClose, distribution, distributionType,
     const [dist, setDist] = useState({});
     const [tabIndex, setTabIndex] = useState(0);
 
-    console.log({distribution, distributionType})
-
-
     const handleChangeTabIndex = (_, newValue) => 
     {
         setTabIndex(newValue);
