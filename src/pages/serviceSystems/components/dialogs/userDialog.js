@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Stack, TableBody, TableCell, TableRow, TextField, Typography, Zoom } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import BasicDialog from "../../../../components/common/basicDialog";
 import SettingsRow from "../../../../components/common/settings/settingsRow";
 import DistributionDialog from "../../../../components/distributions/distributionDialog";
 import { selectUser, updateUserDistribution } from "../../../../features/service/serviceSlice";
@@ -22,20 +23,16 @@ const UserDialog = ({ handleClose, open}) =>
     const handleDialogClose = () => setDialogOpen(false);
     const handleOpenDialog = () => setDialogOpen(true);
 
-    const handleSaveDistribution = (distribution) => dispatch(updateUserDistribution(distribution))
+    const handleSaveDistribution = (distribution) => {
+        console.log({distribution})
+        dispatch(updateUserDistribution(distribution))
+    }
 
     return (
-        <Dialog
-            maxWidth="xs"
-            fullWidth={true}
+        <BasicDialog
             open={open}
-            onClose={handleClose}
-            PaperProps={{
-                sx: {
-                  maxHeight: '40%',
-                  minHeight: '40%',
-                }
-            }}
+            handleClose={handleClose}
+            title={"User Settings"}
         >
             <DistributionDialog
                 open={dialogOpen}
@@ -44,10 +41,6 @@ const UserDialog = ({ handleClose, open}) =>
                 saveDistribution={handleSaveDistribution}
                 distributionType={user.gas.distributionType}
             />
-            <DialogTitle id="alert-dialog-title">
-                {"Customer Settings"}
-            </DialogTitle>
-            <DialogContent>
                 <SettingsRow>
                     <Button
                         onClick={handleOpenDialog}
@@ -57,17 +50,10 @@ const UserDialog = ({ handleClose, open}) =>
                 </SettingsRow>
                 <SettingsRow>
                     <Button>
-                        Servis Selection statistics
+                        Rate of Service Type
                     </Button>
-                </SettingsRow>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose}>CANCEL</Button>
-                <Button onClick={handleAddNewType}>
-                OK
-                </Button>
-            </DialogActions>
-        </Dialog>
+                </SettingsRow>            
+        </BasicDialog>
     );
 }
 

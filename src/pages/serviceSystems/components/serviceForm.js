@@ -22,7 +22,7 @@ const ServiceForm = ({ isSaved, handleAddNewService }) =>
     const handleOpen  = () => setOpen(true);
 
     useEffect(() => {
-        if(isSaved) handleAddNewService(input)
+        if(isSaved) handleAddNewService({...input, id: input.title})
     }, [isSaved]);
 
     return (

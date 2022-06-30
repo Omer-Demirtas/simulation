@@ -2,27 +2,30 @@ import React from 'react';
 import { Grid, Stack, Tab, Tabs } from "@mui/material";
 import ServiceSimulationUI from './components/serviceUI'
 import ServiceResultPage from './components/serviceResult';
+import ServiceTab from './tabs/serviceTab';
+import TableTab from './tabs/tableTab';
+import StatisticsTab from './tabs/statisticsTab';
 
 const pages = [
     {
       label: 'tab 1',
       isVisible: () => true,
       Content: () =>(
-        <ServiceSimulationUI />
+        <ServiceTab />
       )
     },
     {
         label: 'tab 2',
         isVisible: () => true,
         Content: () =>(
-          <ServiceResultPage />
+          <TableTab />
         )
     },
     {
         label: 'tab 3',
         isVisible: () => true,
         Content: () =>(
-          <h1>Tab 3</h1>
+          <StatisticsTab />
         )
     },
 ]
@@ -43,11 +46,15 @@ const ServiceSystemPage = () =>
 
     const selectedTab = pages[value];
 
+    console.log('Service Page')
+
     return(
-       <Stack direction="column">
+       <Stack sx={{height: '100%'}} direction="column">
+            
             <Tabs value={value} onChange={handleChange} centered>
                 <Tab label="System" />
-                <Tab label="Result" />
+                <Tab label="Table" />
+                <Tab label="Statistics" />
             </Tabs>
             
             <selectedTab.Content />

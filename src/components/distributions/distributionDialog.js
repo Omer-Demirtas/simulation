@@ -38,7 +38,9 @@ const DistributionDialog = ({ open, handleClose, distribution, distributionType,
     {
         var data = {}
 
-        if(distributionType == 1) data = {distribution: uniformRef.current.input, distributionType: 1}
+        if(tabIndex == 1) data = uniformRef.current.getDistribution();
+
+        console.log({data})
 
         saveDistribution(data);
         
@@ -55,8 +57,9 @@ const DistributionDialog = ({ open, handleClose, distribution, distributionType,
     return (
         <BasicDialog
             open={open}
-            widthCode="md"
             height="60%"
+            widthCode="md"
+            title="Select Distributon"
             handleSave={handleSave}
             handleClose={handleClose}
         >

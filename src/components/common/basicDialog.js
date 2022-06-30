@@ -1,9 +1,8 @@
-import { Button, Dialog, DialogActions, DialogContent, Stack } from "@mui/material";
+import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Stack } from "@mui/material";
 
 
-const BasicDialog = ({open, handleClose, children, handleSave,widthCode, height}) =>
+const BasicDialog = ({title, open, handleClose, children, handleSave,widthCode, height}) =>
 {
-
     return (
         <Dialog
             open={open}
@@ -14,22 +13,21 @@ const BasicDialog = ({open, handleClose, children, handleSave,widthCode, height}
                 sx: {
                   maxHeight: height,
                   minHeight: height,
-                  p:1
+                  borderRadius: 5
                 }
             }}
         >
-            <DialogContent
-                sx={{ m:0, p: 0 }}
-            >
-                {children}
-            </DialogContent>
-            <DialogActions
-                sx={{ m:0, p: 0 }}
-
-            >
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleSave}>Save</Button>
-            </DialogActions>
+                <DialogTitle>
+                    {title}
+                </DialogTitle>
+                <DialogContent>
+                    {children}
+                </DialogContent>
+                <DialogActions
+                >
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleSave}>Save</Button>
+                </DialogActions>
         </Dialog>
     );
 }

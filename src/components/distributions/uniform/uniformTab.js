@@ -3,7 +3,7 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import UniformChart from "./uniformChart";
 import UniformForm from "./uniformForm";
 
-const UnifromTab = forwardRef(({ uniform, setDistribution }, ref) => 
+const UnifromTab = forwardRef(({ uniform }, ref) => 
 {
     const [input, setInput] = useState({a: 10, b: 20});
 
@@ -12,8 +12,10 @@ const UnifromTab = forwardRef(({ uniform, setDistribution }, ref) =>
         setInput({...input, [e.target.name]: Number(e.target.value)});
     }
     
+    const getDistribution = () => ({value: input, distributionType: 1});
+
     useImperativeHandle(ref, () => ({
-        input
+        getDistribution: () => getDistribution()
     }));
 
     useEffect(() => {

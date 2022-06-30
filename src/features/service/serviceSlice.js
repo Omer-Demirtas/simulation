@@ -353,6 +353,7 @@ export const serviceSlice = createSlice({
     },
     addService: (state, action) => 
     {
+      console.log({action})
       state.services.push(
         {
           ...action.payload
@@ -365,11 +366,11 @@ export const serviceSlice = createSlice({
     },
     updateUserDistribution: (state, action) => 
     {
-      const {distribution, distributionType} = action.payload;
+      const {value, distributionType} = action.payload;
 
-      console.log({distribution, distributionType})
+      console.log({value, distributionType})
 
-      state.user.gas = { distributionType, value: distribution };
+      state.user.gas = { distributionType, value };
     },
     updateServiceType: (state, action) => 
     {
