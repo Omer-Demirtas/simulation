@@ -17,8 +17,7 @@ const BasicDialog = ({title, open, handleClose, children, handleSave,widthCode, 
                 }
             }}
         >
-                <DialogTitle
-                >
+                <DialogTitle>
                     {title}
                 </DialogTitle>
                 <DialogContent>

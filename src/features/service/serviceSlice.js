@@ -37,24 +37,24 @@ const initialState =
     {
       id: 1,
       title: 1,
-      serviceType: 0
+      serviceType: 1
     },
     {
       id: 2,
       title: 2,
-      serviceType: 1
+      serviceType: 2
     }
   ],
   serviceTypes: 
   [
     {
-      id: 0,
+      id: 1,
       title: 'Default Service',
       value: {a: 10, b: 15},
       distributionType: 1
     },
     {
-      id: 1,
+      id: 2,
       title: 'Özel Gişe İşlemleri',
       value: {a: 5, b: 8},
       distributionType: 1

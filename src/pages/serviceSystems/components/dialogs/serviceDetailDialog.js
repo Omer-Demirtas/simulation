@@ -7,7 +7,7 @@ import { selectServiceTypes, updateServiceType, updateServiceTypeDetails } from 
 import useFormFields from "../../../../utils/hooks/useFormFields";
 import ServiceTypeDialog from "./serviceTypeDialog";
 
-const ServiceDetailDialog = ({open, handleClose, params}) =>
+const ServiceDetailDialog = ({open, handleClose, params, serviceTypes}) =>
 {
     const [input, handleChange, handleReload] = useFormFields({serviceNo: "", serviceType: ""});
     const [serviceTypeOpen, setServiceTypeOpen] = useState(false);
@@ -19,8 +19,6 @@ const ServiceDetailDialog = ({open, handleClose, params}) =>
         dispatch(updateServiceType({serviceNo: input.serviceNo, serviceType: input.serviceType}))
         handleClose();
     }
-
-    const serviceTypes = useSelector(selectServiceTypes) 
 
     const handleOpenDialog = () =>setServiceTypeOpen(true);
     const handleCloseServiceType = () => setServiceTypeOpen(false);
@@ -37,61 +35,49 @@ const ServiceDetailDialog = ({open, handleClose, params}) =>
     if(!params) return (<></>);
 
     return (
-        <React.Fragment>
-            {
-                input.serviceType && (
-                    <ServiceTypeDialog 
-                        id={input.serviceType}
-                        open={serviceTypeOpen}
-                        handleClose={handleCloseServiceType}
-                        handleSave={handleSaveServiceType}
-                    />
-                )
-            }
-            <BasicDialog
-                open={open}
-                height="50%"
-                handleSave={handleSave}
-                handleClose={handleClose}
+        <BasicDialog
+            open={open}
+            height="50%"
+            handleSave={handleSave}
+            handleClose={handleClose}
+        >
+            <h1>Service Details</h1>
+            <Stack
+                direction="column"
+                spacing={2}
             >
-                <h1>Service Details</h1>
-                <Stack
-                    direction="column"
-                    spacing={2}
-                >
-                    <SettingsRow noDivider={true} >
-                        <TextField
-                            fullWidth
-                            disabled
-                            id="serviceName" 
-                            value={params.serviceNo}
-                            onClick={() => {}}
-                            label="Service Name" 
-                            variant="outlined" 
-                        />
-                    </SettingsRow>
-                    <SettingsRow noDivider={true}>
-                        <FormControl fullWidth>
-                            <InputLabel id="serviceType">Service Type</InputLabel>
-                            <Select
-                                labelId="serviceType"
-                                id="serviceType"
-                                name="serviceType"
-                                value={input.serviceType}
-                                label="serviceType"
-                                onChange={handleChange}
-                            >
-                                {
-                                    serviceTypes.map(s => (
-                                        <MenuItem key={s.id} value={s.id}>{s.title}</MenuItem>
-                                    ))
-                                }
-                            </Select>
-                        </FormControl>
-                    </SettingsRow>
-                </Stack>
-            </BasicDialog>
-        </React.Fragment>
+                <SettingsRow noDivider={true} >
+                    <TextField
+                        fullWidth
+                        disabled
+                        id="serviceName" 
+                        value={params.serviceNo}
+                        onClick={() => {}}
+                        label="Service Name" 
+                        variant="outlined" 
+                    />
+                </SettingsRow>
+                <SettingsRow noDivider={true}>
+                    <FormControl fullWidth>
+                        <InputLabel id="serviceType">Service Type</InputLabel>
+                        <Select
+                            labelId="serviceType"
+                            id="serviceType"
+                            name="serviceType"
+                            value={input.serviceType}
+                            label="serviceType"
+                            onChange={handleChange}
+                        >
+                            {
+                                serviceTypes.map(s => (
+                                    <MenuItem key={s.id} value={s.id}>{s.title}</MenuItem>
+                                ))
+                            }
+                        </Select>
+                    </FormControl>
+                </SettingsRow>
+            </Stack>
+        </BasicDialog>
     );
 }
 

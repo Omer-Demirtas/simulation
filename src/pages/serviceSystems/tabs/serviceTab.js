@@ -1,32 +1,18 @@
-import { Box, Button, Card, Divider, Fab, Stack, Typography } from '@mui/material';
+import { Button, Card, Divider, Fab, Stack, Typography } from '@mui/material';
+import { type } from '@testing-library/user-event/dist/type';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import ServiceDetailDialog from '../components/dialogs/serviceDetailDialog';
 import UserDialog from '../components/dialogs/userDialog';
-
-const services = [
-    {
-        id: 1,
-        title: 'Özel Gişe İşlemleri'
-    },
-    {
-        id: 2,
-        title: 'Genel Gişe İşlemleri'
-    },
-    {
-        id: 3,
-        title: 'Özel Gişe İşlemleri'
-    },
-    {
-        id: 5,
-        title: 'Genel Gişe İşlemleri'
-    }
-]
 
 const ServiceTab = () =>
 {
     const [open, setOpen] = useState({open: 0});
 
-    const handleOpenService = (id) => setOpen({open: 2, params: {serviceNo: id, serviceType: 1}});
+    const services = useSelector((state) => state.service.services);
+    const serviceTypes = useSelector((state) => state.service.serviceTypes);
+
+    const handleOpenService = (id, serviceType) => setOpen({open: 2, params: {serviceNo: id, serviceType}});
     const handleCloseDialog = () => setOpen({open: 0});
     const handleOpenUserDialog = () => setOpen({open: 1});
 
@@ -37,8 +23,9 @@ const ServiceTab = () =>
                 handleClose={handleCloseDialog}
             />
             <ServiceDetailDialog 
-                open={open.open === 2}
                 params={open.params}
+                open={open.open === 2}
+                serviceTypes={serviceTypes}
                 handleClose={handleCloseDialog}
             />
             <Stack
@@ -59,26 +46,13 @@ const ServiceTab = () =>
                         sx={{height: '50%', width: '100%'}}
                     >
                         {
-                            services.map(s => (
-                                <Stack
-                                    key={s.id}
-                                    spacing={2}
-                                    direction="column"
-                                    alignItems="center"
-                                    justifyContent="center"
-                                >
-                                    <Typography>{s.id}</Typography>
-                                    <Button
-                                        onClick={() => handleOpenService(s.id)}
-                                    >
-                                        <img
-                                            width="96"
-                                            height="96"
-                                            src="/images/service.png" 
-                                        />
-                                    </Button>
-                                    <Typography>{s.title}</Typography>
-                                </Stack>
+                            services.map(service => (
+                                <Service
+                                    key={service.id}
+                                    service={service}
+                                    onClick={handleOpenService} 
+                                    serviceType={serviceTypes.find(t => t.id === service.serviceType).title}
+                                />
                             ))
                         }
                     </Stack>
@@ -93,23 +67,11 @@ const ServiceTab = () =>
                             alignItems="center"
                             direction="row"
                         >
-                            <Stack
-                                spacing={2}
-                                direction="column"
-                                alignItems="center"
-                                justifyContent="center"
-                            >
-                                <Typography>Customer</Typography>
-                                <Button
-                                    onClick={handleOpenUserDialog}
-                                >
-                                    <img
-                                        width="96"
-                                        height="96"
-                                        src="/images/user.png" 
-                                    />
-                                </Button>
-                            </Stack>
+                            <UserIconButton 
+                                title="Customer"
+                                onClick={handleOpenUserDialog}
+                                subTitle=""
+                            />
                         </Stack>
                         <Stack
                             direction="row"
@@ -123,7 +85,6 @@ const ServiceTab = () =>
                             >
                                 SIMULATE
                             </Button>
-                            <div></div>
 
                         </Stack>
                     </Stack>
@@ -131,6 +92,56 @@ const ServiceTab = () =>
             </Stack>
         </React.Fragment>
     );  
+}
+
+const UserIconButton = ({title, subTitle, onClick}) =>
+{
+    return (
+        <Stack
+            spacing={2}
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+        >
+            <Typography>{title}</Typography>
+            <Button
+                onClick={onClick}
+            >
+                <img
+                    width="96"
+                    height="96"
+                    src="/images/user.png" 
+                />
+            </Button>
+            <Typography>{subTitle}</Typography>
+        </Stack>
+    );
+}
+
+const Service = ({ onClick, service, serviceType }) =>
+{
+    const handleClick = () => onClick(service.id, service.serviceType);
+
+    return (
+        <Stack
+            spacing={2}
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
+        >
+            <Typography>{service.id}</Typography>
+            <Button
+                onClick={() => onClick(service.id, service.serviceType)}
+            >
+                <img
+                    width="96"
+                    height="96"
+                    src="/images/service.png" 
+                />
+            </Button>
+            <Typography>{serviceType}</Typography>
+        </Stack>
+    );
 }
 
 export default ServiceTab;
