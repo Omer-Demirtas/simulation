@@ -1,7 +1,8 @@
-import { Box, Button, Card, Divider, Stack, Typography } from '@mui/material';
+import { Box, Button, Card, Divider, Fab, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { openDialog } from '../../../features/dialog/dialogSlice';
+import useDistribution from '../../../utils/hooks/useDistribution';
 
 const services = [
     {
@@ -25,13 +26,16 @@ const services = [
 
 const ServiceTab = () =>
 {
+    const {open, close} = useDistribution();
 
-    const dispatch = useDispatch();
+    const handleSave = (x) => 
+    {
+        console.log({x})
+    }
 
-    console.log('service Tab')
-    const handleOpen = () => {
-        console.log('method ')
-        dispatch(openDialog());
+    const handleOpen = async () => 
+    {
+        open(handleSave);
     }
 
     return (
@@ -43,7 +47,7 @@ const ServiceTab = () =>
         >
             <Card
                 elevation={12}
-                sx={{height: '90%', width: '100%', borderRadius: 5}}
+                sx={{height: '90%', width: '90%', borderRadius: 5}}
             >
                 <Stack
                     spacing={4}
@@ -91,7 +95,7 @@ const ServiceTab = () =>
                         >
                             <Typography>Customer</Typography>
                             <Button
-                                onClick={handleOpen}
+                                onClick={handleOpen }
                             >
                                 <img
                                     width="96"
@@ -103,16 +107,18 @@ const ServiceTab = () =>
                     </Stack>
                     <Stack
                         direction="row"
-                        sx={{mb: 2}}
+                        justifyContent="center"
+                        sx={{m: 2, width: '100%'}}
                     >
-
                         <Button
                             color="error"
                             variant="contained"
-                            sx={{textTransform: 'none', fontSize: 36, textAlign: 'center'}}
+                            sx={{textTransform: 'none', fontSize: 36}}
                         >
                             SIMULATE
                         </Button>
+                        <div></div>
+
                     </Stack>
                 </Stack>
             </Card>

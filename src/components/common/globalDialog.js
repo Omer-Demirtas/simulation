@@ -1,14 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import { closeDialog } from "../../features/dialog/dialogSlice";
 import DistributionDialog from "../distributions/distributionDialog";
-import BasicDialog from "./basicDialog";
-
 
 const GlobalDialog = () => 
 {
     const dispatch = useDispatch();
     const s = useSelector(state => state.dialog );
     
+    const handleClose = () => dispatch(closeDialog())
+    const handleSave = () => s.handleSave();
+
     if(s.open) {
         const open = s.open;
 
@@ -16,7 +17,8 @@ const GlobalDialog = () =>
         return (
             <DistributionDialog 
                 open={open}
-                handleClose={() => dispatch(closeDialog())}
+                saveDistribution={handleSave}
+                handleClose={handleClose}
             />
         );
     }

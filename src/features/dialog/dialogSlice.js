@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = 
 {
     open: false,
+    openDistribution: false
 }
 
 export const dialogSlice = createSlice({
@@ -17,7 +18,7 @@ export const dialogSlice = createSlice({
         },
         closeDialog: (state, action) => 
         {
-            state = {open: false}
+            state.open = false;
         }
     },
   })
