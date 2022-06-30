@@ -55,8 +55,9 @@ const DistributionDialog = ({ open, handleClose, distribution, distributionType,
     return (
         <BasicDialog
             open={open}
-            widthCode="md"
             height="60%"
+            widthCode="md"
+            title="Select Distributon"
             handleSave={handleSave}
             handleClose={handleClose}
         >
