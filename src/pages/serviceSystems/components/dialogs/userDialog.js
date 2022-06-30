@@ -23,7 +23,10 @@ const UserDialog = ({ handleClose, open}) =>
     const handleDialogClose = () => setDialogOpen(false);
     const handleOpenDialog = () => setDialogOpen(true);
 
-    const handleSaveDistribution = (distribution) => dispatch(updateUserDistribution(distribution))
+    const handleSaveDistribution = (distribution) => {
+        console.log({distribution})
+        dispatch(updateUserDistribution(distribution))
+    }
 
     return (
         <BasicDialog
@@ -47,7 +50,7 @@ const UserDialog = ({ handleClose, open}) =>
                 </SettingsRow>
                 <SettingsRow>
                     <Button>
-                        Servis Selection statistics
+                        Rate of Service Type
                     </Button>
                 </SettingsRow>            
         </BasicDialog>

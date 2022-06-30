@@ -28,6 +28,9 @@ const DistributionDialog = ({ open, handleClose, distribution, distributionType,
     const [dist, setDist] = useState({});
     const [tabIndex, setTabIndex] = useState(0);
 
+    console.log({distribution, distributionType})
+
+
     const handleChangeTabIndex = (_, newValue) => 
     {
         setTabIndex(newValue);
@@ -38,7 +41,9 @@ const DistributionDialog = ({ open, handleClose, distribution, distributionType,
     {
         var data = {}
 
-        if(distributionType == 1) data = {distribution: uniformRef.current.input, distributionType: 1}
+        if(tabIndex == 1) data = uniformRef.current.getDistribution();
+
+        console.log({data})
 
         saveDistribution(data);
         
