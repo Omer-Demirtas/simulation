@@ -6,7 +6,6 @@ import { addService, createTable } from '../../../features/service/serviceSlice'
 import ServiceActionsDialog from '../components/dialogs/serviceActionsDialog';
 import ServiceDetailDialog from '../components/dialogs/serviceDetailDialog';
 import UserDialog from '../components/dialogs/userDialog';
-import ServiceDialog from '../components/serviceDialog';
 
 const ServiceTab = () =>
 {
@@ -21,11 +20,10 @@ const ServiceTab = () =>
     const handleCloseDialog = () => setOpen({open: 0});
     const handleOpenUserDialog = () => setOpen({open: 1});
     const handleOpenServiceActions = () => setOpen({open: 3});
-    const handleOpenNewService = () => setOpen({open: 4});
+    const handleOpenNewService = () => setOpen({open: 2, params: {serviceNo: services[services.length - 1].id + 1, serviceType: 0, isNew: true}});
 
     const handleGenerateTable = () => dispatch(createTable());
 
-    const handleAddNewService = (service) => dispatch(addService(service))
     return (
         <React.Fragment>
             <UserDialog 
@@ -41,11 +39,6 @@ const ServiceTab = () =>
             <ServiceActionsDialog 
                 open={open.open === 3}
                 handleClose={handleCloseDialog}
-            />
-            <ServiceDialog 
-                open={open.open === 4}
-                handleClose={handleCloseDialog}
-                handleNewService={handleAddNewService}
             />
             <Stack
                 sx={{p: 3, height: '100%'}}

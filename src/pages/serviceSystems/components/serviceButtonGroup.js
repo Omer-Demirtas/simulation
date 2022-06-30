@@ -2,7 +2,6 @@ import { Button, Grid, Stack } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addService, createTable } from '../../../features/service/serviceSlice';
-import ServiceDialog from "./serviceDialog";
 
 
 const ServiceButtonGroup = () =>
@@ -19,11 +18,6 @@ const ServiceButtonGroup = () =>
 
     return (
         <React.Fragment>
-            <ServiceDialog
-                open={open}
-                handleClose={handleClose}
-                handleNewService={handleNewService}
-            />  
             <Grid
                 sx={{paddingTop: '2rem'}}
                 direction="row"
