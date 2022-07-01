@@ -150,7 +150,6 @@ const Service = ({ onClick, service, serviceType, openServiceType}) =>
 {
     const handleClick = () => 
     {
-        console.log("service Click ", service.id)
         onClick(service.id, service.serviceType);
     }
 

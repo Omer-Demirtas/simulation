@@ -40,8 +40,6 @@ const DistributionDialog = ({ open, handleClose, distribution, distributionType,
 
         if(tabIndex == 1) data = uniformRef.current.getDistribution();
 
-        console.log({data})
-
         saveDistribution(data);
         
         handleClose();

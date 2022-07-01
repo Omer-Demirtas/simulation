@@ -162,15 +162,11 @@ const checkForAvaliableServiceForType = (services, que) =>
 
 const getFirstUserByServiceType = (que, serviceType) =>
 {
-  console.log('getFirstUserByServiceType');
-
   var result = null;
 
   var index = 0;
   for (const u of que)
   {
-    console.log({u});
-
     if(u.serviceType === serviceType) 
     {
       result = que[index];
@@ -179,7 +175,6 @@ const getFirstUserByServiceType = (que, serviceType) =>
     index++;
   }
 
-  console.log({result, que, serviceType})
   return result;
 }
 
@@ -352,7 +347,6 @@ export const serviceSlice = createSlice({
     },
     addService: (state, action) => 
     {
-      console.log({action})
       state.services.push(
         {
           ...action.payload
@@ -366,8 +360,6 @@ export const serviceSlice = createSlice({
     updateUserDistribution: (state, action) => 
     {
       const {value, distributionType} = action.payload;
-
-      console.log({value, distributionType})
 
       state.user.gas = { distributionType, value };
     },
