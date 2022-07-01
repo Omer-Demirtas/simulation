@@ -1,8 +1,7 @@
-import { Button, Card, Divider, Fab, Stack, Typography, Zoom } from '@mui/material';
-import { type } from '@testing-library/user-event/dist/type';
+import { Button, Card, Fab, Stack, Typography, Zoom } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addService, createTable } from '../../../features/service/serviceSlice';
+import { createTable } from '../../../features/service/serviceSlice';
 import ServiceActionsDialog from '../components/dialogs/serviceActionsDialog';
 import ServiceDetailDialog from '../components/dialogs/serviceDetailDialog';
 import ServiceTypeDialog from '../components/dialogs/serviceTypeDialog';
@@ -32,7 +31,7 @@ const ServiceTab = () =>
                 handleClose={handleCloseDialog}
             />
             <ServiceDetailDialog 
-                params={open.params}
+                params={open.open === 2 ? open.params : null}
                 open={open.open === 2}
                 serviceTypes={serviceTypes}
                 handleClose={handleCloseDialog}
@@ -42,8 +41,9 @@ const ServiceTab = () =>
                 handleClose={handleCloseDialog}
             />
             <ServiceTypeDialog
-                params={open.params}
+                params={open.open === 4 ? open.params : null}
                 open={open.open === 4}
+                serviceTypes={serviceTypes}
                 handleClose={handleCloseDialog}
             />
             <Stack
@@ -115,17 +115,6 @@ const ServiceTab = () =>
 
                         </Stack>
                     </Stack>
-                    <Fab
-                        onClick={handleOpenServiceActions}
-                        sx={{
-                            position: "fixed",
-                            bottom: (theme) => theme.spacing(2),
-                            right: (theme) => theme.spacing(2)
-                        }}
-                        color="primary"
-                    >
-                        Actions
-                </Fab>
                 </Card>
             </Stack>
         </React.Fragment>
@@ -158,7 +147,11 @@ const UserIconButton = ({title, subTitle, onClick}) =>
 
 const Service = ({ onClick, service, serviceType, openServiceType}) =>
 {
-    const handleClick = () => onClick(service.id, service.serviceType);
+    const handleClick = () => 
+    {
+        console.log("service Click ", service.id)
+        onClick(service.id, service.serviceType);
+    }
 
     return (
         <Stack

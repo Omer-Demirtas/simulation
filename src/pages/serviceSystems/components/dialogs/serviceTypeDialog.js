@@ -1,36 +1,37 @@
 import { Button, FormControl, InputLabel, MenuItem, Select, Stack, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
 import BasicDialog from "../../../../components/common/basicDialog";
 import SettingsRow from "../../../../components/common/settings/settingsRow";
 import DistributionDialog from "../../../../components/distributions/distributionDialog";
-import { selectServiceTypes } from "../../../../features/service/serviceSlice";
+import { addServiceType, updateServiceTypeDetails } from "../../../../features/service/serviceSlice";
 
-const ServiceTypeDialog = ({ open, handleClose, handleSave, params}) => 
+const ServiceTypeDialog = ({ open, handleClose, params, serviceTypes}) => 
 {
     const [id, setId] = useState(0);
     const [distribution, setDistribution] = useState();
-    const [openDistribution, setOpenDistribution] = useState(false);
+    const [openDistribution, setOpenDistribution] = useState(false);    
 
-    const serviceTypes = useSelector(selectServiceTypes)
+    const dispatch = useDispatch();
 
     const handleOpenDistribution = () => setOpenDistribution(true);
     const handleCloseDistribution = () => setOpenDistribution(false);
 
-    const handleSaveDistribution = (d) => setDistribution({value: d.distribution, distributionType: d.distributionType});
+    const handleSaveDistribution = (d) => setDistribution({value: d.value, distributionType: d.distributionType});
 
     const getServiceTypeById = () => serviceTypes.find(t => t.id === id);
 
-    const handleSaveType = () =>
+    const handleSaveType = () => 
     {
-        handleSave(distribution);
+        dispatch(updateServiceTypeDetails(({distribution,id})));
+        handleClose();
     }
 
     useEffect(() => {
         if(params) setId(params.id) 
     }, [params])
 
-    if(!params) return (<></>)
+    if(!open || !params) return (<></>)
 
     return (
         <React.Fragment>
@@ -48,7 +49,7 @@ const ServiceTypeDialog = ({ open, handleClose, handleSave, params}) =>
                 handleSave={handleSaveType}
             >
                 <Stack
-                    spacing={4}
+                    spacing={2}
                     direction="column"
                 >
                     <SettingsRow noDivider={true}>

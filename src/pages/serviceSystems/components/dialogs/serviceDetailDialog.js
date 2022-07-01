@@ -23,11 +23,12 @@ const ServiceDetailDialog = ({open, handleClose, params, serviceTypes}) =>
     {
         if(params)
         {   
+            console.log("coming params with ", params)
             handleReload(params)
         }
     }, [params]);
 
-    if(!params) return (<></>);
+    if(!open || !params) return (<></>)
 
     return (
         <BasicDialog

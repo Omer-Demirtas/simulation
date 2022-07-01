@@ -9,11 +9,6 @@ import { selectUser, updateUserDistribution } from "../../../../features/service
 
 const UserDialog = ({ handleClose, open}) => 
 {
-    const handleAddNewType = () => 
-    {
-        handleClose();
-    }
-    
     const [dialogOpen, setDialogOpen] = useState(false);
  
     const user = useSelector(statea => selectUser(statea))
