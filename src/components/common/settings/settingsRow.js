@@ -20,4 +20,5 @@ const SettingsRow = ({children, noDivider}) =>
         </React.Fragment>
     );
 }
+
 export default SettingsRow;

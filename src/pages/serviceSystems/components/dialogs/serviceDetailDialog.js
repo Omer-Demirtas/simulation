@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import BasicDialog from "../../../../components/common/basicDialog";
@@ -21,7 +21,6 @@ const ServiceDetailDialog = ({open, handleClose, params, serviceTypes}) =>
 
     useEffect(() => 
     {
-        console.log({params})
         if(params)
         {   
             handleReload(params)
@@ -36,8 +35,8 @@ const ServiceDetailDialog = ({open, handleClose, params, serviceTypes}) =>
             height="50%"
             handleSave={handleSave}
             handleClose={handleClose}
+            title="Service Details"
         >
-            <h1>Service Details</h1>
             <Stack
                 direction="column"
                 spacing={2}
@@ -71,6 +70,7 @@ const ServiceDetailDialog = ({open, handleClose, params, serviceTypes}) =>
                         </Select>
                     </FormControl>
                 </SettingsRow>
+
             </Stack>
         </BasicDialog>
     );

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addService, createTable } from '../../../features/service/serviceSlice';
 import ServiceActionsDialog from '../components/dialogs/serviceActionsDialog';
 import ServiceDetailDialog from '../components/dialogs/serviceDetailDialog';
+import ServiceTypeDialog from '../components/dialogs/serviceTypeDialog';
 import UserDialog from '../components/dialogs/userDialog';
 
 const ServiceTab = () =>
@@ -16,13 +17,13 @@ const ServiceTab = () =>
     const services = useSelector((state) => state.service.services);
     const serviceTypes = useSelector((state) => state.service.serviceTypes);
 
-    const handleOpenService = (id, serviceType) => setOpen({open: 2, params: {serviceNo: id, serviceType}});
     const handleCloseDialog = () => setOpen({open: 0});
     const handleOpenUserDialog = () => setOpen({open: 1});
+    const handleOpenServiceType = (id) => setOpen({open: 4, params: {serviceTypes, id}});
     const handleOpenServiceActions = () => setOpen({open: 3});
-    const handleOpenNewService = () => setOpen({open: 2, params: {serviceNo: services[services.length - 1].id + 1, serviceType: 0, isNew: true}});
-
     const handleGenerateTable = () => dispatch(createTable());
+    const handleOpenService = (id, serviceType) => setOpen({open: 2, params: {serviceNo: id, serviceType}});
+    const handleOpenNewService = () => setOpen({open: 2, params: {serviceNo: services[services.length - 1].id + 1, serviceType: 0, isNew: true}});
 
     return (
         <React.Fragment>
@@ -38,6 +39,11 @@ const ServiceTab = () =>
             />
             <ServiceActionsDialog 
                 open={open.open === 3}
+                handleClose={handleCloseDialog}
+            />
+            <ServiceTypeDialog
+                params={open.params}
+                open={open.open === 4}
                 handleClose={handleCloseDialog}
             />
             <Stack
@@ -63,17 +69,18 @@ const ServiceTab = () =>
                                     key={service.id}
                                     service={service}
                                     onClick={handleOpenService}
+                                    openServiceType={handleOpenServiceType}
                                     serviceType={serviceTypes.find(t => t.id === service.serviceType).title}
                                 />
                             ))
                         }
-                        <Fab
+                        <Button
                             sx={{ml: 1}}
                             color="primary"
                             onClick={handleOpenNewService}
                         >
                             +
-                        </Fab>
+                        </Button>
                     </Stack>
                     <Stack
                         direction="column"
@@ -149,7 +156,7 @@ const UserIconButton = ({title, subTitle, onClick}) =>
     );
 }
 
-const Service = ({ onClick, service, serviceType }) =>
+const Service = ({ onClick, service, serviceType, openServiceType}) =>
 {
     const handleClick = () => onClick(service.id, service.serviceType);
 
@@ -162,7 +169,7 @@ const Service = ({ onClick, service, serviceType }) =>
         >
             <Typography>{service.id}</Typography>
             <Button
-                onClick={() => onClick(service.id, service.serviceType)}
+                onClick={handleClick}
             >
                 <img
                     width="96"
@@ -170,7 +177,7 @@ const Service = ({ onClick, service, serviceType }) =>
                     src="/images/service.png" 
                 />
             </Button>
-            <Typography>{serviceType}</Typography>
+            <Button onClick={() => openServiceType(service.serviceType)}>{serviceType}</Button>
         </Stack>
     );
 }
