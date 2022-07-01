@@ -28,6 +28,7 @@ const ServiceTab = () =>
         <React.Fragment>
             <UserDialog 
                 open={open.open === 1}
+                serviceTypes={serviceTypes}
                 handleClose={handleCloseDialog}
             />
             <ServiceDetailDialog 

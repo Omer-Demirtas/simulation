@@ -1,4 +1,3 @@
-import { unstable_composeClasses } from '@mui/material';
 import { createSlice } from '@reduxjs/toolkit'
 
 /*
@@ -388,14 +387,24 @@ export const serviceSlice = createSlice({
       state.serviceTypes[id].value = distribution.value;
 
     },
+    updateUserServiceTypeDistribution: (state, action) => 
+    {
+      const value = action.payload;
+      Object.keys(value).forEach(k => {
+        value[k] = Number(value[k])
+      });
+
+      state.user.service.value =value;
+    }
   },
 })
 
 
-export const { createTable, addService, addServiceType, updateUserDistribution, updateServiceType, updateServiceTypeDetails} = serviceSlice.actions
+export const { createTable, addService, addServiceType, updateUserDistribution, updateServiceType, updateServiceTypeDetails, updateUserServiceTypeDistribution} = serviceSlice.actions
 
+export const selectUser = (state) => state.service.user;
 export const selectServiceTypes = (state) => state.service.serviceTypes;
 export const selectEventsAndServices = (state) => [ state.service.resultEvents, state.service.services]
-export const selectUser = (state) => state.service.user;
+export const selectUserServiceTypeSelection = (state) => state.service.user.service;
 
 export default serviceSlice.reducer

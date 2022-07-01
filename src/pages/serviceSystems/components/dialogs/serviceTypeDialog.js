@@ -78,6 +78,13 @@ const ServiceTypeDialog = ({ open, handleClose, params, serviceTypes}) =>
                             Select Distribution 
                         </Button>
                     </SettingsRow>
+                    <SettingsRow>
+                    <Button
+                        disabled
+                    >
+                        Add new Service Type
+                    </Button>
+                </SettingsRow>
                 </Stack>
             </BasicDialog>
         </React.Fragment>

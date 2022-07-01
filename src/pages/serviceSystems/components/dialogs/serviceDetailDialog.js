@@ -71,7 +71,6 @@ const ServiceDetailDialog = ({open, handleClose, params, serviceTypes}) =>
                         </Select>
                     </FormControl>
                 </SettingsRow>
-
             </Stack>
         </BasicDialog>
     );
