@@ -35,7 +35,7 @@ const TableTab = () =>
                 elevation={12}
                 sx={{height: '90%', maxHeight:'90%', width: '90%', borderRadius: 5}}
             >
-                    <Table sx={{height: '100%'}} aria-label="simple table">
+                    <Table aria-label="simple table">
                         <TableHead>
                         <TableRow>
                             <TableCell align="center" rowSpan={2}>Simulation Time</TableCell>

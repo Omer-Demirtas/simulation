@@ -347,6 +347,7 @@ export const serviceSlice = createSlice({
     },
     addService: (state, action) => 
     {
+      console.log({action});
       state.services.push(
         {
           ...action.payload
@@ -375,8 +376,10 @@ export const serviceSlice = createSlice({
     {
       const {id, distribution} = action.payload;
 
-      state.serviceTypes[id].distributionType = distribution.distributionType;
-      state.serviceTypes[id].value = distribution.value;
+      const index = state.serviceTypes.findIndex(t => t.id === id);
+
+      state.serviceTypes[index].distributionType = distribution.distributionType;
+      state.serviceTypes[index].value = distribution.value;
 
     },
     updateUserServiceTypeDistribution: (state, action) => 
