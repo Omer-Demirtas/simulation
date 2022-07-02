@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import BasicDialog from "../../../../components/common/basicDialog";
 import SettingsRow from "../../../../components/common/settings/settingsRow";
-import { addService, updateServiceType, updateServiceTypeDetails } from "../../../../features/service/serviceSlice";
+import { addService, removeService, updateServiceType, updateServiceTypeDetails } from "../../../../features/service/serviceSlice";
 import useFormFields from "../../../../utils/hooks/useFormFields";
 
 const ServiceDetailDialog = ({open, handleClose, params, serviceTypes}) =>
@@ -11,6 +11,12 @@ const ServiceDetailDialog = ({open, handleClose, params, serviceTypes}) =>
     const [input, handleChange, handleReload] = useFormFields({serviceNo: "", serviceType: ""});
 
     const dispatch = useDispatch();
+
+    const handleRemoveService = () =>
+    {
+        dispatch(removeService(input.serviceNo))
+        handleClose();
+    }
 
     const handleSave = () => 
     {
@@ -69,6 +75,14 @@ const ServiceDetailDialog = ({open, handleClose, params, serviceTypes}) =>
                             }
                         </Select>
                     </FormControl>
+                </SettingsRow>
+                <SettingsRow>
+                    <Button
+                        onClick={handleRemoveService}
+                        color="error"
+                    >
+                        Remove This Service
+                    </Button>
                 </SettingsRow>
             </Stack>
         </BasicDialog>

@@ -14,6 +14,7 @@ value:
 
 const initialState = 
 {
+  common: {},
   user: {
     gas: {
       distributionType: 1,
@@ -104,7 +105,7 @@ const createSystemUsers = (n, user, serviceTypes) =>
   const generator = 
   {
     gas: generateDistributionOption(user.gas),
-    service: serviceTypes.map(s => generateDistributionOption(s)),
+    service: serviceTypes.map(s => ({id: s.id, f: generateDistributionOption(s)})),
     serviceType: generateDistributionOption(user.service)
   };
 
@@ -115,7 +116,7 @@ const createSystemUsers = (n, user, serviceTypes) =>
   {
       const gas = generator.gas();
       const serviceType = generator.serviceType();
-      const serviceTime = generator.service[serviceType]();
+      const serviceTime = generator.service[serviceType].f();
       
       time+=gas;
 
@@ -354,6 +355,12 @@ export const serviceSlice = createSlice({
         }
       );
     },
+    removeService: (state, action) => 
+    {
+      const id = action.payload;
+      const index =  state.services.findIndex(s => s.id === id);
+      state.services.splice(index, 1);
+    },
     addServiceType: (state, action) => 
     {
       state.serviceTypes.push(action.payload)
@@ -369,7 +376,6 @@ export const serviceSlice = createSlice({
       const {serviceNo, serviceType} = action.payload;
 
       const index = state.services.findIndex(s => s.id === serviceNo);
-
       state.services[index].serviceType = serviceType;
     },
     updateServiceTypeDetails: (state, action) => 
@@ -380,7 +386,6 @@ export const serviceSlice = createSlice({
 
       state.serviceTypes[index].distributionType = distribution.distributionType;
       state.serviceTypes[index].value = distribution.value;
-
     },
     updateUserServiceTypeDistribution: (state, action) => 
     {
@@ -395,7 +400,7 @@ export const serviceSlice = createSlice({
 })
 
 
-export const { createTable, addService, addServiceType, updateUserDistribution, updateServiceType, updateServiceTypeDetails, updateUserServiceTypeDistribution} = serviceSlice.actions
+export const { createTable, addService, removeService, addServiceType, updateUserDistribution, updateServiceType, updateServiceTypeDetails, updateUserServiceTypeDistribution} = serviceSlice.actions
 
 export const selectUser = (state) => state.service.user;
 export const selectServiceTypes = (state) => state.service.serviceTypes;
