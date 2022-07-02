@@ -1,12 +1,11 @@
-import { Button, Card, Divider, Fab, Stack, Typography, Zoom } from '@mui/material';
-import { type } from '@testing-library/user-event/dist/type';
+import { Button, Card, Fab, Stack, Typography, Zoom } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addService, createTable } from '../../../features/service/serviceSlice';
+import { createTable } from '../../../features/service/serviceSlice';
 import ServiceActionsDialog from '../components/dialogs/serviceActionsDialog';
 import ServiceDetailDialog from '../components/dialogs/serviceDetailDialog';
+import ServiceTypeDialog from '../components/dialogs/serviceTypeDialog';
 import UserDialog from '../components/dialogs/userDialog';
-import ServiceDialog from '../components/serviceDialog';
 
 const ServiceTab = () =>
 {
@@ -17,23 +16,23 @@ const ServiceTab = () =>
     const services = useSelector((state) => state.service.services);
     const serviceTypes = useSelector((state) => state.service.serviceTypes);
 
-    const handleOpenService = (id, serviceType) => setOpen({open: 2, params: {serviceNo: id, serviceType}});
     const handleCloseDialog = () => setOpen({open: 0});
     const handleOpenUserDialog = () => setOpen({open: 1});
+    const handleOpenServiceType = (id) => setOpen({open: 4, params: {serviceTypes, id}});
     const handleOpenServiceActions = () => setOpen({open: 3});
-    const handleOpenNewService = () => setOpen({open: 4});
-
     const handleGenerateTable = () => dispatch(createTable());
+    const handleOpenService = (id, serviceType) => setOpen({open: 2, params: {serviceNo: id, serviceType}});
+    const handleOpenNewService = () => setOpen({open: 2, params: {serviceNo: services[services.length - 1].id + 1, serviceType: 0, isNew: true}});
 
-    const handleAddNewService = (service) => dispatch(addService(service))
     return (
         <React.Fragment>
             <UserDialog 
                 open={open.open === 1}
+                serviceTypes={serviceTypes}
                 handleClose={handleCloseDialog}
             />
             <ServiceDetailDialog 
-                params={open.params}
+                params={open.open === 2 ? open.params : null}
                 open={open.open === 2}
                 serviceTypes={serviceTypes}
                 handleClose={handleCloseDialog}
@@ -42,10 +41,11 @@ const ServiceTab = () =>
                 open={open.open === 3}
                 handleClose={handleCloseDialog}
             />
-            <ServiceDialog 
+            <ServiceTypeDialog
+                params={open.open === 4 ? open.params : null}
                 open={open.open === 4}
+                serviceTypes={serviceTypes}
                 handleClose={handleCloseDialog}
-                handleNewService={handleAddNewService}
             />
             <Stack
                 sx={{p: 3, height: '100%'}}
@@ -70,17 +70,18 @@ const ServiceTab = () =>
                                     key={service.id}
                                     service={service}
                                     onClick={handleOpenService}
+                                    openServiceType={handleOpenServiceType}
                                     serviceType={serviceTypes.find(t => t.id === service.serviceType).title}
                                 />
                             ))
                         }
-                        <Fab
+                        <Button
                             sx={{ml: 1}}
                             color="primary"
                             onClick={handleOpenNewService}
                         >
                             +
-                        </Fab>
+                        </Button>
                     </Stack>
                     <Stack
                         direction="column"
@@ -115,17 +116,6 @@ const ServiceTab = () =>
 
                         </Stack>
                     </Stack>
-                    <Fab
-                        onClick={handleOpenServiceActions}
-                        sx={{
-                            position: "fixed",
-                            bottom: (theme) => theme.spacing(2),
-                            right: (theme) => theme.spacing(2)
-                        }}
-                        color="primary"
-                    >
-                        Actions
-                </Fab>
                 </Card>
             </Stack>
         </React.Fragment>
@@ -156,9 +146,12 @@ const UserIconButton = ({title, subTitle, onClick}) =>
     );
 }
 
-const Service = ({ onClick, service, serviceType }) =>
+const Service = ({ onClick, service, serviceType, openServiceType}) =>
 {
-    const handleClick = () => onClick(service.id, service.serviceType);
+    const handleClick = () => 
+    {
+        onClick(service.id, service.serviceType);
+    }
 
     return (
         <Stack
@@ -169,7 +162,7 @@ const Service = ({ onClick, service, serviceType }) =>
         >
             <Typography>{service.id}</Typography>
             <Button
-                onClick={() => onClick(service.id, service.serviceType)}
+                onClick={handleClick}
             >
                 <img
                     width="96"
@@ -177,7 +170,7 @@ const Service = ({ onClick, service, serviceType }) =>
                     src="/images/service.png" 
                 />
             </Button>
-            <Typography>{serviceType}</Typography>
+            <Button onClick={() => openServiceType(service.serviceType)}>{serviceType}</Button>
         </Stack>
     );
 }

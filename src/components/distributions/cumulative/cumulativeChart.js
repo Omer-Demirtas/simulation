@@ -51,7 +51,7 @@ const CumulativeChart = ({cumulative}) =>
   }, [cumulative]);
 
   return (
-      <Bar options={options} data={data} onClick={(e) => console.log({ e })} />
+      <Bar options={options} data={data} onClick={(e) => {}}/>
     );
 }
 

@@ -24,8 +24,6 @@ const TableTab = () =>
         ]
     ), [services]);
 
-    console.log({events, columns})
-
     return (
         <Stack
             sx={{p: 3, height: '100%'}}

@@ -1,38 +1,33 @@
 import { Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import BasicDialog from "../../../../components/common/basicDialog";
 import SettingsRow from "../../../../components/common/settings/settingsRow";
-import { selectServiceTypes, updateServiceType, updateServiceTypeDetails } from "../../../../features/service/serviceSlice";
+import { addService, updateServiceType, updateServiceTypeDetails } from "../../../../features/service/serviceSlice";
 import useFormFields from "../../../../utils/hooks/useFormFields";
-import ServiceTypeDialog from "./serviceTypeDialog";
 
 const ServiceDetailDialog = ({open, handleClose, params, serviceTypes}) =>
 {
     const [input, handleChange, handleReload] = useFormFields({serviceNo: "", serviceType: ""});
-    const [serviceTypeOpen, setServiceTypeOpen] = useState(false);
 
     const dispatch = useDispatch();
 
     const handleSave = () => 
     {
-        dispatch(updateServiceType({serviceNo: input.serviceNo, serviceType: input.serviceType}))
+        if(params.isNew) dispatch(addService({id: input.serviceNo, serviceNo: input.serviceNo, serviceType: input.serviceType}))
+        else dispatch(updateServiceType({serviceNo: input.serviceNo, serviceType: input.serviceType}))
         handleClose();
     }
 
-    const handleOpenDialog = () =>setServiceTypeOpen(true);
-    const handleCloseServiceType = () => setServiceTypeOpen(false);
-    const handleSaveServiceType = (dist) => 
+    useEffect(() => 
     {
-        dispatch(updateServiceTypeDetails({id: input.serviceType, distribution: dist}))
-        handleCloseServiceType();
-    }
-
-    useEffect(() => {
-        if(params && Object.values(params).length !== 0) handleReload(params)
+        if(params)
+        {   
+            handleReload(params)
+        }
     }, [params]);
 
-    if(!params) return (<></>);
+    if(!open || !params) return (<></>)
 
     return (
         <BasicDialog
@@ -40,21 +35,20 @@ const ServiceDetailDialog = ({open, handleClose, params, serviceTypes}) =>
             height="50%"
             handleSave={handleSave}
             handleClose={handleClose}
+            title="Service Details"
         >
-            <h1>Service Details</h1>
             <Stack
                 direction="column"
                 spacing={2}
             >
                 <SettingsRow noDivider={true} >
                     <TextField
-                        fullWidth
                         disabled
+                        fullWidth
                         id="serviceName" 
-                        value={params.serviceNo}
-                        onClick={() => {}}
-                        label="Service Name" 
                         variant="outlined" 
+                        label="Service Name" 
+                        value={params.serviceNo}
                     />
                 </SettingsRow>
                 <SettingsRow noDivider={true}>

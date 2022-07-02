@@ -46,8 +46,6 @@ const ServiceSystemPage = () =>
 
     const selectedTab = pages[value];
 
-    console.log('Service Page')
-
     return(
        <Stack sx={{height: '100%'}} direction="column">
             
