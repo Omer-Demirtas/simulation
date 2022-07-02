@@ -7,26 +7,13 @@ import { useNavigate } from "react-router-dom";
 const options = 
 [
     {
-        title: 'service',
+        title: 'Service System',
+        description: 'Simulation on the service systems',
         url: '/service'
     },
-    {
-        title: 'asd',
-        url: '/service'
-    },
-    {
-        title: 'xyz',
-        url: 'service'
-    },
-    {
-        title: 'klm',
-        url: '/service'
-    },
-    
-
 ];
 
-const HomePage = (props) => 
+const HomePage = () => 
 {
     const navigate = useNavigate()
 
@@ -35,7 +22,7 @@ const HomePage = (props) =>
     return (
         <Grid sx={{padding: '16px',}} container spacing={2}>
             {
-                options.map(option => <MenuCard navigate={navigateTo} key={option.title} title={option.title} url={option.url} />)
+                options.map(option => <MenuCard navigate={navigateTo} key={option.title} title={option.title} description={option.description} url={option.url} />)
             }
         </Grid>
     );

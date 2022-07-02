@@ -1,4 +1,4 @@
-import { Card, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Card, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { selectEventsAndServices } from "../../../features/service/serviceSlice";
