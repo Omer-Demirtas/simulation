@@ -23,7 +23,7 @@ const ServiceTypeDialog = ({ open, handleClose, params, serviceTypes}) =>
 
     const handleSaveType = () => 
     {
-        dispatch(updateServiceTypeDetails(({distribution,id})));
+        if(distribution) dispatch(updateServiceTypeDetails(({distribution,id})));
         handleClose();
     }
 

@@ -1,13 +1,7 @@
-import { Card, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Card, Grid, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { selectEventsAndServices } from "../../../features/service/serviceSlice";
-
-const row = 
-[
-    1,2,3,4,,5,6,7,8,9,0,2,3,
-//    4,5,6,1,2,3,4,5,6
-]
 
 const TableTab = () =>
 {
@@ -25,17 +19,19 @@ const TableTab = () =>
     ), [services]);
 
     return (
-        <Stack
-            sx={{p: 3, height: '100%'}}
-            direction="column"
-            alignItems="center"
-            justifyContent="flex-start"
+        <Grid
+            item
+            sx={{height: '100%', mx: 2}}
+            spacing={2} 
+            container  
+            xs={12}
         >
-            <Card
-                elevation={12}
-                sx={{height: '90%', maxHeight:'90%', width: '90%', borderRadius: 5}}
+            <Grid
+                item
+                xs={12}
             >
-                    <Table sx={{height: '100%'}} aria-label="simple table">
+                <TableContainer sx={{maxHeight: '100%'}}>
+                    <Table >
                         <TableHead>
                         <TableRow>
                             <TableCell align="center" rowSpan={2}>Simulation Time</TableCell>
@@ -76,8 +72,9 @@ const TableTab = () =>
                             }
                         </TableBody>
                     </Table>
-            </Card>
-        </Stack>
+                </TableContainer>
+            </Grid>
+        </Grid>
     );
 }
 

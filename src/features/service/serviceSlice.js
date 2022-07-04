@@ -14,6 +14,7 @@ value:
 
 const initialState = 
 {
+  common: {},
   user: {
     gas: {
       distributionType: 1,
@@ -66,19 +67,19 @@ const getRandomNumber = () => Math.random().toFixed(2);
 
 const getCumulativeValue = (cu) =>
 {
-    const rand = getRandomNumber() * 100;
+  const rand = getRandomNumber() * 100;
 
-    return cu.findIndex(c => rand < c);
+  return cu.findIndex(c => rand < c);
 }
 
 const getFromCumulative = (cumulative) => 
-    {
-        const values = Object.values(cumulative);
+{
+  const values = Object.values(cumulative);
 
-        const c = values.map((sum => value => sum += value)(0))
+  const c = values.map((sum => value => sum += value)(0))
 
-        return c;
-    }
+  return c;
+}
 
 const getFromUniformDistribution = ({a, b}) => 
 {
@@ -104,7 +105,7 @@ const createSystemUsers = (n, user, serviceTypes) =>
   const generator = 
   {
     gas: generateDistributionOption(user.gas),
-    service: serviceTypes.map(s => generateDistributionOption(s)),
+    service: serviceTypes.map(s => ({id: s.id, f: generateDistributionOption(s)})),
     serviceType: generateDistributionOption(user.service)
   };
 
@@ -115,7 +116,7 @@ const createSystemUsers = (n, user, serviceTypes) =>
   {
       const gas = generator.gas();
       const serviceType = generator.serviceType();
-      const serviceTime = generator.service[serviceType]();
+      const serviceTime = generator.service[serviceType].f();
       
       time+=gas;
 
@@ -318,7 +319,6 @@ const generateTable = (services, user, serviceTypes) =>
   }
   
   console.log({ users, events , services, que, resultEvents});
-
   return resultEvents;
 } 
 
@@ -347,11 +347,18 @@ export const serviceSlice = createSlice({
     },
     addService: (state, action) => 
     {
+      console.log({action});
       state.services.push(
         {
           ...action.payload
         }
       );
+    },
+    removeService: (state, action) => 
+    {
+      const id = action.payload;
+      const index =  state.services.findIndex(s => s.id === id);
+      state.services.splice(index, 1);
     },
     addServiceType: (state, action) => 
     {
@@ -368,16 +375,16 @@ export const serviceSlice = createSlice({
       const {serviceNo, serviceType} = action.payload;
 
       const index = state.services.findIndex(s => s.id === serviceNo);
-
       state.services[index].serviceType = serviceType;
     },
     updateServiceTypeDetails: (state, action) => 
     {
       const {id, distribution} = action.payload;
 
-      state.serviceTypes[id].distributionType = distribution.distributionType;
-      state.serviceTypes[id].value = distribution.value;
+      const index = state.serviceTypes.findIndex(t => t.id === id);
 
+      state.serviceTypes[index].distributionType = distribution.distributionType;
+      state.serviceTypes[index].value = distribution.value;
     },
     updateUserServiceTypeDistribution: (state, action) => 
     {
@@ -392,7 +399,7 @@ export const serviceSlice = createSlice({
 })
 
 
-export const { createTable, addService, addServiceType, updateUserDistribution, updateServiceType, updateServiceTypeDetails, updateUserServiceTypeDistribution} = serviceSlice.actions
+export const { createTable, addService, removeService, addServiceType, updateUserDistribution, updateServiceType, updateServiceTypeDetails, updateUserServiceTypeDistribution} = serviceSlice.actions
 
 export const selectUser = (state) => state.service.user;
 export const selectServiceTypes = (state) => state.service.serviceTypes;
