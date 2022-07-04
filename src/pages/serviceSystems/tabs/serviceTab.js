@@ -27,7 +27,8 @@ const ServiceTab = () =>
     return (
         <Grid 
             sx={{height: '100%', mx: 2}}
-            spacing={2} 
+            rowSpacing={2} 
+            columnSpacing={2}
             container  
             xs={12}
             item
@@ -53,75 +54,51 @@ const ServiceTab = () =>
                 serviceTypes={serviceTypes}
                 handleClose={handleCloseDialog}
             />
-            <Grid
-                item
-                xs={12}
-                md={12}
-                lg={3}
+            <SettingsCard
+                title="Settings"
             >
                 <Card
-                    elevation={12}
-                    sx={{height: '100%', borderRadius: 5,width: '100%'}}
+                    sx={{mt: 2, borderRadius: 2}}
+                    elevation={3}
                 >
                     <Stack
-                        direction="column"
-                        sx={{p: 1}}
-                        spacing={2}
-                    >       
-                        <Stack
-                            direction="column"
-                            sx={{p: 1}}
-                            spacing={2}
+                        direction="row"
+                        sx={{width: '100%', p: 1}}
+                    >
+                        <Button
+                            onClick={handleOpenNewService}
                         >
-                            <Typography variant='h4'>
-                                System Settings
+                            <Typography variant='h6'>
+                                Add new Servicec
                             </Typography>
-                        </Stack>
-
-                        <Card
-                            sx={{mt: 2, borderRadius: 2}}
-                            elevation={6}
-                        >
-                            <Stack
-                                direction="row"
-                                sx={{width: '100%', p: 1}}
-                            >
-                                <Button
-                                    onClick={handleOpenNewService}
-                                >
-                                    <Typography variant='h6'>
-                                        Add new Servicec
-                                    </Typography>
-                                </Button>
-                            </Stack>
-                        </Card>
-
-                        <Card
-                            sx={{borderRadius: 2}}
-                            elevation={6}
-                        >
-                            <Stack
-                                direction="row"
-                                sx={{width: '100%', p: 1}}
-                            >
-                                <Button
-                                    onClick={handleOpenServiceActions}
-                                >
-                                    <Typography variant='h6'>
-                                        Service Actions
-                                    </Typography>
-                                </Button>
-                            </Stack>
-                        </Card>
+                        </Button>
                     </Stack>
                 </Card>
-            </Grid>
+
+                <Card
+                    sx={{borderRadius: 2, mt: 2}}
+                    elevation={3}
+                >
+                    <Stack
+                        direction="row"
+                        sx={{width: '100%', p: 1}}
+                    >
+                        <Button
+                            onClick={handleOpenServiceActions}
+                        >
+                            <Typography variant='h6'>
+                                Service Actions
+                            </Typography>
+                        </Button>
+                    </Stack>
+                </Card>
+            </SettingsCard>
             <Grid
                 item
                 xs={12}
                 md={12}
                 lg={6}
-                sx={{height: '100%'}}
+                sx={{mb: 2, height: '100%'}}
             >
                 <Card
                     elevation={12}
@@ -137,7 +114,7 @@ const ServiceTab = () =>
                             <Stack
                                 direction="row"
                                 sx={{width: '100%'}}
-                                justifyContent="space-between"
+                                justifyContent="space-around"
                             >
                                 {
                                     services.map(service => (
@@ -185,31 +162,63 @@ const ServiceTab = () =>
                     </Grid>
                 </Card>
             </Grid>
-            <Grid
-                item
-                xs={12}
-                md={12}
-                lg={3}
+            <SettingsCard
+                title="Services"
             >
-                <Card
-                elevation={12}
-                sx={{p: 1,height: '100%', borderRadius: 5}}
-                >
-                    <Stack
-                        direction="column"
-                        sx={{p: 1}}
-                        spacing={2}
-                    >
-                        <Typography variant='h4'>
-                            Services
-                        </Typography>
-                    </Stack>
-
-                </Card>
-            </Grid>
+                {
+                    services.map(s => (
+                        <Card
+                            sx={{mb: 2, p: 2}}
+                            spacing={3}
+                        >
+                            <Stack
+                                direction="column"
+                            >
+                                <Typography variant='h6'>
+                                    service-{s.id}
+                                </Typography>
+                                <Typography variant='body1'>
+                                    {serviceTypes.find(t => t.id === s.serviceType)?.title}
+                                </Typography>
+                            </Stack>
+                        </Card>
+                    ))
+                }
+            </SettingsCard>
             
         </Grid>
     );  
+}
+
+
+const SettingsCard = ({children, title}) =>
+{
+
+    return (
+        <Grid
+            item
+            xs={12}
+            md={12}
+            lg={3}
+            sx={{mb: 2}}
+        >
+            <Card
+                elevation={12}
+                sx={{p: 1,height: '100%', borderRadius: 5}}
+            >
+                <Stack
+                    direction="column"
+                    sx={{p: 1}}
+                    spacing={2}
+                >
+                    <Typography variant='h4'>
+                        {title}
+                    </Typography>
+                </Stack>
+                {children}
+            </Card>
+        </Grid>
+    );
 }
 
 /*
