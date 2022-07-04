@@ -10,7 +10,7 @@ import ServiceSystemPage from "./pages/serviceSystems";
 const App = () => 
 {
   return (
-    <div style={{height: '100vh', width: '100%', position: 'relative'}}>
+    <div>
     <Header />
     <Routes>
       

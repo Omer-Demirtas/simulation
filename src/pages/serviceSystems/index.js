@@ -47,7 +47,7 @@ const ServiceSystemPage = () =>
     const selectedTab = pages[value];
 
     return(
-       <Stack sx={{height: '100%'}} direction="column">
+       <Stack direction="column">
             
             <Tabs value={value} onChange={handleChange} centered>
                 <Tab label="System" />
@@ -55,7 +55,12 @@ const ServiceSystemPage = () =>
                 <Tab label="Statistics" />
             </Tabs>
             
-            <selectedTab.Content />
+            <Grid 
+              container
+              sx={{height: '85vh'}}
+            >
+              <selectedTab.Content />
+            </Grid>
        </Stack>
     );
 }

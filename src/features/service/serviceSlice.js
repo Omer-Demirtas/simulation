@@ -67,19 +67,19 @@ const getRandomNumber = () => Math.random().toFixed(2);
 
 const getCumulativeValue = (cu) =>
 {
-    const rand = getRandomNumber() * 100;
+  const rand = getRandomNumber() * 100;
 
-    return cu.findIndex(c => rand < c);
+  return cu.findIndex(c => rand < c);
 }
 
 const getFromCumulative = (cumulative) => 
-    {
-        const values = Object.values(cumulative);
+{
+  const values = Object.values(cumulative);
 
-        const c = values.map((sum => value => sum += value)(0))
+  const c = values.map((sum => value => sum += value)(0))
 
-        return c;
-    }
+  return c;
+}
 
 const getFromUniformDistribution = ({a, b}) => 
 {
@@ -319,7 +319,6 @@ const generateTable = (services, user, serviceTypes) =>
   }
   
   console.log({ users, events , services, que, resultEvents});
-
   return resultEvents;
 } 
 
