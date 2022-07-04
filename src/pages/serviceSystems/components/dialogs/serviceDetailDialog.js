@@ -76,14 +76,19 @@ const ServiceDetailDialog = ({open, handleClose, params, serviceTypes}) =>
                         </Select>
                     </FormControl>
                 </SettingsRow>
-                <SettingsRow>
-                    <Button
-                        onClick={handleRemoveService}
-                        color="error"
-                    >
-                        Remove This Service
-                    </Button>
-                </SettingsRow>
+                {
+                    !params.isNew && (
+                        <SettingsRow>
+                            <Button
+                                onClick={handleRemoveService}
+                                color="error"
+                            >
+                                Remove This Service
+                            </Button>
+                        </SettingsRow>
+                    )
+                }
+                
             </Stack>
         </BasicDialog>
     );

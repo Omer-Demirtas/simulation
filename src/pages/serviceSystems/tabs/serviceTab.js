@@ -86,9 +86,13 @@ const ServiceTab = () =>
                                 direction="row"
                                 sx={{width: '100%', p: 1}}
                             >
-                                <Typography variant='h6'>
-                                    Change Service Types
-                                </Typography>
+                                <Button
+                                    onClick={handleOpenNewService}
+                                >
+                                    <Typography variant='h6'>
+                                        Add new Servicec
+                                    </Typography>
+                                </Button>
                             </Stack>
                         </Card>
 
@@ -100,9 +104,13 @@ const ServiceTab = () =>
                                 direction="row"
                                 sx={{width: '100%', p: 1}}
                             >
-                               <Typography variant='h6'>
-                                    Change Service Types
-                                </Typography>
+                                <Button
+                                    onClick={handleOpenServiceActions}
+                                >
+                                    <Typography variant='h6'>
+                                        Service Actions
+                                    </Typography>
+                                </Button>
                             </Stack>
                         </Card>
                     </Stack>
