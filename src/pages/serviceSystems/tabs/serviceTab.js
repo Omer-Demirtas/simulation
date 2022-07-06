@@ -1,6 +1,7 @@
 import { Box, Button, Card, Fab, Grid, Stack, Typography, Zoom } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import SettingsRow from '../../../components/common/settings/settingsRow';
 import { createTable } from '../../../features/service/serviceSlice';
 import ServiceActionsDialog from '../components/dialogs/serviceActionsDialog';
 import ServiceDetailDialog from '../components/dialogs/serviceDetailDialog';
@@ -19,6 +20,7 @@ const ServiceTab = () =>
     const handleCloseDialog = () => setOpen({open: 0});
     const handleOpenUserDialog = () => setOpen({open: 1});
     const handleOpenServiceType = (id) => setOpen({open: 4, params: {serviceTypes, id}});
+    const handleOpenServiceFirstType = () => setOpen({open: 4, params: {serviceTypes, id: serviceTypes[0].id}});
     const handleOpenServiceActions = () => setOpen({open: 3});
     const handleGenerateTable = () => dispatch(createTable());
     const handleOpenService = (id, serviceType) => setOpen({open: 2, params: {serviceNo: id, serviceType}});
@@ -57,41 +59,45 @@ const ServiceTab = () =>
             <SettingsCard
                 title="Settings"
             >
-                <Card
-                    sx={{mt: 2, borderRadius: 2}}
-                    elevation={3}
-                >
-                    <Stack
-                        direction="row"
-                        sx={{width: '100%', p: 1}}
+                <SettingsRow>
+                    <Button
+                        onClick={handleOpenUserDialog}
                     >
-                        <Button
-                            onClick={handleOpenNewService}
-                        >
-                            <Typography variant='h6'>
-                                Add new Servicec
-                            </Typography>
-                        </Button>
-                    </Stack>
-                </Card>
+                        <Typography variant='h6'>
+                            User Settings
+                        </Typography>
+                    </Button>
+                </SettingsRow>
+            
+                <SettingsRow>
+                    <Button
+                        onClick={handleOpenServiceActions}
+                    >
+                        <Typography variant='h6'>
+                            Service Actions
+                        </Typography>
+                    </Button>
+                </SettingsRow>
 
-                <Card
-                    sx={{borderRadius: 2, mt: 2}}
-                    elevation={3}
-                >
-                    <Stack
-                        direction="row"
-                        sx={{width: '100%', p: 1}}
+                <SettingsRow>
+                    <Button
+                        onClick={handleOpenNewService}
                     >
-                        <Button
-                            onClick={handleOpenServiceActions}
-                        >
-                            <Typography variant='h6'>
-                                Service Actions
-                            </Typography>
-                        </Button>
-                    </Stack>
-                </Card>
+                        <Typography variant='h6'>
+                            Add new Service
+                        </Typography>
+                    </Button>
+                </SettingsRow>
+
+                <SettingsRow>
+                    <Button
+                        onClick={handleOpenServiceFirstType}
+                    >
+                        <Typography variant='h6'>
+                            Update Service Type Distribution
+                        </Typography>
+                    </Button>
+                </SettingsRow>
             </SettingsCard>
             <Grid
                 item
