@@ -54,6 +54,8 @@ const DistributionDialog = ({ open, handleClose, distribution, distributionType,
         <BasicDialog
             open={open}
             widthCode="md"
+            minHeight="70%"
+            maxHeight="70%"
             title="Select Distributon"
             handleSave={handleSave}
             handleClose={handleClose}
@@ -69,6 +71,7 @@ const DistributionDialog = ({ open, handleClose, distribution, distributionType,
                     justifyContent="center"
                     alignItems="flex-end" 
                     direction="row"
+                    sx={{p: 1}}
                 >
                     <selectedTab.Content
                         distribution={dist}
