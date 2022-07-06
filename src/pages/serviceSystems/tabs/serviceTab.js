@@ -1,4 +1,4 @@
-import { Box, Button, Card, Fab, Grid, Stack, Typography, Zoom } from '@mui/material';
+import { Box, Button, Card, Fab, Grid, Stack, Typography, useMediaQuery, useTheme, withStyles } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SettingsRow from '../../../components/common/settings/settingsRow';
@@ -10,6 +10,12 @@ import UserDialog from '../components/dialogs/userDialog';
 
 const ServiceTab = () =>
 {
+    /*
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'), {
+        defaultMatches: true
+    });
+    */
     const [open, setOpen] = useState({open: 0});
 
     const dispatch = useDispatch();
@@ -27,7 +33,7 @@ const ServiceTab = () =>
     const handleOpenNewService = () => setOpen({open: 2, params: {serviceNo: services[services.length - 1].id + 1, serviceType: 0, isNew: true}});
 
     return (
-        <Grid 
+        <Grid
             sx={{height: '100%', mx: 2}}
             rowSpacing={2} 
             columnSpacing={2}
