@@ -13,7 +13,7 @@ import UserDialog from '../components/dialogs/userDialog';
 const ServiceTab = () =>
 {
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'), {
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'), {
         defaultMatches: true
     });
 

@@ -1,6 +1,7 @@
 import { Card, Grid, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
+import StickyHeadTable from "../../../components/common/dataTable";
 import { selectEventsAndServices } from "../../../features/service/serviceSlice";
 
 const TableTab = () =>
@@ -19,7 +20,26 @@ const TableTab = () =>
     ), [services]);
 
     return (
-        <Grid
+        <React.Fragment>
+            <Grid
+                container
+                sx={{width: '100%', p: 1}}
+            >
+                    <Card
+                        elevation={12}
+                        sx={{width: '100%', height: 600}}
+                    >
+                        <StickyHeadTable />
+                    </Card>
+            </Grid>
+        </React.Fragment>
+    );
+}
+
+export default TableTab;
+
+/*
+<Grid
             item
             sx={{height: '100%', mx: 2}}
             spacing={2} 
@@ -75,11 +95,4 @@ const TableTab = () =>
                 </TableContainer>
             </Grid>
         </Grid>
-    );
-}
-
-export default TableTab;
-
-/*
-
 */
