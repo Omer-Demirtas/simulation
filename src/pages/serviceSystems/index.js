@@ -45,20 +45,15 @@ const ServiceSystemPage = () =>
     const selectedTab = pages[value];
 
     return(
-       <Stack direction="column">
+       <Stack  direction="column">
             
-            <Tabs value={value} onChange={handleChange} centered>
-                <Tab label="System" />
-                <Tab label="Table" />
-                <Tab label="Statistics" />
-            </Tabs>
-            
-            <Grid 
-              container
-              sx={{height: '85vh'}}
-            >
-              <selectedTab.Content />
-            </Grid>
+          <Tabs value={value} onChange={handleChange}  centered>
+              <Tab label="System" />
+              <Tab label="Table" />
+              <Tab label="Statistics" />
+          </Tabs>
+          
+          <selectedTab.Content />
        </Stack>
     );
 }

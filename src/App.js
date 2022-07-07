@@ -1,5 +1,5 @@
 import React from "react";
-
+import './App.css'
 import { Routes, Route, Navigate, Link } from 'react-router-dom';
 import Header from "./components/common/header";
 import HomePage from "./pages/home";
@@ -11,16 +11,14 @@ const App = () =>
 {
   return (
     <div>
-    <Header />
-    <Routes>
-      
-      <Route element={<HomePage />} path={'/'}></Route>
-      
-      <Route element={<ServiceSystemPage />} path='/service'></Route>
+      <Header />
+      <Routes>
+        <Route element={<HomePage />} path={'/'}></Route>
+        
+        <Route element={<ServiceSystemPage />} path='/service'></Route>
 
-      <Route path="*" element={<Navigate to="/" replace />} />
-
-    </Routes>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </div>
   );
 }
