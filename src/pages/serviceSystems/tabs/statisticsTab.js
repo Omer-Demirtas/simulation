@@ -1,18 +1,21 @@
-import { Card, Grid, Stack } from "@mui/material";
+import { Card, Grid, Stack, useMediaQuery, useTheme } from "@mui/material";
 import LineChart from "../../../components/charts/lineChart";
 import PieChart from "../../../components/charts/pieChart";
 
 
 const StatisticsTab = () => 
 {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'), {
+        defaultMatches: true
+    });
 
     return (
-        <Grid 
-            sx={{height: '100%', mx: 2}}
+        <Grid
+            direction={ isMobile ? 'column' : 'row'}
+            sx={{p: 1}}
             spacing={2} 
             container  
-            xs={12}
-            item
         >
             <Grid item xs={12} md={4} lg={3}>
                 <Card 

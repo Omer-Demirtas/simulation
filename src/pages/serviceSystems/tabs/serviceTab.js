@@ -1,4 +1,4 @@
-import { Box, Button, Card, Fab, Grid, Stack, Typography, useMediaQuery, useTheme, withStyles } from '@mui/material';
+import { Box, Button, Card, Fab, Grid, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SettingsRow from '../../../components/common/settings/settingsRow';
@@ -159,6 +159,7 @@ const ServiceTab = () =>
                     {
                         services.map(s => (
                             <Card
+                                key={s.id}
                                 sx={{mb: 2, p: 2}}
                                 spacing={3}
                             >
