@@ -94,7 +94,7 @@ const ServiceTab = () =>
                             sx={{height: '30%', width: '100%'}}
                         >
                             {
-                                services.map(service => (
+                                services.slice(0, 5).map(service => (
                                     <Service
                                         key={service.id}
                                         service={service}
@@ -113,7 +113,7 @@ const ServiceTab = () =>
                             sx={{height: '30%', width: '100%'}}
                         >
                             {
-                                services.map(service => (
+                                services.slice(5, 10).map(service => (
                                     <Service
                                         key={service.id}
                                         service={service}
