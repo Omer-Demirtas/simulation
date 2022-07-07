@@ -63,6 +63,7 @@ const ServiceTab = () =>
                 container  
             >
                 <SettingsCard
+                    xs={12} md={12} lg={3}
                     isMobile={isMobile}
                     title="Settings"
                 >
@@ -73,6 +74,86 @@ const ServiceTab = () =>
                 </SettingsCard>
 
                 <SettingsCard
+                    xs={12} md={12} lg={6}
+                >
+                    <Grid
+                        sx={{height: 600}}
+                        container
+                    >
+                        <Stack
+                            direction="row"
+                            justifyContent="center"
+                            alignItems="center"
+                            sx={{height: '10%', width: '100%'}}
+                        ></Stack>
+
+                        <Stack 
+                            direction="row"
+                            justifyContent="space-around"
+                            alignItems='center'
+                            sx={{height: '30%', width: '100%'}}
+                        >
+                            {
+                                services.map(service => (
+                                    <Service
+                                        key={service.id}
+                                        service={service}
+                                        onClick={handleOpenService}
+                                        openServiceType={handleOpenServiceType}
+                                        serviceType={serviceTypes.find(t => t.id === service.serviceType).title}
+                                    />
+                                ))
+                            }
+                        </Stack>
+
+                        <Stack 
+                            direction="row"
+                            justifyContent="space-around"
+                            alignItems='center'
+                            sx={{height: '30%', width: '100%'}}
+                        >
+                            {
+                                services.map(service => (
+                                    <Service
+                                        key={service.id}
+                                        service={service}
+                                        onClick={handleOpenService}
+                                        openServiceType={handleOpenServiceType}
+                                        serviceType={serviceTypes.find(t => t.id === service.serviceType).title}
+                                    />
+                                ))
+                            }
+                        </Stack>
+
+                        <Stack 
+                            direction="row"
+                            justifyContent="center"
+                            alignItems='center'
+                            sx={{height: '20%', width: '100%'}}
+                        >
+                            <ImageButton 
+                                image='/images/user.png'
+                                onClick={handleOpenUserDialog}
+                                title='Customer'
+                                subTitle=''
+                            />
+                        </Stack>
+
+                        <Stack 
+                            direction="row"
+                            justifyContent="center"
+                            alignItems="center"
+                            sx={{height: '10%', width: '100%'}}
+                        >
+                            <Button>
+                                SIMULATE
+                            </Button>
+                        </Stack>
+                    </Grid>
+                </SettingsCard>
+
+                <SettingsCard
+                    xs={12} md={12} lg={3}
                     title="Services"
                 >
                     {
@@ -100,22 +181,7 @@ const ServiceTab = () =>
     );  
 }
 
-
-/*
-{
-                                services.map(service => (
-                                    <Service
-                                        key={service.id}
-                                        service={service}
-                                        onClick={handleOpenService}
-                                        openServiceType={handleOpenServiceType}
-                                        serviceType={serviceTypes.find(t => t.id === service.serviceType).title}
-                                    />
-                                ))
-                            }
-*/
-
-const UserIconButton = ({title, subTitle, onClick}) =>
+const ImageButton = ({image, onClick, title, subTitle}) => 
 {
     return (
         <Stack
@@ -129,9 +195,9 @@ const UserIconButton = ({title, subTitle, onClick}) =>
                 onClick={onClick}
             >
                 <img
-                    width="96"
-                    height="96"
-                    src="/images/user.png" 
+                    width="64"
+                    height="64"
+                    src={image} 
                 />
             </Button>
             <Typography>{subTitle}</Typography>
@@ -147,30 +213,23 @@ const Service = ({ onClick, service, serviceType, openServiceType}) =>
     }
 
     return (
-        <Grid
-            item
-            xs={4}
-            md={3}
-            lg={2}
+        <Stack
+            direction="column"
+            alignItems="center"
+            justifyContent="center"
         >
-            <Stack
-                direction="column"
-                alignItems="center"
-                justifyContent="center"
+            <Typography>{service.id}</Typography>
+            <Button
+                onClick={handleClick}
             >
-                <Typography>{service.id}</Typography>
-                <Button
-                    onClick={handleClick}
-                >
-                    <img
-                        width="96"
-                        height="96"
-                        src="/images/service.png" 
-                    />
-                </Button>
-                <Button onClick={() => openServiceType(service.serviceType)}>{serviceType}</Button>
-            </Stack>
-        </Grid>
+                <img
+                    width="64"
+                    height="64"
+                    src="/images/service.png" 
+                />
+            </Button>
+            <Button onClick={() => openServiceType(service.serviceType)}>{serviceType}</Button>
+        </Stack>
     );
 }
 

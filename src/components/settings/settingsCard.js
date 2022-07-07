@@ -1,14 +1,14 @@
 import { Card, Grid, Stack, Typography } from "@mui/material";
 
 
-const SettingsCard = ({children, title, isMobile}) =>
+const SettingsCard = ({children, title, isMobile, xs, md, lg}) =>
 {
     return (
         <Grid
             item
-            xs={12}
-            md={12}
-            lg={3}
+            xs={xs}
+            md={md}
+            lg={lg}
         >
             <Card
                 elevation={12}
