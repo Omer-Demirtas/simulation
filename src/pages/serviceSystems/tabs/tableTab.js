@@ -1,11 +1,16 @@
-import { Card, Grid, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Card, Grid, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useMediaQuery, useTheme } from "@mui/material";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
-import StickyHeadTable from "../../../components/common/dataTable";
+import ServiceSystemDataTable from "../../../components/common/dataTable";
 import { selectEventsAndServices } from "../../../features/service/serviceSlice";
 
 const TableTab = () =>
 {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'), {
+        defaultMatches: true
+    });
+
     const [events, services] = useSelector(selectEventsAndServices);
     //const [columns, setColumns] = useState([]);
 
@@ -23,13 +28,17 @@ const TableTab = () =>
         <React.Fragment>
             <Grid
                 container
-                sx={{width: '100%', p: 1}}
+                sx={{width: '100%', p: isMobile ? 1 : 5}}
             >
                     <Card
                         elevation={12}
                         sx={{width: '100%', height: 600}}
                     >
-                        <StickyHeadTable />
+                        <ServiceSystemDataTable 
+                            rows={events}
+                            columns={columns}
+                            services={services}
+                        />
                     </Card>
             </Grid>
         </React.Fragment>

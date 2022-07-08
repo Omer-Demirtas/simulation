@@ -1,7 +1,6 @@
-import { Box, Button, Card, Fab, Grid, Stack, Typography, useMediaQuery, useTheme, withStyles } from '@mui/material';
-import React, { useState } from 'react';
+import { Button, Card, Grid, Stack, Typography, useMediaQuery, useTheme, withStyles } from '@mui/material';
+import React, { useState } from 'react';    
 import { useDispatch, useSelector } from 'react-redux';
-import SettingsRow from '../../../components/common/settings/settingsRow';
 import SettingsButtonRow from '../../../components/settings/settingsButtonRow';
 import SettingsCard from '../../../components/settings/settingsCard';
 import { createTable } from '../../../features/service/serviceSlice';
@@ -29,9 +28,10 @@ const ServiceTab = () =>
     const handleOpenServiceType = (id) => setOpen({open: 4, params: {serviceTypes, id}});
     const handleOpenServiceFirstType = () => setOpen({open: 4, params: {serviceTypes, id: serviceTypes[0].id}});
     const handleOpenServiceActions = () => setOpen({open: 3});
-    const handleGenerateTable = () => dispatch(createTable());
     const handleOpenService = (id, serviceType) => setOpen({open: 2, params: {serviceNo: id, serviceType}});
     const handleOpenNewService = () => setOpen({open: 2, params: {serviceNo: services[services.length - 1].id + 1, serviceType: 0, isNew: true}});
+
+    const handleGenerateTable = () => dispatch(createTable());
 
     return (
         <React.Fragment>
@@ -145,7 +145,9 @@ const ServiceTab = () =>
                             alignItems="center"
                             sx={{height: '10%', width: '100%'}}
                         >
-                            <Button>
+                            <Button
+                                onClick={handleGenerateTable}
+                            >
                                 SIMULATE
                             </Button>
                         </Stack>
@@ -159,6 +161,7 @@ const ServiceTab = () =>
                     {
                         services.map(s => (
                             <Card
+                                key={s.id}
                                 sx={{mb: 2, p: 2}}
                                 spacing={3}
                             >

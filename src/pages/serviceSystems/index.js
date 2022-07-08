@@ -49,7 +49,7 @@ const ServiceSystemPage = () =>
             
           <Tabs value={value} onChange={handleChange}  centered>
               <Tab label="System" />
-              <Tab label="Table" />
+              <Tab label="Result" />
               <Tab label="Statistics" />
           </Tabs>
           
