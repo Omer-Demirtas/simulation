@@ -1,18 +1,12 @@
-import { Card, Grid, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, useMediaQuery, useTheme } from "@mui/material";
+import { Card, Grid, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import ServiceSystemDataTable from "../../../components/common/dataTable";
 import { selectEventsAndServices } from "../../../features/service/serviceSlice";
 
-const TableTab = () =>
+const TableTab = ({isMobile}) =>
 {
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('md'), {
-        defaultMatches: true
-    });
-
     const [events, services] = useSelector(selectEventsAndServices);
-    //const [columns, setColumns] = useState([]);
 
     const columns = useMemo(() => (
         [
@@ -28,7 +22,7 @@ const TableTab = () =>
         <React.Fragment>
             <Grid
                 container
-                sx={{width: '100%', p: isMobile ? 1 : 5}}
+                sx={{width: '100%', px: isMobile ? 1 : 5}}
             >
                     <Card
                         elevation={12}

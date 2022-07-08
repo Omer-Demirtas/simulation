@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Stack, Tab, Tabs } from "@mui/material";
+import { Grid, Stack, Tab, Tabs, useMediaQuery, useTheme } from "@mui/material";
 import ServiceTab from './tabs/serviceTab';
 import TableTab from './tabs/tableTab';
 import StatisticsTab from './tabs/statisticsTab';
@@ -8,22 +8,22 @@ const pages = [
     {
       label: 'tab 1',
       isVisible: () => true,
-      Content: () =>(
-        <ServiceTab />
+      Content: ({ isMobile }) =>(
+        <ServiceTab isMobile={isMobile} />
       )
     },
     {
         label: 'tab 2',
         isVisible: () => true,
-        Content: () =>(
-          <TableTab />
+        Content: ({isMobile}) =>(
+          <TableTab isMobile={isMobile} />
         )
     },
     {
         label: 'tab 3',
         isVisible: () => true,
-        Content: () =>(
-          <StatisticsTab />
+        Content: ({isMobile}) =>(
+          <StatisticsTab isMobile={isMobile} />
         )
     },
 ]
@@ -36,6 +36,11 @@ const pages = [
 
 const ServiceSystemPage = () =>
 {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'), {
+        defaultMatches: true
+    });
+
     const [value, setValue] = React.useState(0);
 
     const handleChange = (_, newValue) => {
@@ -53,7 +58,9 @@ const ServiceSystemPage = () =>
               <Tab label="Statistics" />
           </Tabs>
           
-          <selectedTab.Content />
+          <selectedTab.Content 
+            isMobile={isMobile}
+          />
        </Stack>
     );
 }

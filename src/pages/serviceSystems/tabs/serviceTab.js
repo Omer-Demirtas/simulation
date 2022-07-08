@@ -1,4 +1,4 @@
-import { Button, Card, Grid, Stack, Typography, useMediaQuery, useTheme, withStyles } from '@mui/material';
+import { Button, Card, Grid, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';    
 import { useDispatch, useSelector } from 'react-redux';
 import SettingsButtonRow from '../../../components/settings/settingsButtonRow';
@@ -9,13 +9,8 @@ import ServiceDetailDialog from '../components/dialogs/serviceDetailDialog';
 import ServiceTypeDialog from '../components/dialogs/serviceTypeDialog';
 import UserDialog from '../components/dialogs/userDialog';
 
-const ServiceTab = () =>
+const ServiceTab = ({isMobile}) =>
 {
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('md'), {
-        defaultMatches: true
-    });
-
     const [open, setOpen] = useState({open: 0});
 
     const dispatch = useDispatch();
@@ -58,7 +53,7 @@ const ServiceTab = () =>
             />
             <Grid
                 direction={ isMobile ? 'column' : 'row'}
-                sx={{p: 1}}
+                sx={{px: isMobile ? 1: 5}}
                 spacing={2} 
                 container  
             >
