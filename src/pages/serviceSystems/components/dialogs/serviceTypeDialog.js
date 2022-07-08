@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import BasicDialog from "../../../../components/common/basicDialog";
 import SettingsRow from "../../../../components/common/settings/settingsRow";
 import DistributionDialog from "../../../../components/distributions/distributionDialog";
+import SettingsButtonRow from "../../../../components/settings/settingsButtonRow";
 import { addServiceType, updateServiceTypeDetails } from "../../../../features/service/serviceSlice";
 
 const ServiceTypeDialog = ({ open, handleClose, params, serviceTypes}) => 
@@ -71,20 +72,15 @@ const ServiceTypeDialog = ({ open, handleClose, params, serviceTypes}) =>
                             </Select>
                         </FormControl>
                     </SettingsRow>
-                    <SettingsRow>
-                        <Button
-                            onClick={handleOpenDistribution}
-                        >
-                            Select Distribution 
-                        </Button>
-                    </SettingsRow>
-                    <SettingsRow>
-                    <Button
-                        disabled
-                    >
-                        Add new Service Type
-                    </Button>
-                </SettingsRow>
+                    <SettingsButtonRow
+                        onClick={handleOpenDistribution}
+                        title={'Change Distribution'}
+                    />
+                    <SettingsButtonRow
+                        disabled={true}
+                        title={'Delete This Service Type'}
+                        color="error"
+                    />
                 </Stack>
             </BasicDialog>
         </React.Fragment>

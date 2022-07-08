@@ -1,5 +1,5 @@
 import { Button, Card, Grid, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';    
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SettingsButtonRow from '../../../components/settings/settingsButtonRow';
 import SettingsCard from '../../../components/settings/settingsCard';
@@ -53,7 +53,7 @@ const ServiceTab = ({isMobile}) =>
             />
             <Grid
                 direction={ isMobile ? 'column' : 'row'}
-                sx={{px: isMobile ? 1: 5}}
+                sx={{px: isMobile ? 1: 5, pb: 2}}
                 spacing={2} 
                 container  
             >
