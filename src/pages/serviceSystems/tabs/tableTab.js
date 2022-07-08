@@ -1,13 +1,12 @@
 import { Card, Grid, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
-import StickyHeadTable from "../../../components/common/dataTable";
+import ServiceSystemDataTable from "../../../components/common/dataTable";
 import { selectEventsAndServices } from "../../../features/service/serviceSlice";
 
-const TableTab = () =>
+const TableTab = ({isMobile}) =>
 {
     const [events, services] = useSelector(selectEventsAndServices);
-    //const [columns, setColumns] = useState([]);
 
     const columns = useMemo(() => (
         [
@@ -23,13 +22,17 @@ const TableTab = () =>
         <React.Fragment>
             <Grid
                 container
-                sx={{width: '100%', p: 1}}
+                sx={{width: '100%', px: isMobile ? 1 : 5}}
             >
                     <Card
                         elevation={12}
                         sx={{width: '100%', height: 600}}
                     >
-                        <StickyHeadTable />
+                        <ServiceSystemDataTable 
+                            rows={events}
+                            columns={columns}
+                            services={services}
+                        />
                     </Card>
             </Grid>
         </React.Fragment>
