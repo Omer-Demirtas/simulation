@@ -7,7 +7,7 @@ const StatisticsTab = ({isMobile}) =>
 {
     return (
         <Grid 
-            sx={{height: '100%', px: isMobile ? 1: 5}}
+            sx={{height: '100%', px: isMobile ? 1: 5, pb:2}}
             spacing={2} 
             container
         >

@@ -1,11 +1,12 @@
 import { Button } from "@mui/material";
 import SettingsRow from "../common/settings/settingsRow";
 
-const SettingsButtonRow = ({onClick, title, color}) =>
+const SettingsButtonRow = ({onClick, title, color, disabled}) =>
 {
     return (
         <SettingsRow>
             <Button
+                disabled={disabled}
                 sx={{textTransform: 'none'}}
                 onClick={onClick}
                 color={color}
@@ -18,7 +19,8 @@ const SettingsButtonRow = ({onClick, title, color}) =>
 
 SettingsButtonRow.defaultProps = 
 {
-    color: 'info'
+    color: 'info',
+    disabled: false
 }
 
 export default SettingsButtonRow;

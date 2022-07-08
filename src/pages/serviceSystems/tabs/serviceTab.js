@@ -53,7 +53,7 @@ const ServiceTab = ({isMobile}) =>
             />
             <Grid
                 direction={ isMobile ? 'column' : 'row'}
-                sx={{px: isMobile ? 1: 5}}
+                sx={{px: isMobile ? 1: 5, pb: 2}}
                 spacing={2} 
                 container  
             >
