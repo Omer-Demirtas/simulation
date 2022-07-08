@@ -3,16 +3,13 @@ import LineChart from "../../../components/charts/lineChart";
 import PieChart from "../../../components/charts/pieChart";
 
 
-const StatisticsTab = () => 
+const StatisticsTab = ({isMobile}) => 
 {
-
     return (
         <Grid 
-            sx={{height: '100%', mx: 2}}
+            sx={{height: '100%', px: isMobile ? 1: 5}}
             spacing={2} 
             container  
-            xs={12}
-            item
         >
             <Grid item xs={12} md={4} lg={3}>
                 <Card 

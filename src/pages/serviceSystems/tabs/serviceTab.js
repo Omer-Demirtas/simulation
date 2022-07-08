@@ -1,7 +1,6 @@
-import { Box, Button, Card, Fab, Grid, Stack, Typography, useMediaQuery, useTheme, withStyles } from '@mui/material';
-import React, { useState } from 'react';
+import { Button, Card, Grid, Stack, Typography } from '@mui/material';
+import React, { useState } from 'react';    
 import { useDispatch, useSelector } from 'react-redux';
-import SettingsRow from '../../../components/common/settings/settingsRow';
 import SettingsButtonRow from '../../../components/settings/settingsButtonRow';
 import SettingsCard from '../../../components/settings/settingsCard';
 import { createTable } from '../../../features/service/serviceSlice';
@@ -10,13 +9,8 @@ import ServiceDetailDialog from '../components/dialogs/serviceDetailDialog';
 import ServiceTypeDialog from '../components/dialogs/serviceTypeDialog';
 import UserDialog from '../components/dialogs/userDialog';
 
-const ServiceTab = () =>
+const ServiceTab = ({isMobile}) =>
 {
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'), {
-        defaultMatches: true
-    });
-
     const [open, setOpen] = useState({open: 0});
 
     const dispatch = useDispatch();
@@ -29,9 +23,10 @@ const ServiceTab = () =>
     const handleOpenServiceType = (id) => setOpen({open: 4, params: {serviceTypes, id}});
     const handleOpenServiceFirstType = () => setOpen({open: 4, params: {serviceTypes, id: serviceTypes[0].id}});
     const handleOpenServiceActions = () => setOpen({open: 3});
-    const handleGenerateTable = () => dispatch(createTable());
     const handleOpenService = (id, serviceType) => setOpen({open: 2, params: {serviceNo: id, serviceType}});
     const handleOpenNewService = () => setOpen({open: 2, params: {serviceNo: services[services.length - 1].id + 1, serviceType: 0, isNew: true}});
+
+    const handleGenerateTable = () => dispatch(createTable());
 
     return (
         <React.Fragment>
@@ -58,7 +53,7 @@ const ServiceTab = () =>
             />
             <Grid
                 direction={ isMobile ? 'column' : 'row'}
-                sx={{p: 1}}
+                sx={{px: isMobile ? 1: 5}}
                 spacing={2} 
                 container  
             >
@@ -145,7 +140,9 @@ const ServiceTab = () =>
                             alignItems="center"
                             sx={{height: '10%', width: '100%'}}
                         >
-                            <Button>
+                            <Button
+                                onClick={handleGenerateTable}
+                            >
                                 SIMULATE
                             </Button>
                         </Stack>
@@ -159,6 +156,7 @@ const ServiceTab = () =>
                     {
                         services.map(s => (
                             <Card
+                                key={s.id}
                                 sx={{mb: 2, p: 2}}
                                 spacing={3}
                             >
@@ -234,152 +232,3 @@ const Service = ({ onClick, service, serviceType, openServiceType}) =>
 }
 
 export default ServiceTab;
-
-
-/*
-            <Grid
-                item
-                xs={12}
-                md={12}
-                lg={6}
-                sx={{ height: '100%'}}
-            >
-                <Card
-                    elevation={12}
-                    sx={{p: 1, height: '100%', borderRadius: 5}}
-                >
-                    <Grid 
-                        sx={{height: '100%'}}
-                        container
-                    >
-                        <Grid item xs={12} sx={{height: '20%'}}>
-                        </Grid>
-                        <Grid container spacing={2} item xs={12} sx={{height: '20%'}}>
-                            <Stack
-                                direction="row"
-                                sx={{width: '100%'}}
-                                justifyContent="space-around"
-                            >
-                                {
-                                    services.map(service => (
-                                        <Service
-                                            key={service.id}
-                                            service={service}
-                                            onClick={handleOpenService}
-                                            openServiceType={handleOpenServiceType}
-                                            serviceType={serviceTypes.find(t => t.id === service.serviceType).title}
-                                        />
-                                    ))
-                                }
-                            </Stack>
-                        </Grid>
-                        
-                        <Grid item xs={12} sx={{height: '20%'}}>
-                        </Grid>
-                        <Grid item xs={12} sx={{height: '20%'}}>
-                            <Stack
-                                    direction="row"
-                                    justifyContent="center"
-                            >
-                                <UserIconButton 
-                                    title="Customer"
-                                    onClick={handleOpenUserDialog}
-                                    subTitle=""
-                                />
-                            </Stack>
-                        </Grid>
-                        <Grid item xs={12} sx={{height: '20%'}}>
-                            <Stack
-                                direction="row"
-                                justifyContent="center"
-                            >
-                                <Button  
-                                    color="primary"
-                                    variant="contained"
-                                    onClick={(handleGenerateTable)}
-                                    sx={{textTransform: 'none', fontSize: 24}}
-                                >
-                                    SIMULATE
-                                </Button>
-                            </Stack>
-                        </Grid>
-                    </Grid>
-                </Card>
-            </Grid>
-*/
-
-/*
-<Grid
-                item
-                xs={6} lg={6}
-                sx={{p: 3, height: '100%'}}
-                direction="column"
-                alignItems="center"
-                justifyContent="flex-start"
-            >
-                <Card
-                    elevation={12}
-                    sx={{height: '90%', borderRadius: 5}}
-                >
-                    <Stack
-                        spacing={4}
-                        direction="row"
-                        alignItems="center"
-                        justifyContent="center"
-                        sx={{height: '50%'}}
-                    >
-                        {
-                            services.map(service => (
-                                <Service
-                                    key={service.id}
-                                    service={service}
-                                    onClick={handleOpenService}
-                                    openServiceType={handleOpenServiceType}
-                                    serviceType={serviceTypes.find(t => t.id === service.serviceType).title}
-                                />
-                            ))
-                        }
-                        <Button
-                            sx={{ml: 1}}
-                            color="primary"
-                            onClick={handleOpenNewService}
-                        >
-                            +
-                        </Button>
-                    </Stack>
-                    <Stack
-                        direction="column"
-                        alignItems="center"
-                        justifyContent="flex-end"
-                        sx={{height: '50%', width: '100%'}}
-                    >
-                        <Stack 
-                            sx={{height: '100%'}}
-                            alignItems="center"
-                            direction="row"
-                        >
-                            <UserIconButton 
-                                title="Customer"
-                                onClick={handleOpenUserDialog}
-                                subTitle=""
-                            />
-                        </Stack>
-                        <Stack
-                            direction="row"
-                            justifyContent="center"
-                            sx={{m: 2, width: '100%'}}
-                        >
-                            <Button
-                                color="primary"
-                                variant="contained"
-                                onClick={(handleGenerateTable)}
-                                sx={{textTransform: 'none', fontSize: 36}}
-                            >
-                                SIMULATE
-                            </Button>
-
-                        </Stack>
-                    </Stack>
-                </Card>
-            </Grid>
-*/
