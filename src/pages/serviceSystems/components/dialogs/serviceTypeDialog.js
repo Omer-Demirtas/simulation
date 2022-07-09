@@ -78,7 +78,7 @@ const ServiceTypeDialog = ({ open, handleClose, params, serviceTypes}) =>
                     />
                     <SettingsButtonRow
                         disabled={true}
-                        title={'Delete This Service Type'}
+                        title={'remove this service type'}
                         color="error"
                     />
                 </Stack>
