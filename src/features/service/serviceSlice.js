@@ -347,7 +347,11 @@ export const serviceSlice = createSlice({
     },
     addService: (state, action) => 
     {
-      console.log({action});
+      if(state.services.length === 8) 
+      {
+        alert('You can not add more then 8');
+        return;
+      }
       state.services.push(
         {
           ...action.payload

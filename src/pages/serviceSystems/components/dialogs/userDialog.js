@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import BasicDialog from "../../../../components/common/basicDialog";
 import SettingsRow from "../../../../components/common/settings/settingsRow";
 import DistributionDialog from "../../../../components/distributions/distributionDialog";
+import SettingsButtonRow from "../../../../components/settings/settingsButtonRow";
 import { selectUser, updateUserDistribution } from "../../../../features/service/serviceSlice";
 import ServiceTypeRateDialog from './serviceTypeRateDialog'
 
@@ -48,20 +49,14 @@ const UserDialog = ({ handleClose, open, serviceTypes}) =>
                 saveDistribution={handleSaveDistribution}
                 distributionType={user.gas.distributionType}
             />
-                <SettingsRow>
-                    <Button
-                        onClick={handleOpenDialog}
-                    >
-                        Set GAS Distributon
-                    </Button>
-                </SettingsRow>
-                <SettingsRow>
-                    <Button
-                        onClick={handleOpenServiceTypeRate}
-                    >
-                        Rate of Service Type
-                    </Button>
-                </SettingsRow>            
+                <SettingsButtonRow
+                    onClick={handleOpenDialog}
+                    title='Set GAS distributon'
+                />
+                <SettingsButtonRow
+                    onClick={handleOpenServiceTypeRate}
+                    title='set rate of Service Type'
+                />
         </BasicDialog>
     );
 }

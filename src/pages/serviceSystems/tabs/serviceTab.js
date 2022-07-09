@@ -1,6 +1,7 @@
-import { Button, Card, Grid, Stack, Typography } from '@mui/material';
+import { Button, Card, CircularProgress, Grid, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import LoadingButton from '../../../components/common/buttonLoading';
 import SettingsButtonRow from '../../../components/settings/settingsButtonRow';
 import SettingsCard from '../../../components/settings/settingsCard';
 import { createTable } from '../../../features/service/serviceSlice';
@@ -12,7 +13,8 @@ import UserDialog from '../components/dialogs/userDialog';
 const ServiceTab = ({isMobile}) =>
 {
     const [open, setOpen] = useState({open: 0});
-
+    const [loading, setLoading] = useState(false);
+    
     const dispatch = useDispatch();
 
     const services = useSelector((state) => state.service.services);
@@ -26,7 +28,22 @@ const ServiceTab = ({isMobile}) =>
     const handleOpenService = (id, serviceType) => setOpen({open: 2, params: {serviceNo: id, serviceType}});
     const handleOpenNewService = () => setOpen({open: 2, params: {serviceNo: services[services.length - 1].id + 1, serviceType: 0, isNew: true}});
 
-    const handleGenerateTable = () => dispatch(createTable());
+    const handleGenerateTable = async () => 
+    {
+        setLoading(true);
+        setTimeout(() => {
+           try
+           {
+                dispatch(createTable());
+           }
+           catch(e)
+           {
+                console.log(e)
+                alert('There is a error!');
+           }
+           setLoading(false);
+        }, 1000)
+    }
 
     return (
         <React.Fragment>
@@ -89,7 +106,7 @@ const ServiceTab = ({isMobile}) =>
                             sx={{height: '30%', width: '100%'}}
                         >
                             {
-                                services.slice(0, 5).map(service => (
+                                services.slice(0, 4).map(service => (
                                     <Service
                                         key={service.id}
                                         service={service}
@@ -108,7 +125,7 @@ const ServiceTab = ({isMobile}) =>
                             sx={{height: '30%', width: '100%'}}
                         >
                             {
-                                services.slice(5, 10).map(service => (
+                                services.slice(4, 8).map(service => (
                                     <Service
                                         key={service.id}
                                         service={service}
@@ -140,11 +157,11 @@ const ServiceTab = ({isMobile}) =>
                             alignItems="center"
                             sx={{height: '10%', width: '100%'}}
                         >
-                            <Button
+                            <LoadingButton
+                                title='SIMULE'
+                                loading={loading}
                                 onClick={handleGenerateTable}
-                            >
-                                SIMULATE
-                            </Button>
+                            />
                         </Stack>
                     </Grid>
                 </SettingsCard>
@@ -226,7 +243,7 @@ const Service = ({ onClick, service, serviceType, openServiceType}) =>
                     src="/images/service.png" 
                 />
             </Button>
-            <Button onClick={() => openServiceType(service.serviceType)}>{serviceType}</Button>
+            <Button sx={{textTransform: 'none'}} onClick={() => openServiceType(service.serviceType)}>{serviceType}</Button>
         </Stack>
     );
 }
