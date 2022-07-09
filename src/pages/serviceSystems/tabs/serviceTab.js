@@ -106,7 +106,7 @@ const ServiceTab = ({isMobile}) =>
                             sx={{height: '30%', width: '100%'}}
                         >
                             {
-                                services.slice(0, 5).map(service => (
+                                services.slice(0, 4).map(service => (
                                     <Service
                                         key={service.id}
                                         service={service}
@@ -125,7 +125,7 @@ const ServiceTab = ({isMobile}) =>
                             sx={{height: '30%', width: '100%'}}
                         >
                             {
-                                services.slice(5, 10).map(service => (
+                                services.slice(4, 8).map(service => (
                                     <Service
                                         key={service.id}
                                         service={service}
