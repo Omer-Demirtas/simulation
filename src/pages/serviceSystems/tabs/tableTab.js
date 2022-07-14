@@ -22,11 +22,11 @@ const TableTab = ({isMobile}) =>
         <React.Fragment>
             <Grid
                 container
-                sx={{width: '100%', px: isMobile ? 1 : 5}}
+                sx={{pb: 2, width: '100%', px: isMobile ? 1 : 5}}
             >
                     <Card
                         elevation={12}
-                        sx={{width: '100%', height: 600}}
+                        sx={{width: '100%', height: '100%'}}
                     >
                         <ServiceSystemDataTable 
                             rows={events}
