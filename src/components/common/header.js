@@ -7,7 +7,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Slide from '@mui/material/Slide';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, Link } from '@mui/material';
 
 
 const Header = () =>
@@ -20,13 +20,9 @@ const Header = () =>
     <React.Fragment>
         <AppBar>
           <Toolbar>
-            <Typography variant="h6" component="div">
-                Simulation
-            </Typography>
-
-            <Button sx={{color: 'white', marginLeft: '10px'}} onClick={navigateToHome}  variant="text">
-              Home
-            </Button>
+          <Link color="white" variant="h6" component="button" onClick={navigateToHome} underline="none">
+            Simulation
+          </Link>
 
           </Toolbar>
         </AppBar>
